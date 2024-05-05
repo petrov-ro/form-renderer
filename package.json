@@ -1,0 +1,26 @@
+{
+  "name": "form-renderer",
+  "version": "1.0.0",
+  "description": "Configurable form renderer",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "form-renderer"
+  },
+  "keywords": [
+    "form",
+    "construction"
+  ],
+  "author": "Roman Petrov",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^18.3.1",
+    "antd": "^5.16.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.5"
+  }
+}
