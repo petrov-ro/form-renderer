@@ -1,4 +1,4 @@
-import {StatisticsFormElementClass} from "@/models/classes/StatisticsFormElementClass";
+import {StatisticsFormElementClass} from "../classes/StatisticsFormElementClass";
 
 /**
  * Класс конфига формы сбора

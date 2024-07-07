@@ -1,10 +1,19 @@
 {
-  "name": "form-renderer",
-  "version": "1.0.0",
+  "name": "@petrov-ro/form-renderer",
+  "publishConfig": {
+    "registry": "https://github.com/petrov-ro"
+  },
+  "version": "2.0.1",
   "description": "Configurable form renderer",
-  "main": "index.ts",
+  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "rollup": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -15,12 +24,44 @@
     "construction"
   ],
   "author": "Roman Petrov",
-  "license": "ISC",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/clone-deep": "^4.0.4",
+    "@types/lodash": "^4.17.6",
+    "lodash": "^4.17.21",
+    "node-sass": "^9.0.0",
+    "rollup": "^4.17.2",
+    "rollup-plugin-dts": "^6.1.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.5"
+  },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
+    "@ant-design/pro-provider": "^2.14.7",
     "@types/react": "^18.3.1",
-    "antd": "^5.16.5",
+    "antd": "^5.17.0",
+    "classnames": "^2.5.1",
+    "clone-deep": "^4.0.1",
+    "fetch": "^1.1.0",
+    "moment": "^2.30.1",
+    "react": "^18.3.1",
+    "react-dnd": "^16.0.1",
+    "react-dom": "^18.3.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-scss": "^4.0.0"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": "^5.3.7",
+    "@types/react": "^18.3.1",
+    "antd": "^5.17.0",
+    "classnames": "^2.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "^5.4.5"
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-scss": "^4.0.0"
   }
 }

@@ -1,4 +1,4 @@
-@import '../../../../styles/base';
+@import '../../styles/base';
 
 .side-style {
   background-color: lightgray;
@@ -94,14 +94,6 @@
         cursor: grab;
         // background-color: #f2f2f2;
       }
-    }
-
-    .category-expand-icon {
-      @include expand-icon()
-    }
-
-    .category-expanded-icon {
-      @include expand-icon();
     }
   }
 }

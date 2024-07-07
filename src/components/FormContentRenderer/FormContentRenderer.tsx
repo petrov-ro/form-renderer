@@ -1,8 +1,7 @@
 import React, {Dispatch, SetStateAction} from "react";
-import {StatisticsFormElementClass} from "@/models/classes/StatisticsFormElementClass";
+import {StatisticsFormElementClass} from "../../models/classes/StatisticsFormElementClass";
 import StatisticsFormConstructorElement
-  from "@/containers/forms/StatisticsForm/StatisticsFormConstructor/StatisticsFormConstructorElement/StatisticsFormConstructorElement";
-import '@antv/s2-react/dist/style.min.css';
+  from "../../components/StatisticsFormConstructorElement/StatisticsFormConstructorElement";
 
 type FormContentRendererProps = {
   elements: StatisticsFormElementClass[]                                // элементы размещенные на форме
@@ -22,7 +21,7 @@ type FormContentRendererProps = {
  */
 const FormContentRenderer: React.FC<FormContentRendererProps> = props => {
   const {
-    elements, setElements = () => {},
+    elements = [], setElements = () => {},
     editComponent, setEditComponent = () => {},
     edit = false, reportMode, className
   } = props

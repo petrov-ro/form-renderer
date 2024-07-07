@@ -1,0 +1,62 @@
+@import '../../styles/base';
+
+$default-border-color: lightgray;
+
+@mixin remove-button-container($color, $backColor) {
+  display: block;
+  height: 30px;
+  width: 40px;
+  text-align: center;
+  border-left: 1px solid $color;
+  border-bottom: 1px solid $color;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: $backColor;
+}
+
+.component-container {
+  min-height: 40px;
+  position: relative;
+  border-radius: 5px;
+  margin: 1px;
+  padding: 5px;
+
+  &-editing {
+    border: 1px solid $blue-color;
+    padding: 4px;
+
+    .remove-button-container {
+      @include remove-button-container($blue-color, #dcf1ff);
+
+      .remove-button {
+        padding: 0;
+        color: $blue-color;
+      }
+    }
+  }
+
+  &-not-editing {
+    &:hover {
+      border: 1px solid $default-border-color;
+      cursor: pointer;
+      padding: 4px;
+
+      .remove-button-container {
+        @include remove-button-container($default-border-color, #f1f1f1);
+
+        .remove-button {
+          color: gray;
+          padding: 0;
+        }
+      }
+    }
+
+    &:not(:hover) {
+      border: 0px solid $default-border-color;
+
+      .remove-button-container {
+        display: none;
+      }
+    }
+  }
+}

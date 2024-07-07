@@ -1,0 +1,16 @@
+.statistics-grid-container {
+  padding: 10px 0;
+
+  .statistics-grid-col {
+    height: 100%;
+    border: 1px solid #eeeeee;
+    border-collapse: collapse;
+
+    .statistics-grid-cell {
+      min-height: 32px;
+      height: 100%;
+      //background-color: lightgray;
+      //background-image: repeating-linear-gradient(-45deg, #dedede, #dedede 1px, white 2px, white 10px);
+    }
+  }
+}
