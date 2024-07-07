@@ -3,7 +3,7 @@ import {Button, Form, Layout, Space} from "antd";
 import {StatisticsFormConfig} from "../../models/classes/StatisticsFormConfig";
 import FormContentRenderer from "../../components/FormContentRenderer/FormContentRenderer";
 import {CheckOutlined} from "@ant-design/icons";
-import {REACT_APP_API_URL} from "../../constants/Constants";
+import {API} from "../../constants/Constants";
 
 const {Content} = Layout;
 
@@ -52,8 +52,8 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
     // установка адреса апи
     useEffect(() => {
         if (apiPath) {
-            REACT_APP_API_URL = apiPath
-            Object.freeze(REACT_APP_API_URL)
+            API.REACT_APP_API_URL = apiPath
+            //Object.freeze(API)
         }
     }, [apiPath])
 
@@ -88,36 +88,34 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
         .concat(extraButtons)
 
     return (
-        <PathContext.Provider value={apiPath}>
-            <Form form={form} name="render-form" className='statistics-form-constructor'
-                  initialValues={data}
-                  onFieldsChange={onFieldsChange}
-                  layout='horizontal'
-            >
-                <Space direction='vertical' size='small' style={{width: '100%'}}>
-                    {showButtons &&
-                    <div className='buttons-panel'>
-                        {buttons.map(button =>
-                            <Button type="primary" icon={button.icon} size='small'
-                                    onClick={() => button.action(form.getFieldsValue(true))}>
-                                {button.text}
-                            </Button>
-                        )}
-                    </div>
-                    }
+        <Form form={form} name="render-form" className='statistics-form-constructor'
+              initialValues={data}
+              onFieldsChange={onFieldsChange}
+              layout='horizontal'
+        >
+            <Space direction='vertical' size='small' style={{width: '100%'}}>
+                {showButtons &&
+                <div className='buttons-panel'>
+                    {buttons.map(button =>
+                        <Button type="primary" icon={button.icon} size='small'
+                                onClick={() => button.action(form.getFieldsValue(true))}>
+                            {button.text}
+                        </Button>
+                    )}
+                </div>
+                }
 
-                    <Layout style={{width: '100%'}}>
-                        <Content style={{width: '100%', display: 'flex', backgroundColor: 'white'}}>
-                            <FormContentRenderer edit={edit}
-                                                 elements={elements}
-                                                 reportMode={edit}
-                                                 className='statistics-form-layout-content'
-                            />
-                        </Content>
-                    </Layout>
-                </Space>
-            </Form>
-        </PathContext.Provider>
+                <Layout style={{width: '100%'}}>
+                    <Content style={{width: '100%', display: 'flex', backgroundColor: 'white'}}>
+                        <FormContentRenderer edit={edit}
+                                             elements={elements}
+                                             reportMode={edit}
+                                             className='statistics-form-layout-content'
+                        />
+                    </Content>
+                </Layout>
+            </Space>
+        </Form>
     )
 }
 

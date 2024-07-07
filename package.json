@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://github.com/petrov-ro"
   },
-  "version": "2.0.1",
+  "version": "2.1.2",
   "description": "Configurable form renderer",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -37,7 +37,9 @@
     "rollup": "^4.17.2",
     "rollup-plugin-dts": "^6.1.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-scss": "^4.0.0"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
@@ -50,9 +52,7 @@
     "moment": "^2.30.1",
     "react": "^18.3.1",
     "react-dnd": "^16.0.1",
-    "react-dom": "^18.3.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-scss": "^4.0.0"
+    "react-dom": "^18.3.1"
   },
   "peerDependencies": {
     "@ant-design/icons": "^5.3.7",

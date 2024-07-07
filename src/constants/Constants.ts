@@ -1,4 +1,6 @@
-export let REACT_APP_API_URL: string = '1.1.1.1'
+export let API = {
+    REACT_APP_API_URL: '1.1.1.1'
+}
 export const ENTRIES_ON_PAGE = 100
 
 export const DATE_FORMAT = 'DD.MM.YYYY'

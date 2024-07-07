@@ -1,9 +1,9 @@
 import {errorHandle} from "../utils/messages";
-import {REACT_APP_API_URL} from "../constants/Constants";
+import {API} from "../constants/Constants";
 
 export const getp = <T = any>(url: string, params = {}, error: (err: string) => void = errorHandle, silent = false): Promise<any> => {
   // clear() // сброс всех сообщений пока отключил т.к. на формах после неудачного сохранения обновляются справочники и сбрасывают сообщения
-  return fetch(`${REACT_APP_API_URL}/${url}`, {
+  return fetch(`${API.REACT_APP_API_URL}/${url}`, {
     method: 'GET',
     ...params,
   })
@@ -25,7 +25,7 @@ export const getp = <T = any>(url: string, params = {}, error: (err: string) => 
  */
 export const postp = <T = any>(url: string, data?: any, params?: any, silent = false, throwout = false): Promise<any> => {
   // clear() // сброс всех сообщений пока отключил т.к. на формах после неудачного сохранения обновляются встроенные гриды и сбрасывают сообщения
-  return fetch(`${REACT_APP_API_URL}/${url}`, {
+  return fetch(`${API.REACT_APP_API_URL}/${url}`, {
     method: 'POST',
     data,
     ...params,
@@ -41,7 +41,7 @@ export const postp = <T = any>(url: string, data?: any, params?: any, silent = f
 }
 
 export const putp = <T = any>(url: string, data?: any, params?: any, silent = false): Promise<any> => {
-  return fetch(`${REACT_APP_API_URL}/${url}`, {
+  return fetch(`${API.REACT_APP_API_URL}/${url}`, {
     method: 'PUT',
     data,
     ...params,
