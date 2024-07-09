@@ -1,4 +1,4 @@
-import {getp} from "./AbstractService";
+import {getJSON} from "./AbstractService";
 import {FormType} from "../models/types/FormType";
 import {Key} from "react";
 
@@ -17,11 +17,11 @@ export const getFormData = (type: FormType | undefined,
                             record: object | undefined,
                             successHandle?: any,
                             errorHandle?: any,
-                            finalHandle?: any) => {
+                            finalHandle?: () => void) => {
   if (type && (id || record)) {
     const url = type.url?.(record || id) || `${type.getRoute || type.route}/${id}`;
 
-    getp(url, undefined, errorHandle)
+    getJSON(url, undefined, errorHandle)
       .then(successHandle)
       .finally(finalHandle)
   } else {

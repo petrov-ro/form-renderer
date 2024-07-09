@@ -23,123 +23,124 @@ type StatisticsPanelType = StatisticsFormElementExtendedType<StatisticsPanelValu
  * @constructor
  */
 const StatisticsPanel: React.FC<StatisticsPanelType> = props => {
-  const {elements, setElements, currentElement, edit, changeValue, editComponent, setEditComponent} = props
-  const {id, value = '', content = []} = currentElement
+    const {elements, setElements, currentElement, edit, changeValue, editComponent, setEditComponent} = props
+    const {id, value = '', content = []} = currentElement
 
-  const empty = content.length < 1    // флаг отсутсвия элементов на панели
+    const empty = content.length < 1    // флаг отсутсвия элементов на панели
 
-  const [editing, setEditing] = useState(false)
-  const [editValue, setEditValue] = useState(value)
+    const [editing, setEditing] = useState(false)
+    const [editValue, setEditValue] = useState(value)
 
-  // заголовок панели
-  const header = () => {
-    // сохранение названия таба
-    const save = () => {
-      changeValue(editValue)
-      setEditing(false)
+    // заголовок панели
+    const header = () => {
+        // сохранение названия таба
+        const save = () => {
+            changeValue(editValue)
+            setEditing(false)
+        }
+
+        return (
+            <div style={{textAlign: 'left'}} className='panel-header'>
+                {!editing &&
+                <>
+                    {edit &&
+                    <Button type='link' icon={<EditOutlined/>}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                setEditing(true)
+                            }}/>
+                    }
+                    {value}
+                </>
+                }
+
+                {editing &&
+                <>
+                    <Button type='link' icon={<SaveOutlined/>}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                save()
+                            }}/>
+                    <Input defaultValue={editValue} style={{maxWidth: 'calc(100% - 60px)'}}
+                           onKeyDown={(e) => {
+                               if (e.which == 13) {
+                                   save()
+                               } else {
+                                   e.stopPropagation()
+                               }
+                               e.stopPropagation()
+                           }}
+                           onClick={(e) => {
+                               e.stopPropagation()
+                           }}
+                           onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                               setEditValue(e.target.value)
+                               e.stopPropagation()
+                           }}
+                    />
+                </>
+                }
+    </div>
+        )
+    }
+
+    /**
+     * Изменение контента (вложенных элементов) компонента
+     */
+    const changeContent = (e: StatisticsFormElementClass[]) => {
+        const newElements = elements.map(el => el.id === id ? {...el, content: e} : el)
+        setElements(newElements)
+    }
+
+    /**
+     * Перемещение элемента на панель
+     * @param dragElement  - перетаскиваемый элемент
+     */
+    const onDrop = (type: Identifier | null, item: StatisticsFormComponentType | StatisticsIndicatorClass) => {
+        const elem =
+            type === DraggableElements.COMPONENT ? (
+                new StatisticsFormElementClass(
+                    (item as StatisticsFormComponentType).defaultValue,
+                    DraggableElements.COMPONENT,
+                    item as StatisticsFormComponentType)
+            ) : (
+                new StatisticsFormElementClass(undefined, DraggableElements.INDICATOR, undefined,
+                    item as StatisticsIndicatorClass)
+            )
+
+        // добавление атрибута в контент панели
+        const newContent = [...content].concat(elem)
+        changeContent(newContent)
     }
 
     return (
-      <span>
-        {!editing &&
-        <>
-          {edit &&
-          <Button type='link' icon={<EditOutlined/>}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setEditing(true)
-                  }}/>
-          }
-          {value}
-        </>
-        }
+        <DropTarget onDrop={onDrop}>
+            <div className={`statistics-panel-container component-${id}`}>
+                <Collapse defaultActiveKey={['1']}
+                          bordered={false}
+                          expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
+                >
+                    <Panel header={header()} key="1">
+                        {empty &&
+                        <div>Перенесите компоненты и показатели сюда</div>}
 
-        {editing &&
-        <>
-            <Button type='link' icon={<SaveOutlined/>}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      save()
-                    }}/>
-            <Input defaultValue={editValue} style={{maxWidth: 'calc(100% - 60px)'}}
-                   onKeyDown={(e) => {
-                     if (e.which == 13) {
-                       save()
-                     } else {
-                       e.stopPropagation()
-                     }
-                     e.stopPropagation()
-                   }}
-                   onClick={(e) => {
-                     e.stopPropagation()
-                   }}
-                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                     setEditValue(e.target.value)
-                     e.stopPropagation()
-                   }}
-            />
-        </>
-        }
-    </span>
-    )
-  }
-
-  /**
-   * Изменение контента (вложенных элементов) компонента
-   */
-  const changeContent = (e: StatisticsFormElementClass[]) => {
-    const newElements = elements.map(el => el.id === id ? {...el, content: e} : el)
-    setElements(newElements)
-  }
-
-  /**
-   * Перемещение элемента на панель
-   * @param dragElement  - перетаскиваемый элемент
-   */
-  const onDrop = (type: Identifier | null, item: StatisticsFormComponentType | StatisticsIndicatorClass) => {
-    const elem =
-      type === DraggableElements.COMPONENT ? (
-        new StatisticsFormElementClass(
-          (item as StatisticsFormComponentType).defaultValue,
-          DraggableElements.COMPONENT,
-          item as StatisticsFormComponentType)
-      ) : (
-        new StatisticsFormElementClass(undefined, DraggableElements.INDICATOR, undefined,
-          item as StatisticsIndicatorClass)
-      )
-
-    // добавление атрибута в контент панели
-    const newContent = [...content].concat(elem)
-    changeContent(newContent)
-  }
-
-  return (
-    <DropTarget onDrop={onDrop}>
-      <div className={`statistics-panel-container component-${id}`}>
-        <Collapse defaultActiveKey={['1']}
-                  bordered={false}
-                  expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
-        >
-          <Panel header={header()} key="1">
-            {empty &&
-            <div>Перенесите компоненты и показатели сюда</div>}
-
-            {!empty &&
-            <div className='container'>
-              {content
-                .map((element: StatisticsFormElementClass) =>
-                  <StatisticsFormConstructorElement elements={content} setElements={changeContent}
-                                                    currentElement={element} edit={edit}
-                                                    editComponent={editComponent}
-                                                    setEditComponent={setEditComponent}/>
-                )}
+                        {!empty &&
+                        <div className='container'>
+                            {content
+                                .map((element: StatisticsFormElementClass) =>
+                                    <StatisticsFormConstructorElement key={element.id}
+                                                                      elements={content} setElements={changeContent}
+                                                                      currentElement={element} edit={edit}
+                                                                      editComponent={editComponent}
+                                                                      setEditComponent={setEditComponent}/>
+                                )}
+                        </div>
+                        }
+                    </Panel>
+                </Collapse>
             </div>
-            }
-          </Panel>
-        </Collapse>
-      </div>
-    </DropTarget>
-  )
+        </DropTarget>
+    )
 }
 
 export default StatisticsPanel

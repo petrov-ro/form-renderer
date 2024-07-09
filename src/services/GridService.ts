@@ -3,7 +3,7 @@ import {SortOrder} from "antd/lib/table/interface";
 import {ParamsType} from "@ant-design/pro-provider";
 import {GridType} from "../models/types/GridType";
 import {GridTypes} from "../constants/GridTypes";
-import {getp, postp} from "../services/AbstractService";
+import {getJSON, postp} from "../services/AbstractService";
 import {gidRequestParams} from "../utils/searchUtils";
 import {isArray} from "../utils/arrayUtils";
 import {isNumeric} from "../utils/common";
@@ -12,9 +12,9 @@ import {getEntityByType} from "../utils/entityHelper";
 import {EntityClass} from "../models/classes/EntityClass";
 
 export type GridParamType = ParamsType & {
-  pageSize?: number;
-  current?: number;
-  keyword?: string;
+    pageSize?: number;
+    current?: number;
+    keyword?: string;
 }
 
 /**
@@ -31,20 +31,20 @@ const gridData = <T extends Record<string, any>>(params: GridParamType,
                                                  type: GridType,
                                                  entity?: EntityClass
 ): Promise<T[]> => {
-  const {current = 1, pageSize = ENTRIES_ON_PAGE, ...restParams} = params
-  const url = `${type.data ? '' : 'system/grid/'}${type.route}`
+    const {current = 1, pageSize = ENTRIES_ON_PAGE, ...restParams} = params
+    const url = `${type.data ? '' : 'system/grid/'}${type.route}`
 
-  const data = {
-    limit: pageSize,
-    offset: pageSize * (current - 1),
-    fields: type.fields || undefined,
-    ...gidRequestParams(type, sort, restParams, undefined, undefined, entity)
-  }
+    const data = {
+        limit: pageSize,
+        offset: pageSize * (current - 1),
+        fields: type.fields || undefined,
+        ...gidRequestParams(type, sort, restParams, undefined, undefined, entity)
+    }
 
-  return (
-    postp<T[]>(url, data, filter)
-      .then(resp => isArray(resp) ? resp : [])
-  )
+    return (
+        postp<T[]>(url, data, filter)
+            .then(resp => isArray(resp) ? resp : [])
+    )
 }
 
 /**
@@ -59,36 +59,36 @@ const gridDataCount = (params: GridParamType,
                        total?: number,
                        entity?: EntityClass
 ): Promise<number> => {
-  if (total !== undefined && isNumeric(total)) {
-    return Promise.resolve(total)
-  }
-
-  if (type) {
-    const {current = 1, pageSize = ENTRIES_ON_PAGE, ...restParams} = params
-
-    if (type.data) {
-      const url = type.routeCount || ''
-      const offset = pageSize * (current - 1)
-      const data = {
-        ...gidRequestParams(type, sort, restParams, undefined, undefined, entity),
-        limit: pageSize,
-        offset
-      }
-      return postp(url, data)
-        .then(t => t + offset)
+    if (total !== undefined && isNumeric(total)) {
+        return Promise.resolve(total)
     }
 
-    const url = `system/grid/count/${type.route}`
-    const data = {
-      search: gidRequestParams(type, sort, restParams, undefined, undefined, entity)?.search
-    }
+    if (type) {
+        const {current = 1, pageSize = ENTRIES_ON_PAGE, ...restParams} = params
 
-    const uncoutable = [GridTypes.ENTITY_CATEGORY.route, GridTypes.STATISTICS_INDICATOR.route].includes(type.route)
-    return uncoutable ? Promise.resolve(0) : postp(url, data)
-  }
-  return Promise.reject(
-    new Error('Не задан тип грида')
-  )
+        if (type.data) {
+            const url = type.routeCount || ''
+            const offset = pageSize * (current - 1)
+            const data = {
+                ...gidRequestParams(type, sort, restParams, undefined, undefined, entity),
+                limit: pageSize,
+                offset
+            }
+            return postp(url, data)
+                .then(t => t + offset)
+        }
+
+        const url = `system/grid/count/${type.route}`
+        const data = {
+            search: gidRequestParams(type, sort, restParams, undefined, undefined, entity)?.search
+        }
+
+        const uncoutable = [GridTypes.ENTITY_CATEGORY.route, GridTypes.STATISTICS_INDICATOR.route].includes(type.route)
+        return uncoutable ? Promise.resolve(0) : postp(url, data)
+    }
+    return Promise.reject(
+        new Error('Не задан тип грида')
+    )
 }
 
 /**
@@ -97,7 +97,7 @@ const gridDataCount = (params: GridParamType,
  * @param params
  */
 const getEntityCategory = <T extends Record<string, any>>(params: GridParamType): Promise<T[]> =>
-  getp(`entity-category/tree?modelId=${params.model_id || ''}&categId=${params.categId || ''}&categOnly=${params.categ_only || false}`)
+    getJSON(`entity-category/tree?modelId=${params.model_id || ''}&categId=${params.categId || ''}&categOnly=${params.categ_only || false}`)
 
 
 /**
@@ -106,7 +106,7 @@ const getEntityCategory = <T extends Record<string, any>>(params: GridParamType)
  * @param params
  */
 const getCategory = <T extends Record<string, any>>(params: GridParamType): Promise<T[]> =>
-  getp(`statistics-indicator-category/tree?categId=${params.categId || ''}&categOnly=${params.categ_only || false}`)
+    getJSON(`statistics-indicator-category/tree?categId=${params.categId || ''}&categOnly=${params.categ_only || false}`)
 
 /**
  * Получение данных
@@ -114,27 +114,27 @@ const getCategory = <T extends Record<string, any>>(params: GridParamType): Prom
  * @param params
  */
 export const getData = <T extends Record<string, any>>(
-  params: GridParamType,
-  sort: Record<string, SortOrder> = {},
-  filter: Record<string, React.ReactText[] | null> = {},
-  type?: GridType,
-  initialData?: T[],
-  entity?: EntityClass
+    params: GridParamType,
+    sort: Record<string, SortOrder> = {},
+    filter: Record<string, React.ReactText[] | null> = {},
+    type?: GridType,
+    initialData?: T[],
+    entity?: EntityClass
 ): Promise<T[]> => {
-  if (type) {
-    return (
-      GridTypes.ENTITY_CATEGORY.route === type.route ? (
-        getEntityCategory(params)
-      ) : (
-        GridTypes.STATISTICS_INDICATOR.route === type.route ? (
-          getCategory(params)
-        ) : (
-          gridData(params, sort, filter, type, entity)
-        )
-      ))
-  }
+    if (type) {
+        return (
+            GridTypes.ENTITY_CATEGORY.route === type.route ? (
+                getEntityCategory(params)
+            ) : (
+                GridTypes.STATISTICS_INDICATOR.route === type.route ? (
+                    getCategory(params)
+                ) : (
+                    gridData(params, sort, filter, type, entity)
+                )
+            ))
+    }
 
-  return Promise.resolve(initialData || [])
+    return Promise.resolve(initialData || [])
 }
 
 /**
@@ -146,26 +146,26 @@ export const getData = <T extends Record<string, any>>(
  * @param type
  */
 export const getTableData = <T extends Record<string, any>>(
-  params: GridParamType,
-  sort: Record<string, SortOrder> = {},
-  filter: Record<string, React.ReactText[] | null> = {},
-  type?: GridType,
-  initialData?: T[],
-  total?: number
+    params: GridParamType,
+    sort: Record<string, SortOrder> = {},
+    filter: Record<string, React.ReactText[] | null> = {},
+    type?: GridType,
+    initialData?: T[],
+    total?: number
 ): Promise<{ data?: any[], success?: boolean }> =>
-  getEntityByType(type)
-    .then((entity: EntityClass | undefined) =>
-      Promise.all([
-        getData(params, sort, filter, type, initialData, entity),
-        gridDataCount(params, sort, type, total, entity)
-      ])
-        .then(([data = [], count]) => ({
-          data: data as T[],
-          total: count,
-          success: true
-        }))
-        .catch(() => ({
-            data: [],
-            success: false
-          })
-        ))
+    getEntityByType(type)
+        .then((entity: EntityClass | undefined) =>
+            Promise.all([
+                getData(params, sort, filter, type, initialData, entity),
+                gridDataCount(params, sort, type, total, entity)
+            ])
+                .then(([data = [], count]) => ({
+                    data: data as T[],
+                    total: count,
+                    success: true
+                }))
+                .catch(() => ({
+                        data: [],
+                        success: false
+                    })
+                ))

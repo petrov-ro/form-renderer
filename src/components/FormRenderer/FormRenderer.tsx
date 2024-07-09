@@ -4,6 +4,8 @@ import {StatisticsFormConfig} from "../../models/classes/StatisticsFormConfig";
 import FormContentRenderer from "../../components/FormContentRenderer/FormContentRenderer";
 import {CheckOutlined} from "@ant-design/icons";
 import {API} from "../../constants/Constants";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 
 const {Content} = Layout;
 
@@ -50,12 +52,15 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
     const [form] = Form.useForm();
 
     // установка адреса апи
+    if (apiPath) {
+        API.REACT_APP_API_URL = apiPath
+        //Object.freeze(API)
+    }
+
+/*    // установка адреса апи
     useEffect(() => {
-        if (apiPath) {
-            API.REACT_APP_API_URL = apiPath
-            //Object.freeze(API)
-        }
-    }, [apiPath])
+
+    }, [apiPath])*/
 
     const showButtons = (checkButton || extraButtons.length > 0)
 
@@ -93,30 +98,33 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
               onFieldsChange={onFieldsChange}
               layout='horizontal'
         >
-            <Space direction='vertical' size='small' style={{width: '100%'}}>
-                {showButtons &&
-                <div className='buttons-panel'>
-                    {buttons.map(button =>
-                        <Button type="primary" icon={button.icon} size='small'
-                                onClick={() => button.action(form.getFieldsValue(true))}>
-                            {button.text}
-                        </Button>
-                    )}
-                </div>
-                }
+            <DndProvider backend={HTML5Backend}>
+                <Space direction='vertical' size='small' style={{width: '100%'}}>
+                    {showButtons &&
+                    <div className='buttons-panel'>
+                        {buttons
+                            .map((button, i) =>
+                            <Button key={i} type="primary" icon={button.icon} size='small'
+                                    onClick={() => button.action(form.getFieldsValue(true))}>
+                                {button.text}
+                            </Button>
+                        )}
+                    </div>
+                    }
 
-                <Layout style={{width: '100%'}}>
-                    <Content style={{width: '100%', display: 'flex', backgroundColor: 'white'}}>
-                        <FormContentRenderer edit={edit}
-                                             elements={elements}
-                                             reportMode={edit}
-                                             className='statistics-form-layout-content'
-                        />
-                    </Content>
-                </Layout>
-            </Space>
+                    <Layout style={{width: '100%'}}>
+                        <Content style={{width: '100%', display: 'flex', backgroundColor: 'white'}}>
+                            <FormContentRenderer edit={edit}
+                                                 elements={elements}
+                                                 reportMode={edit}
+                                                 className='statistics-form-layout-content'
+                            />
+                        </Content>
+                    </Layout>
+                </Space>
+            </DndProvider>
         </Form>
     )
 }
 
-export default FormRenderer
+export default React.memo(FormRenderer)

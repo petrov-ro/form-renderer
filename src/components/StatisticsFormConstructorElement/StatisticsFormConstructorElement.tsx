@@ -9,7 +9,6 @@ import {StatisticsFormComponentDict, StatisticsFormComponentTypeEnum} from "../.
 import {StatisticsIndicatorClass} from "../../models/classes/StatisticsIndicatorClass";
 import StatisticsFormField from "./StatisticsFormField/StatisticsFormField";
 import {FormProps} from "../../models/types/FormPropsType";
-import {FormConfigComponentTypeEnum} from "../../constants/FormConfigComponentTypeEnum";
 import {StatisticsFormElementExtendedType} from "../../models/types/StatisticsFormElementExtendedType";
 
 type StatisticsFormConstructorElementProps = FormProps & {
@@ -60,7 +59,7 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
 
     const isIndicator = currentElementType === DraggableElements.INDICATOR  // текущий элемент - это индикатор
     const isComponent = currentElementType === DraggableElements.COMPONENT  // текущий элемент - это компонент
-    const componentDictItem = isComponent && type && StatisticsFormComponentDict[type]  // запись из справочника компонентов
+    const componentDictItem = isComponent && StatisticsFormComponentDict[type]  // запись из справочника компонентов
 
     const isEditing = edit && id === editComponent  // флаг режима редактирования формы в конструкторе
     const isSection = columnSection || rowSection   // флаг сбора данных в разрезе
@@ -151,4 +150,4 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
     )
 }
 
-export default StatisticsFormConstructorElement
+export default React.memo(StatisticsFormConstructorElement)

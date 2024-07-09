@@ -7,9 +7,8 @@ import {DATA_SYSTEM_KEY, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../../constants/Co
 import {entityDataGridType} from "../../constants/GridTypes";
 import useGridData from "../../hooks/useGridData";
 import OptionData from "../../models/types/OptionData";
-import {CheckboxValueType} from "antd/lib/checkbox/Group";
 
-type RefCheckboxProps = Partial<FormFieldProps<CheckboxValueType[]>> & {
+type RefCheckboxProps = Partial<FormFieldProps<any[]>> & {
   multivalued?: boolean   // флаг возможности множественного выбора
   label: string           // наименование сущности
   code: string            // код сущности для отображения записей
@@ -51,7 +50,7 @@ const RefCheckbox: React.FC<RefCheckboxProps> = props => {
    *
    * @param newVal - новое значение
    */
-  const onChangeCheckbox = (newVal: CheckboxValueType[]) => {
+  const onChangeCheckbox = (newVal: any[]) => {
     setValue(newVal)
     onChange?.(newVal)
   }

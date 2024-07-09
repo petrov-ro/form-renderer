@@ -66,7 +66,7 @@ const EmbeddedObjects: React.FC<EmbeddedObjectsType> = props => {
         {!empty && <div className='container'>
           {value
             .map((element: StatisticsFormElementClass) =>
-              <StatisticsFormConstructorElement elements={value} setElements={changeValue}
+              <StatisticsFormConstructorElement elements={value} setElements={changeValue} key={element.id}
                                                 currentElement={element} edit={edit} setEditComponent={setEditComponent}/>
             )}
         </div>

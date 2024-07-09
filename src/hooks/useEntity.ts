@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
-import {getp} from "@/services/AbstractService";
-import {EntityClass} from "@/models/classes/EntityClass";
+import {getJSON} from "../services/AbstractService";
+import {EntityClass} from "../models/classes/EntityClass";
 
 export type useEntityProps = {
   loading: boolean
-  entity?: EntityClass
+  entity: EntityClass | undefined
 }
 
 /**
@@ -45,7 +45,7 @@ const useEntity = (code?: string, defaultEntity?: EntityClass, modelId?: string,
         const url = getURL(code, modelId, id)
 
         // получение данных
-        const data = await getp(url)
+        const data = await getJSON(url)
 
         if (isMounted) {
           setEntity({

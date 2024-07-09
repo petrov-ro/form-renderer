@@ -89,7 +89,7 @@ const StatisticsTab: React.FC<StatisticsTabProps> = props => {
         <div className='container'>
           {tabElements
             .map((element: StatisticsFormElementClass) =>
-              <StatisticsFormConstructorElement elements={tabElements} setElements={changeTabElements}
+              <StatisticsFormConstructorElement key={element.id} elements={tabElements} setElements={changeTabElements}
                                                 currentElement={element} edit={edit}
                                                 editComponent={editComponent}
                                                 setEditComponent={setEditComponent}/>

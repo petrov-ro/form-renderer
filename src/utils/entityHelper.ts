@@ -1,4 +1,4 @@
-import {getp} from "../services/AbstractService";
+import {getJSON} from "../services/AbstractService";
 import {GridType} from "../models/types/GridType";
 import {EntityClass} from "../models/classes/EntityClass";
 import {EntityAttrClass} from "../models/classes/EntityAttrClass";
@@ -15,7 +15,7 @@ export async function getEntityByCode(code: string, modelId?: string): Promise<E
     const url = modelId ? `entity/by-model-and-code/${modelId}/${code}` : `entity/by-code/${code}`
 
     // получение данных
-    const data = await getp(url)
+    const data = await getJSON(url)
 
     return data
   } catch (error) {
