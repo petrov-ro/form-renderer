@@ -14,12 +14,12 @@ import StatisticsFormFieldConfig from "./StatisticsFormFieldConfig/StatisticsFor
 
 type StatisticsFormConstructorElementProps = FormProps & {
     elements: StatisticsFormElementClass[]                               // элементы размещенные на форме
-    setElements: (e: StatisticsFormElementClass[]) => void               // изменение элементов на форме
+    setElements?: (e: StatisticsFormElementClass[]) => void               // изменение элементов на форме
     currentElement: StatisticsFormElementClass                           // текущий элемент, который нужно отрисовать
     edit: boolean                                                        // режим редактирования формы внутри режима конструктора
     reportMode?: boolean                                                 // режим ввода данных отчета
     editComponent?: string                                               // идентификатор редактируемого компонента
-    setEditComponent: Dispatch<SetStateAction<string | undefined>>       // установка редактируемого компонента
+    setEditComponent?: Dispatch<SetStateAction<string | undefined>>       // установка редактируемого компонента
 }
 
 /**

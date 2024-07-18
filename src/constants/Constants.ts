@@ -1,5 +1,5 @@
 export let API = {
-    REACT_APP_API_URL: '1.1.1.1',
+    REACT_APP_API_URL: '/',
     fetch: (url: string, params: Record<string, any>) => Promise.reject('Не задан метод получения данных')
 }
 export const ENTRIES_ON_PAGE = 100

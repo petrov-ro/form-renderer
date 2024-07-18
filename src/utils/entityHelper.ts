@@ -12,7 +12,7 @@ import {EntityAttrClass} from "../models/classes/EntityAttrClass";
 export async function getEntityByCode(code: string, modelId?: string): Promise<EntityClass | undefined> {
   try {
     // генерация url
-    const url = modelId ? `entity/by-model-and-code/${modelId}/${code}` : `entity/by-code/${code}`
+    const url = modelId ? `statistics-form-renderer/by-model-and-code/${modelId}/${code}` : `statistics-form-renderer/by-code/${code}`
 
     // получение данных
     const data = await getJSON(url)

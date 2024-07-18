@@ -37,10 +37,10 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
   const {entity} = useEntity(code)
 
   // формирование типа грида
-  const gridType = entityDataGridType(code, label, [DATA_SYSTEM_KEY, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`], entity)
+  const gridType = entityDataGridType(code, label, [DATA_SYSTEM_KEY, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'], entity)
   const gridTypeKeys = {
     ...gridType,
-    labelKey: [SYS_DATA, SYS_DATA_TITLE_ATTR],
+    labelKey: 'name',
     valueKey: DATA_SYSTEM_KEY
   }
 
