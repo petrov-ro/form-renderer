@@ -24,7 +24,7 @@ export type RefGridType<T = any> = Partial<FormFieldProps<T>> & {
 }
 
 type FormAttributeObjectProps = Partial<RefGridType<Record<string, any> | Record<string, any>[]>> & {
-    entity?: EntityClass
+    formConfigComponents?: FormConfigComponentType[]
 }
 
 /**
@@ -35,28 +35,21 @@ type FormAttributeObjectProps = Partial<RefGridType<Record<string, any> | Record
  */
 const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     const {
-        loading, onChange, multivalued, code, label = '', entity,
+        loading, onChange, multivalued, formConfigComponents = [],
         value = multivalued ? [] : {}
     } = props
 
-    // конфиг сущности на которую ссылается объект
-    const {
-        config: {
-            formConfig: {
-                components = []
-            } = {}
-        } = {}
-    } = entity || {}
-
     // получение формы (компонента формы сбора) для сущности на которую ссылается объект (если такая форма есть - она будет отрисована, иначе - грид)
-    const embeddedForm = components.find((f: FormConfigComponentType) => f.type === FormConfigComponentTypeEnum.EMBEDDED_FORM)
+    const embeddedForm = formConfigComponents.find((f: FormConfigComponentType) => f.type === FormConfigComponentTypeEnum.EMBEDDED_FORM)
 
     /**
      * Изменение значения в массиве
      * @param index - индекс записи в массиве
      */
     const onChangeVal = (index: number) => (newVal: Record<string, any>) => {
-        const newValue = value.map((val: Record<string, any>, i: number) => i === index ? newVal : val)
+        const name = newVal[0].name[0]
+        const v = newVal[0].value
+        const newValue = value.map((val: Record<string, any>, i: number) => i === index ? {...value, [name]: v} : val)
         onChange?.(newValue)
     }
 
@@ -64,7 +57,9 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
      * Изменение одиночного значения
      */
     const onChangeSingle = (newVal: Record<string, any>) => {
-        onChange?.(newVal)
+        const name = newVal[0].name[0]
+        const val = newVal[0].value
+        onChange?.({...value, [name]: val})
     }
 
     /**

@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from "react";
+import React, {PropsWithChildren, ReactNode} from "react";
 import cn from 'classnames'
 import {
     Checkbox,
@@ -13,6 +13,7 @@ import {FormItemTypes} from "../../constants/FormItemTypes";
 import {DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import UUIDField from "../../components/FormField/Fields/UUIDField/UUIDField";
+import ValuesArrayField from "./Fields/ValuesArrayField/ValuesArrayField";
 import ObjectByForm from "../../components/FormField/Fields/ObjectByForm/ObjectByForm";
 import './FormField.scss'
 
@@ -36,7 +37,8 @@ const fields: any = {
     [FormItemTypes.object]: ObjectByForm,
     [FormItemTypes.tree]: Tree,
     [FormItemTypes.treeSelect]: TreeSelect,
-    [FormItemTypes.file]: Upload
+    [FormItemTypes.file]: Upload,
+    [FormItemTypes.values]: ValuesArrayField
 }
 
 /**
@@ -45,14 +47,14 @@ const fields: any = {
  * @param props
  * @constructor
  */
-const FormItem = (props: PropsWithChildren<FormFieldProps> & { inputType: FormItemTypes }): JSX.Element => {
+const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Element => {
     const {
         inputType, name, label, styleLabel, fieldProps, children, className, rules, ...childrenProps
     } = props;
     const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
 
     return (
-        <Form.Item name={name} className={className} style={styleLabel} rules={rules}>
+        <Form.Item name={name} className={className} style={styleLabel} rules={rules} layout={'horizontal'}>
             <CustomElement {...childrenProps} {...fieldProps} label={label}/>
         </Form.Item>
     )
@@ -70,6 +72,8 @@ const FormField = React.forwardRef(
             span = 24, xs, sm, md, lg, xl, xxl, flex,
             ...restProps
         } = props;
+
+        // console.log(props)
 
         // название поля
         const label = labelText
@@ -130,11 +134,11 @@ const FormField = React.forwardRef(
                 span={span} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl} flex={flex}>
                 <div className={cn({'input-disabled-container': disabled})}>
                     <Row>
-                        <Col xs={12} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}}>
+                        <Col xs={12} lg={6} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}}>
                             {label}
                         </Col>
 
-                        <Col xs={12} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}}>
+                        <Col xs={12} lg={18} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}} className='data-col'>
                             <Spin spinning={loading}>
                                 <FormItem {...mainProps} {...addProps} ref={ref} inputType={inputType}/>
                             </Spin>

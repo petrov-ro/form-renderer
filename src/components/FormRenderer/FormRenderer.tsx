@@ -1,11 +1,11 @@
-import React, {ReactElement, useEffect} from "react";
+import React, {ReactElement} from "react";
 import {Button, Form, Layout, Space} from "antd";
 import {StatisticsFormConfig} from "../../models/classes/StatisticsFormConfig";
 import FormContentRenderer from "../../components/FormContentRenderer/FormContentRenderer";
 import {CheckOutlined} from "@ant-design/icons";
 import {API} from "../../constants/Constants";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
+import {modifyConfig} from "../../services/ConfigService";
+import {ClassicFormClass} from "../../models/classes/ClassicFormElementClass";
 
 const {Content} = Layout;
 
@@ -25,15 +25,17 @@ interface CheckResultType {
 }
 
 interface FormRendererProps {
-    apiPath: string                                      // адрес для вызова процедур
-    config?: StatisticsFormConfig                        // конфиг (метаданные) формы
-    edit?: boolean                                       // режим редактирования
-    data?: Record<string, any>                           // данные для отображения на форме
-    checkHandle?: (data: Record<string, any>,
-                   result: CheckResultType) => void      // колбек при проверке данных
-    setData?: (data: Record<string, any>) => void        // колбек при установке новых значений формы
-    extraButtons?: ButtonType[]                          // дополнительные кнопки
-    checkButton?: boolean                                // флаг отображения кнопки проверки
+    fetch: (url: string, params: Record<string, any>) => Promise<Response>   // адрес для вызова процедур
+    apiPath: string                                             // адрес для вызова процедур
+    config?: StatisticsFormConfig | ClassicFormClass            // конфиг (метаданные) формы
+    edit?: boolean                                              // режим редактирования
+    data?: Record<string, any>                                  // данные для отображения на форме
+    checkHandle?: (data: string,
+                   result: CheckResultType) => void             // колбек при проверке данных
+    setData?: (data: string) => void                            // колбек при установке новых значений формы
+    extraButtons?: ButtonType[]                                 // дополнительные кнопки
+    checkButton?: boolean                                       // флаг отображения кнопки проверки
+    legacy?: boolean                                            // старый формат конфига
 }
 
 /**
@@ -44,43 +46,42 @@ interface FormRendererProps {
  */
 const FormRenderer: React.FC<FormRendererProps> = props => {
     const {
-        config = {} as StatisticsFormConfig, edit, data, setData, checkHandle, extraButtons = [], checkButton = true,
-        apiPath
+        config, edit, data, setData, checkHandle, extraButtons = [], checkButton = true,
+        apiPath, fetch, legacy = true
     } = props
-    const {elements = []} = config
+
+    // приведение типа конфига
+    const modifiedConfig = legacy ? modifyConfig(config as ClassicFormClass) : (config as StatisticsFormConfig)
+
+    const {elements = []} = modifiedConfig
 
     const [form] = Form.useForm();
 
     // установка адреса апи
-    if (apiPath) {
+    //if (apiPath) {
         API.REACT_APP_API_URL = apiPath
+        API.fetch = fetch
         //Object.freeze(API)
-    }
-
-/*    // установка адреса апи
-    useEffect(() => {
-
-    }, [apiPath])*/
+    //}
 
     const showButtons = (checkButton || extraButtons.length > 0)
 
     /**
      * Изменение значений формы
      */
-    const onFieldsChange = (values: any) => {
-        form?.setFieldsValue(values)
-        setData?.(values)
+    const getFormData = () => {
+        return JSON.stringify(form.getFieldsValue(true))
     }
 
-    /**
+     /**
      * Проверка значений формы
      */
-    const checkValues = (values: Record<string, any>) => {
+    const checkValues = () => {
         const result: CheckResultType = {
             errors: [],
             warnings: []
         }
-        checkHandle?.(values, result)
+        checkHandle?.(getFormData(), result)
     }
 
     // кнопки в хедере формы
@@ -95,10 +96,8 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
     return (
         <Form form={form} name="render-form" className='statistics-form-constructor'
               initialValues={data}
-              onFieldsChange={onFieldsChange}
-              layout='horizontal'
+              layout='vertical'
         >
-            <DndProvider backend={HTML5Backend}>
                 <Space direction='vertical' size='small' style={{width: '100%'}}>
                     {showButtons &&
                     <div className='buttons-panel'>
@@ -113,7 +112,7 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
                     }
 
                     <Layout style={{width: '100%'}}>
-                        <Content style={{width: '100%', display: 'flex', backgroundColor: 'white'}}>
+                        <Content style={{width: '100%', display: 'block', backgroundColor: 'white'}}>
                             <FormContentRenderer edit={edit}
                                                  elements={elements}
                                                  reportMode={edit}
@@ -122,7 +121,6 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
                         </Content>
                     </Layout>
                 </Space>
-            </DndProvider>
         </Form>
     )
 }

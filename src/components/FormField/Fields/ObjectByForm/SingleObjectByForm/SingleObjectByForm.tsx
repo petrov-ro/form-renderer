@@ -31,10 +31,9 @@ const SingleObjectByForm: React.FC<FormAttributeObjectProps> = props => {
   }
 
   return (
-      <Form form={form} initialValues={value} onFieldsChange={onFieldsChange}>
+      <Form form={form} initialValues={value} onFieldsChange={onFieldsChange} layout={'horizontal'} style={{padding: 20}}>
         <FormContentRenderer
           elements={config?.elements}
-
         />
       </Form>
   )

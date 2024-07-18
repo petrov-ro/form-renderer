@@ -1,6 +1,5 @@
 import moment, {Moment} from "moment/moment"
-import {capitalize} from "./stringHelper";
-import {DATE_FORMAT, BACK_DATE_TIME_FORMAT} from "../constants/Constants";
+import {BACK_DATE_TIME_FORMAT, DATE_FORMAT} from "../constants/Constants";
 
 export const nowDate = () => moment()
 
@@ -39,22 +38,3 @@ export const convertStrToStrNotNull = (initStr: string, targetFormat: string = B
   const dateStr = convertDateToStr(date, targetFormat)
   return dateStr || initStr
 }
-
-export const getMonthName = (month: number | string) =>
-    capitalize(moment(month, 'MM').format('MMMM'));
-
-export const addToStr = (dateStr: string | undefined,
-                                 format: string = DATE_FORMAT,
-                                 amount: number,
-                                 type: any): string | undefined => {
-    if (dateStr) {
-        const date = convertNotNullStrToDate(dateStr, format)
-        if (date.isValid()) {
-            const newDate =  date.add(amount, type);
-            return convertDateToStr(newDate, format)
-        }
-    }
-    return undefined
-}
-
-export const getSeconds = () => moment().seconds()

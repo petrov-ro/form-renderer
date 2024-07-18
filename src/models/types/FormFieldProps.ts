@@ -2,11 +2,11 @@ import {FormItemProps} from "antd/es/form/FormItem";
 import {ColProps} from "antd/es/grid/col";
 import {FormItemTypes} from "../../constants/FormItemTypes";
 import {FormListFieldData} from "antd/es/form/FormList";
-import {CSSProperties} from "react";
+import {CSSProperties, ReactNode} from "react";
 import {ColumnValTypesEnum} from "../../constants/EntityAttrValTypes";
 import {StatisticsFormElementClass} from "../classes/StatisticsFormElementClass";
 
-export type FormFieldProps<T = any> = FormItemProps<T> & ColProps & {
+export type FormFieldProps<T = any> = Omit<FormItemProps<T>, 'children'> & ColProps & {
   field?: FormListFieldData
   value?: T
   onChange?: (value: T) => void

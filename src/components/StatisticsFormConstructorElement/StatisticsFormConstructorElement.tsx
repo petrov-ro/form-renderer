@@ -1,15 +1,16 @@
 import React, {Dispatch, SetStateAction, useState} from "react";
 import cn from 'classnames'
-import {isArray} from "../../utils/arrayUtils";
 import {Affix, Button, Popconfirm} from 'antd';
-import {StatisticsFormElementClass} from "../../models/classes/StatisticsFormElementClass";
 import {CloseOutlined} from "@ant-design/icons";
-import {DraggableElements} from "../../constants/DraggableElements";
-import {StatisticsFormComponentDict, StatisticsFormComponentTypeEnum} from "../../constants/StatisticsFormComponent";
-import {StatisticsIndicatorClass} from "../../models/classes/StatisticsIndicatorClass";
-import StatisticsFormField from "./StatisticsFormField/StatisticsFormField";
+import {isArray} from "../../utils/arrayUtils";
 import {FormProps} from "../../models/types/FormPropsType";
+import {DraggableElements} from "../../constants/DraggableElements";
+import {StatisticsFormElementClass} from "../../models/classes/StatisticsFormElementClass";
+import {StatisticsIndicatorClass} from "../../models/classes/StatisticsIndicatorClass";
 import {StatisticsFormElementExtendedType} from "../../models/types/StatisticsFormElementExtendedType";
+import {StatisticsFormComponentDict, StatisticsFormComponentTypeEnum} from "../../constants/StatisticsFormComponent";
+import StatisticsFormFieldRequest from "./StatisticsFormFieldRequest/StatisticsFormFieldRequest";
+import StatisticsFormFieldConfig from "./StatisticsFormFieldConfig/StatisticsFormFieldConfig";
 
 type StatisticsFormConstructorElementProps = FormProps & {
     elements: StatisticsFormElementClass[]                               // элементы размещенные на форме
@@ -51,6 +52,7 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
             name: fieldTitle,
             description: fieldTooltip,
             entityAttr,
+            config
         } = {} as StatisticsIndicatorClass
     } = currentElement
 
@@ -115,8 +117,8 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
                 } as StatisticsFormElementExtendedType
             )}
 
-            {isIndicator &&
-            <StatisticsFormField label={fieldTitle} name={fieldName} id={indicatorId} code={indicatorCode}
+            {isIndicator && !config &&
+            <StatisticsFormFieldRequest label={fieldTitle} name={fieldName} id={indicatorId} code={indicatorCode}
                                  entityAttr={entityAttr}
                                  tooltip={fieldTooltip} disabled={false}
                                  isSection={isSection}
@@ -124,6 +126,19 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
                                  currentElement={currentElement}
                                  style={{...view}}
                                  rules={[{required, message: `Не задан обязательный атрибут ${fieldTitle}`}]}
+            />
+            }
+
+            {isIndicator && config &&
+            <StatisticsFormFieldConfig label={fieldTitle} name={fieldName} id={indicatorId} code={indicatorCode}
+                                       config={config}
+                                       entityAttr={entityAttr}
+                                       tooltip={fieldTooltip} disabled={false}
+                                       isSection={isSection}
+                                       multivalued={multivalued}
+                                       currentElement={currentElement}
+                                       style={{...view}}
+                                       rules={[{required, message: `Не задан обязательный атрибут ${fieldTitle}`}]}
             />
             }
 

@@ -6,7 +6,7 @@ import {StatisticsFormElementClass} from "../classes/StatisticsFormElementClass"
 export class StatisticsFormConfig {
   elements: StatisticsFormElementClass[]
 
-  constructor(elements = []) {
+  constructor(elements = [] as StatisticsFormElementClass[]) {
     this.elements = elements
   }
 }

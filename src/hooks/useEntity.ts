@@ -12,14 +12,14 @@ export type useEntityProps = {
  */
 const getURL = (code?: string, modelId?: string, id?: string): string => {
   if (id) {
-    return `entity/${id}`
+    return `statistics-form-renderer/${id}`
   }
 
   if (modelId) {
-    return `entity/by-model-and-code/${modelId}/${code}`
+    return `statistics-form-renderer/by-model-and-code/${modelId}/${code}`
   }
 
-  return `entity/by-code/${code}`
+  return `statistics-form-renderer/by-code/${code}`
 }
 
 /**

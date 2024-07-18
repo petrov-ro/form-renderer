@@ -28,7 +28,7 @@ const StatisticsPanel: React.FC<StatisticsPanelType> = props => {
 
     const empty = content.length < 1    // флаг отсутсвия элементов на панели
 
-    const [editing, setEditing] = useState(false)
+    const [editing, setEditing] = useState(false)   // флаг редактирования названия панели
     const [editValue, setEditValue] = useState(value)
 
     // заголовок панели

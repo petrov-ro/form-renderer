@@ -8,22 +8,22 @@ import {uuid} from "../../utils/common";
  * Класс элемента размещенного на форме сбора
  */
 export class StatisticsFormElementClass<T = any, P = any, U = any> {
-  id: string                                        // идентификатор
-  value: T | undefined                              // значение элемента (для показателя - данные, для компонента - описание, например массив вкладок для компонента Вкладки)
-  type: DraggableElements                           // тип элемента
-  component?: StatisticsFormComponentType           // компонент
-  indicator?: StatisticsIndicatorClass              // показатель
-  config: StatisticsFormElementConfigType<P, U>     // настройки элемента
-  content: StatisticsFormElementClass[]             // содержимое элемента (вложенные компоненты и показатели)
+  id: string                                          // идентификатор
+  value: T | undefined                                // значение элемента (для показателя - данные, для компонента - описание, например массив вкладок для компонента Вкладки)
+  type: DraggableElements                             // тип элемента
+  component: StatisticsFormComponentType | undefined  // компонент
+  indicator: StatisticsIndicatorClass  | undefined    // показатель
+  config: StatisticsFormElementConfigType<P, U>       // настройки элемента
+  content: StatisticsFormElementClass[]               // содержимое элемента (вложенные компоненты и показатели)
 
   constructor(value: T | undefined,
               type: DraggableElements,
-              component: StatisticsFormComponentType | undefined,
-              indicator: StatisticsIndicatorClass | undefined = undefined,
+              component?: StatisticsFormComponentType | undefined,
+              indicator?: StatisticsIndicatorClass | undefined,
               config: StatisticsFormElementConfigType = {
                 data: undefined,
                 view: undefined
-              },
+              } as StatisticsFormElementConfigType,
               content: StatisticsFormElementClass[] = []
   ) {
     this.id = uuid()

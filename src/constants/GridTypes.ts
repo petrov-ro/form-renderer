@@ -19,8 +19,8 @@ export const entityDataGridType = (code: string, title: string = '', initialFiel
   const route = isTree ? 'find-with-children' : 'find'
 
   return ({
-    route: `data/${route}/${code}`,
-    routeCount: `data/count/${code}`,
+    route: `external-data/${route}/${code}`,
+    routeCount: `external-data/count/${code}`,
     fields,
     code,
     name: `Данные ${title}`,
