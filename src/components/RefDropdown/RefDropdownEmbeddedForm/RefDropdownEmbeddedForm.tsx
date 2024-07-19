@@ -54,6 +54,7 @@ const RefDropdownEmbeddedForm: React.FC<RefDropdownEmbeddedFormProps> = props =>
       <Form form={form} initialValues={object}>
           <FormContentRenderer
               elements={formComponent?.config?.elements}
+              form={form}
           />
       </Form>
       }

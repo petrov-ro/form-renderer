@@ -20,7 +20,7 @@ type StatisticsFormFieldProps = FormFieldProps & {
  */
 const StatisticsFormFieldRequest: React.FC<StatisticsFormFieldProps> = (props) => {
     const {
-        id, label, name, tooltip, disabled, entityAttr, isSection, style, currentElement
+        id, label, name, tooltip, disabled, entityAttr, isSection, style, currentElement, form
     } = props
 
 // получение показателя по идентификатору
@@ -56,7 +56,7 @@ const StatisticsFormFieldRequest: React.FC<StatisticsFormFieldProps> = (props) =
                              typeId={typeId} valueTypeId={valueTypeId} code={code} components={components}
                              entityLoading={entityLoading} indicatorLoading={indicatorLoading}
                              tooltip={tooltip} disabled={disabled} isSection={isSection} style={style}
-                             currentElement={currentElement}/>
+                             currentElement={currentElement} form={form}/>
     )
 }
 

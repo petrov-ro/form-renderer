@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Collapse, Spin} from 'antd';
 import {CaretRightOutlined, DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {toArray} from "../../../../utils/arrayUtils";
@@ -35,9 +35,11 @@ type FormAttributeObjectProps = Partial<RefGridType<Record<string, any> | Record
  */
 const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     const {
-        loading, onChange, multivalued, formConfigComponents = [],
-        value = multivalued ? [] : {}
+        loading, multivalued, formConfigComponents = [],
+        value: initialValue = multivalued ? [] : {}, form, name
     } = props
+
+    const [value, setVal] = useState(initialValue)
 
     // получение формы (компонента формы сбора) для сущности на которую ссылается объект (если такая форма есть - она будет отрисована, иначе - грид)
     const embeddedForm = formConfigComponents.find((f: FormConfigComponentType) => f.type === FormConfigComponentTypeEnum.EMBEDDED_FORM)
@@ -46,47 +48,56 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
      * Изменение значения в массиве
      * @param index - индекс записи в массиве
      */
+    const setValue = (newValue: Record<string, any>) => {
+        setVal(newValue)
+        form?.setFieldValue(name, newValue)
+    }
+
+    /**
+     * Изменение значения в массиве
+     * @param index - индекс записи в массиве
+     */
     const onChangeVal = (index: number) => (newVal: Record<string, any>) => {
-        const name = newVal[0].name[0]
-        const v = newVal[0].value
-        const newValue = value.map((val: Record<string, any>, i: number) => i === index ? {...value, [name]: v} : val)
-        onChange?.(newValue)
+        const newValue = value.map((val: Record<string, any>, i: number) => i === index ? newVal : val)
+        setValue(newValue)
     }
 
     /**
      * Изменение одиночного значения
      */
     const onChangeSingle = (newVal: Record<string, any>) => {
-        const name = newVal[0].name[0]
-        const val = newVal[0].value
-        onChange?.({...value, [name]: val})
+        setValue(newVal)
     }
 
     /**
      * Добавление нового значения
      */
     const addNewValue = () => {
+        let newValue
         if (multivalued) {
-            onChange?.(toArray(value).concat([{}]))
+            newValue = toArray(value).concat([{}])
         } else {
-            onChange?.({})
+            newValue = {}
         }
+        setValue(newValue)
     }
 
     /**
      * Удаление значения
      */
     const removeValue = (index: number) => () => {
+        let newValue
         if (multivalued) {
-            toArray(value).splice(index, 1);
-            onChange?.(value)
+            newValue = toArray(value)
+            newValue.splice(index, 1);
         } else {
-            onChange?.({})
+            newValue = {}
         }
+        setValue(newValue)
     }
 
     return (
-        <Spin spinning={loading}>
+        <Spin spinning={false}>
             {embeddedForm &&
             <>
                 {!multivalued &&
@@ -129,4 +140,4 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     )
 }
 
-export default React.memo(ObjectByForm)
+export default ObjectByForm

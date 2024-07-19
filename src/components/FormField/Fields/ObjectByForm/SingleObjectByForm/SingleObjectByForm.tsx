@@ -27,13 +27,16 @@ const SingleObjectByForm: React.FC<FormAttributeObjectProps> = props => {
    * @param values
    */
   const onFieldsChange = (values: Record<string, any>) => {
-    onChange(values)
+    const name = values[0].name[0]
+    const newVal = values[0].value
+    onChange({...value, [name]: newVal})
   }
 
   return (
       <Form form={form} initialValues={value} onFieldsChange={onFieldsChange} layout={'horizontal'} style={{padding: 20}}>
         <FormContentRenderer
           elements={config?.elements}
+          form={form}
         />
       </Form>
   )

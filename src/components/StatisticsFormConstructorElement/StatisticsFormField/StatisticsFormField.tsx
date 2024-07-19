@@ -32,7 +32,7 @@ type StatisticsFormFieldRenderProps = FormFieldProps & {
 const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) => {
   const {
     label, name, required, multivalued, viewType, viewTypeForm,
-    typeId, valueTypeId, code, components, entityLoading, indicatorLoading, tooltip, disabled, isSection, style, currentElement
+    typeId, valueTypeId, code, components, entityLoading, indicatorLoading, tooltip, disabled, isSection, style, currentElement, form
   } = props
 
   const exclude: string[] = []  // массив системных идентификторов, которые не нужно отображать в гриде (для атрибутов типа REF)
@@ -67,8 +67,8 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
                    inputType={FormItemTypes.custom}
                    children={({value, onChange}: FormFieldProps) =>
                      <ObjectByForm value={value} onChange={onChange} multivalued={multivalued} disabled={disabled}
-                                   formConfigComponents={components} code={code}
-                                   loading={entityLoading}/>
+                                   formConfigComponents={components} code={code} name={name}
+                                   loading={entityLoading} form={form}/>
                    }
                    rules={[{required: required, message: `Не задан обязательный атрибут ${name}`}]}
         />

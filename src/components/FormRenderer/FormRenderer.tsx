@@ -117,6 +117,7 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
                                                  elements={elements}
                                                  reportMode={edit}
                                                  className='statistics-form-layout-content'
+                                                 form={form}
                             />
                         </Content>
                     </Layout>

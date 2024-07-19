@@ -1,16 +1,14 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import cn from 'classnames'
-import {Affix, Button, Popconfirm} from 'antd';
-import {CloseOutlined} from "@ant-design/icons";
 import {isArray} from "../../utils/arrayUtils";
 import {FormProps} from "../../models/types/FormPropsType";
 import {DraggableElements} from "../../constants/DraggableElements";
 import {StatisticsFormElementClass} from "../../models/classes/StatisticsFormElementClass";
 import {StatisticsIndicatorClass} from "../../models/classes/StatisticsIndicatorClass";
-import {StatisticsFormElementExtendedType} from "../../models/types/StatisticsFormElementExtendedType";
-import {StatisticsFormComponentDict, StatisticsFormComponentTypeEnum} from "../../constants/StatisticsFormComponent";
+import {StatisticsFormComponentTypeEnum} from "../../constants/StatisticsFormComponent";
 import StatisticsFormFieldRequest from "./StatisticsFormFieldRequest/StatisticsFormFieldRequest";
 import StatisticsFormFieldConfig from "./StatisticsFormFieldConfig/StatisticsFormFieldConfig";
+import StatisticsFormField from "./StatisticsFormField/StatisticsFormField";
 
 type StatisticsFormConstructorElementProps = FormProps & {
     elements: StatisticsFormElementClass[]                               // элементы размещенные на форме
@@ -27,10 +25,8 @@ type StatisticsFormConstructorElementProps = FormProps & {
  */
 const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElementProps> = (props) => {
     const {
-        elements, setElements, editComponent, setEditComponent, currentElement, edit
+        currentElement, form
     } = props
-
-    const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
     const {
         type: currentElementType, id,
@@ -60,63 +56,14 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
     const containerMargin = isArray(margin) ? margin.map((m: number) => `${m}px`).join(' ') : margin
 
     const isIndicator = currentElementType === DraggableElements.INDICATOR  // текущий элемент - это индикатор
-    const isComponent = currentElementType === DraggableElements.COMPONENT  // текущий элемент - это компонент
-    const componentDictItem = isComponent && StatisticsFormComponentDict[type]  // запись из справочника компонентов
 
-    const isEditing = edit && id === editComponent  // флаг режима редактирования формы в конструкторе
     const isSection = columnSection || rowSection   // флаг сбора данных в разрезе
     const fieldName = indicatorCode || id           // название атрибута формы принимается равным коду элемента
 
-    /**
-     * Удаление элемента с формы
-     */
-    const removeElement = (e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        e?.stopPropagation()
-        e?.preventDefault()
-
-        setElements(elements.filter(el => el.id !== id))
-        if (id === editComponent) {
-            setEditComponent(undefined)
-        }
-    }
-
-    /**
-     * Изменение значения компонента формы
-     */
-    const changeValue = (newValue: any) => {
-        setElements(elements.map(el => el.id === id ? {...el, value: newValue} : el))
-    }
-
-    /**
-     * Клик по элементу на форме
-     */
-    const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        // реагирует только верхний элемент
-        if (e.stopPropagation) {
-            e.stopPropagation();
-        }
-
-        if (edit) {
-            setEditComponent(id)
-        }
-    }
-
     return (
-        <div ref={setContainer}
-             className={cn(
-                 'component-container',
-                 {'component-container-editing': edit && isEditing},
-                 {'component-container-not-editing': edit && !isEditing}
-             )}
-             onClick={onClick}
+        <div className={cn('component-container')}
              style={{margin: containerMargin}}
         >
-            {componentDictItem && componentDictItem.render(
-                {
-                    currentElement, edit, changeValue, elements, setElements, editComponent, setEditComponent
-                } as StatisticsFormElementExtendedType
-            )}
-
             {isIndicator && !config &&
             <StatisticsFormFieldRequest label={fieldTitle} name={fieldName} id={indicatorId} code={indicatorCode}
                                  entityAttr={entityAttr}
@@ -124,7 +71,7 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
                                  isSection={isSection}
                                  multivalued={multivalued}
                                  currentElement={currentElement}
-                                 style={{...view}}
+                                 style={{...view}} form={form}
                                  rules={[{required, message: `Не задан обязательный атрибут ${fieldTitle}`}]}
             />
             }
@@ -137,29 +84,9 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
                                        isSection={isSection}
                                        multivalued={multivalued}
                                        currentElement={currentElement}
-                                       style={{...view}}
+                                       style={{...view}} form={form}
                                        rules={[{required, message: `Не задан обязательный атрибут ${fieldTitle}`}]}
             />
-            }
-
-            {edit &&
-            <Affix target={() => container} style={{position: 'absolute', top: 0, right: 0}}>
-                <Popconfirm
-                    title="Удалить элемент с формы?"
-                    onConfirm={removeElement}
-                    okText="Да"
-                    cancelText="Отмена"
-                >
-                    <div className='remove-button-container'>
-                        <Button type='link' className='remove-button' title='Удалить элемент'
-                                onClick={e => {
-                                    e.preventDefault()
-                                }}>
-                            <CloseOutlined/>
-                        </Button>
-                    </div>
-                </Popconfirm>
-            </Affix>
             }
         </div>
     )

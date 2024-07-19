@@ -2,6 +2,7 @@ import React, {Dispatch, SetStateAction} from "react";
 import {StatisticsFormElementClass} from "../../models/classes/StatisticsFormElementClass";
 import StatisticsFormConstructorElement
   from "../../components/StatisticsFormConstructorElement/StatisticsFormConstructorElement";
+import {FormInstance} from "antd/es/form/Form";
 
 type FormContentRendererProps = {
   elements: StatisticsFormElementClass[]                                // элементы размещенные на форме
@@ -11,6 +12,7 @@ type FormContentRendererProps = {
   editComponent?: string                                                // идентификатор редактируемого компонента
   setEditComponent?: Dispatch<SetStateAction<string | undefined>>       // установка редактируемого компонента
   className?: string                                                    // css-классы контейнера
+  form: FormInstance
 }
 
 /**
@@ -23,7 +25,7 @@ const FormContentRenderer: React.FC<FormContentRendererProps> = props => {
   const {
     elements = [], setElements = () => {},
     editComponent, setEditComponent = () => {},
-    edit = false, reportMode, className
+    edit = false, reportMode, className, form
   } = props
 
   return (
@@ -32,9 +34,9 @@ const FormContentRenderer: React.FC<FormContentRendererProps> = props => {
         <StatisticsFormConstructorElement key={elem.id} currentElement={elem}
                                           edit={edit} reportMode={reportMode}
                                           elements={elements}
-                                          setElements={setElements}
+                                          setElements={undefined}
                                           editComponent={editComponent}
-                                          setEditComponent={setEditComponent}/>)
+                                          setEditComponent={undefined} form={form}/>)
       }
     </div>
   )

@@ -150,4 +150,4 @@ const FormField = React.forwardRef(
     }
 )
 
-export default React.memo(FormField)
+export default FormField

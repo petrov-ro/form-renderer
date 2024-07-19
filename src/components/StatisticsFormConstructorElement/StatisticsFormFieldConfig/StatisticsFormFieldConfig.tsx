@@ -20,7 +20,7 @@ type StatisticsFormFieldConfigProps = FormFieldProps & {
  */
 const StatisticsFormFieldConfig: React.FC<StatisticsFormFieldConfigProps> = (props) => {
   const {
-    label, name, tooltip, disabled, isSection, style, currentElement, config
+    label, name, tooltip, disabled, isSection, style, currentElement, config, form
   } = props
 
   const {
@@ -36,7 +36,7 @@ const StatisticsFormFieldConfig: React.FC<StatisticsFormFieldConfigProps> = (pro
                          code={entityCode} components={entityFormConfigComponents}
                          entityLoading={false} indicatorLoading={false}
                          tooltip={tooltip} disabled={disabled} isSection={isSection} style={style}
-                         currentElement={currentElement}/>
+                         currentElement={currentElement} form={form}/>
   )
 }
 
