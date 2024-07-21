@@ -1,0 +1,57 @@
+.statistics-tab {
+  width: 100%;
+  min-height: 400px;
+
+  &.hovered {
+    //border: 1px dashed lightgray;
+    //border: 1px dashed #2eabff;
+    //border-radius: 3px;
+  }
+
+  &.empty {
+    border: 1px dashed lightgray;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17pt;
+    color: lightgray;
+  }
+
+  .container {
+    width: 100%;
+
+    .attr {
+      border: 1px solid lightgrey;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      // box-shadow: rgb(0 0 0 / 50%) 0px 0px 3px 0px;
+
+      .content {
+        display: flex;
+        flex-direction: row;
+        align-content: space-between;
+
+        .hint {
+          position: absolute;
+          top: -1px;
+          font-size: 7pt;
+          background-color: #2eabff;
+          color: white;
+          border-radius: 3px;
+          padding: 0 5px;
+        }
+
+        .text {
+          width: calc(100% - 24px);
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .action {
+
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+@import '../../styles/base';
+
+.side-style {
+  background-color: lightgray;
+
+  .ant-layout-sider-trigger {
+    position: absolute;
+    background-color: $blue-color;
+  }
+}
+
+.ant-tabs-tabpane {
+  height: 100%;
+}
+
+.ant-layout {
+  min-height: auto;
+}
+
+.statistics-form-constructor {
+  height: 100%;
+  width: 100%;
+
+  .buttons-panel {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .statistics-form-layout-content {
+    width: 100%;
+    min-height: calc(100vh - 170px);
+    border: 1px dotted lightgray;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 10px;
+
+    .add-component-button {
+      width: 50%;
+      height: 80px;
+      font-size: 24px;
+      color: lightgray;
+      border-color: lightgray;
+      align-self: center;
+      margin-top: 100px;
+
+      &:hover {
+        color: $blue-color;
+        border-color: $blue-color;
+      }
+    }
+  }
+
+  .indicators-container {
+    border: 1px dotted lightgray;
+    border-left: none;
+    background-color: white;
+    transition-property: width, border;
+    transition-duration: 0.5s;
+    overflow: hidden;
+
+    &.visible {
+      width: 30%;
+      visibility: visible;
+      marginLeft: 5;
+    }
+
+    &.invisible {
+      width: 0;
+      visibility: hidden;
+      marginLeft: 0;
+      border: 0;
+    }
+
+    .panel {
+      border: 0;
+      background-color: white;
+    }
+
+    .ant-collapse-header {
+      background-color: #f2f2f2;
+    }
+
+    .ant-collapse-content {
+      padding-top: 5px;
+    }
+
+    .component-item {
+      // padding: 10px;
+
+      &:hover {
+        color: $blue-color;
+        cursor: grab;
+        // background-color: #f2f2f2;
+      }
+    }
+  }
+}
