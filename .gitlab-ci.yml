@@ -1,0 +1,55 @@
+stages:
+  - docker # Build Docker image and push it to Nexus docker registry
+  - helm_upgrade # Deploy build to stands
+  - notify_error  # Send message to Telegram if error
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+variables:
+  # Включение отладки CICD
+  CI_DEBUG_TRACE: "${CI_DEBUG_TRACE}"
+  CI_DEBUG_SERVICES: "${CI_DEBUG_SERVICES}"
+  # Оптимизация docker сборки
+  DOCKER_DRIVER: overlay2
+  DOCKER_BUILDKIT: 1
+  # Имя docker image
+  DOCKER_IMAGE_NAME: "${DOCKER_DEAR_URL}/gp/gasps/common/form-renderer"
+  DATATIME_FORMAT: "%Y%m%d%H%M"
+
+docker:
+  stage: docker
+  script:
+    # Build Docker image and push it to Nexus docker registry
+    - start=`date +%s`
+    - TIMESTAMP="$(date -d "$CI_PIPELINE_CREATED_AT" +"$DATATIME_FORMAT")"
+    - TAG=${CI_COMMIT_REF_NAME}-${TIMESTAMP}-${CI_COMMIT_SHORT_SHA}
+    - docker login "${DOCKER_DEAR_URL}" -u "${DOCKER_DEAR_USER}" -p "${DOCKER_DEAR_USER_PASS}"
+    - 'docker build --cache-from "${DOCKER_IMAGE_NAME}":latest --build-arg BUILDKIT_INLINE_CACHE=1 -t "${DOCKER_IMAGE_NAME}":latest .'
+    - docker push "${DOCKER_IMAGE_NAME}":latest
+    - docker tag "${DOCKER_IMAGE_NAME}":latest "${DOCKER_IMAGE_NAME}":${TAG}
+    - docker push "${DOCKER_IMAGE_NAME}":${TAG}
+    - end=`date +%s`
+    - 'echo Jod time: $((end-start)) sec.'
+
+# Выполнить helm upgrade для gasps на 172.26.12.190.
+helm_upgrade_190:
+  stage: helm_upgrade
+  script:
+    - TIMESTAMP="$(date -d "$CI_PIPELINE_CREATED_AT" +"$DATATIME_FORMAT")"
+    - TAG=${CI_COMMIT_REF_NAME}-${TIMESTAMP}-${CI_COMMIT_SHORT_SHA}
+    - eval $(ssh-agent -s)
+    - cat "$SSH_190_KEY" | tr -d '\r' | ssh-add -
+    - 'ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" $CICD_USER@$CI_ENVIRONMENT_URL "cd /home/worker/gasps/gasps-deploy/cmd; ./helm-upgrade-deploy.sh services.form_renderer.tag=${TAG}"'
+  environment:
+    name: dev_190
+    url: 172.26.12.190
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "trigger"'
+
+notify_error_job:
+  stage: notify_error
+  script:
+    - sh telegram-notifications.sh ❌
+  when: on_failure #deploy fail
