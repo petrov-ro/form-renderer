@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Form} from 'antd';
 import FormContentRenderer from "../../../../FormContentRenderer/FormContentRenderer";
 import {StatisticsFormConfig} from "../../../../../models/classes/StatisticsFormConfig";
+import {objectCompare} from "../../../../../utils/objectUtils";
 
 type FormAttributeObjectProps = {
   value: Record<string, any>                  // объект который нужно показать на форме
@@ -26,17 +27,25 @@ const SingleObjectByForm: React.FC<FormAttributeObjectProps> = props => {
    * Изменение полей формы
    * @param values
    */
-  const onFieldsChange = (values: Record<string, any>) => {
-    const name = values[0].name[0]
-    const newVal = values[0].value
-    onChange({...value, [name]: newVal})
+  const onValuesChange = () => {
+    onChange(form?.getFieldsValue(true))
   }
 
+  /**
+   * Установка данных формы
+   * @param newValues
+   */
+  const setFormData = useCallback((newValues) => {
+    const formData = form?.getFieldsValue(true)
+    form?.setFieldsValue({...formData, ...newValues})
+    onChange({...formData, ...newValues})
+  }, [])
+
   return (
-      <Form form={form} initialValues={value} onFieldsChange={onFieldsChange} layout={'horizontal'} style={{padding: 20}}>
+      <Form form={form} initialValues={value} onValuesChange={onValuesChange} layout={'horizontal'} style={{padding: 20}}>
         <FormContentRenderer
           elements={config?.elements}
-          form={form}
+          setFormData={setFormData}
         />
       </Form>
   )

@@ -39,9 +39,11 @@ const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
  * Приведение элемента из старого формата в новый
  * @param elements   - массив всех элементов конфига
  * @param element    - текущий модифицируемый элемент
+ * @param dicts      - справочные элементы (собираются для последующей подгрузки данных)
  */
 export const convertElement = (elements: ClassicFormElementClass[],
-                               element: ClassicFormElementClass
+                               element: ClassicFormElementClass,
+                               dicts: Record<string, any>
 ): StatisticsFormElementClass => {
     const {
         key: elementKey,
@@ -81,7 +83,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
             let childrenElements = elements
                 .filter((el: ClassicFormElementClass) => el.parentKey === primaryKey)
                 .filter((el: ClassicFormElementClass) => !!el.is_visible)
-                .map(el => convertElement(elements, el))
+                .map(el => convertElement(elements, el, dicts))
 
             // формирование формы для отображения, она состоит просто из дочерних элементов
             const objectFormConfig = [{
@@ -135,6 +137,11 @@ export const convertElement = (elements: ClassicFormElementClass[],
                 entityCode,
                 viewType
             }
+
+            // добавление в карту справочников
+            if (typeId === ReqTypeEnum.DICT && entityCode) {
+                dicts[entityCode] = config
+            }
         }
     }
 
@@ -150,15 +157,17 @@ export const convertElement = (elements: ClassicFormElementClass[],
  * Приведение типов конфига из старого формата в новый
  * @param config
  */
-export const modifyConfig = (config: ClassicFormClass): StatisticsFormConfig => {
+export const modifyConfig = (config: ClassicFormClass): {result: StatisticsFormConfig, dicts: Record<string, any>} => {
     const {elements = [] as ClassicFormElementClass[]} = config
+    const dicts = {}
 
     // выборка родительских элементов (не имеющих родителя)
     const topElements: StatisticsFormElementClass[] = elements
         .filter((el: ClassicFormElementClass) => !el.parentKey)
         .filter((el: ClassicFormElementClass) => !!el.is_visible)
-        .map(el => convertElement(elements, el))
+        .flatMap((el) => elements.filter(childEl => childEl.parentKey === el.primaryKey))
+        .map(el => convertElement(elements, el, dicts))
 
     const result = new StatisticsFormConfig(topElements)
-    return result
+    return {result, dicts}
 }

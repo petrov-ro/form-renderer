@@ -1,12 +1,10 @@
-import {StatisticsFormElementClass} from "../classes/StatisticsFormElementClass";
-
 /**
  * Класс конфига формы сбора
  */
 export class StatisticsFormConfig {
-  elements: StatisticsFormElementClass[]
+  elements
 
-  constructor(elements = [] as StatisticsFormElementClass[]) {
+  constructor(elements) {
     this.elements = elements
   }
 }

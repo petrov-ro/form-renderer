@@ -4,6 +4,8 @@ import {StatisticsIndicatorClass} from "../classes/StatisticsIndicatorClass";
 import {StatisticsFormElementConfigType} from "../types/StatisticsFormElementConfigType";
 import {uuid} from "../../utils/common";
 
+
+
 /**
  * Класс элемента размещенного на форме сбора
  */

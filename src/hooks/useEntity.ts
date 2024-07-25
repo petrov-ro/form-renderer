@@ -10,7 +10,7 @@ export type useEntityProps = {
 /**
  * Генерация url для получения сущности
  */
-const getURL = (code?: string, modelId?: string, id?: string): string => {
+export const getEntityURL = (code?: string, modelId?: string, id?: string): string => {
   if (id) {
     return `statistics-form-renderer/${id}`
   }
@@ -42,7 +42,7 @@ const useEntity = (code?: string, defaultEntity?: EntityClass, modelId?: string,
     async function fetchList() {
       try {
         // генерация url
-        const url = getURL(code, modelId, id)
+        const url = getEntityURL(code, modelId, id)
 
         // получение данных
         const data = await getJSON(url)

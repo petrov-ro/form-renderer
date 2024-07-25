@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Collapse, Spin} from 'antd';
+import {Button, Collapse, Form, Spin} from 'antd';
 import {CaretRightOutlined, DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {toArray} from "../../../../utils/arrayUtils";
 import {FormConfigComponentType} from "../../../../models/types/FormConfigComponentType";
@@ -8,6 +8,8 @@ import {EntityClass} from "../../../../models/classes/EntityClass";
 import SingleObjectByForm
     from "../../../../components/FormField/Fields/ObjectByForm/SingleObjectByForm/SingleObjectByForm";
 import {FormFieldProps} from "../../../../models/types/FormFieldProps";
+import {objectCompare} from "../../../../utils/objectUtils";
+import {hashCode} from "../../../../utils/stringHelper";
 
 const {Panel} = Collapse;
 
@@ -36,21 +38,29 @@ type FormAttributeObjectProps = Partial<RefGridType<Record<string, any> | Record
 const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     const {
         loading, multivalued, formConfigComponents = [],
-        value: initialValue = multivalued ? [] : {}, form, name
+        name, setFormData
     } = props
 
-    const [value, setVal] = useState(initialValue)
+    const form = Form.useFormInstance();
+
+    const [deleted, setDeleted] = useState(0)
 
     // получение формы (компонента формы сбора) для сущности на которую ссылается объект (если такая форма есть - она будет отрисована, иначе - грид)
     const embeddedForm = formConfigComponents.find((f: FormConfigComponentType) => f.type === FormConfigComponentTypeEnum.EMBEDDED_FORM)
+
+    /**
+     * Возвращает значение текущего атрибута
+     */
+    const getValue = () => {
+        return form?.getFieldValue(name)
+    }
 
     /**
      * Изменение значения в массиве
      * @param index - индекс записи в массиве
      */
     const setValue = (newValue: Record<string, any>) => {
-        setVal(newValue)
-        form?.setFieldValue(name, newValue)
+        setFormData({[name]: newValue})
     }
 
     /**
@@ -58,7 +68,7 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
      * @param index - индекс записи в массиве
      */
     const onChangeVal = (index: number) => (newVal: Record<string, any>) => {
-        const newValue = value.map((val: Record<string, any>, i: number) => i === index ? newVal : val)
+        const newValue = (getValue() || []).map((val: Record<string, any>, i: number) => i === index ? newVal : val)
         setValue(newValue)
     }
 
@@ -75,7 +85,7 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     const addNewValue = () => {
         let newValue
         if (multivalued) {
-            newValue = toArray(value).concat([{}])
+            newValue = toArray(getValue() || []).concat([{}])
         } else {
             newValue = {}
         }
@@ -88,12 +98,13 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     const removeValue = (index: number) => () => {
         let newValue
         if (multivalued) {
-            newValue = toArray(value)
+            newValue = toArray(getValue() || [])
             newValue.splice(index, 1);
         } else {
             newValue = {}
         }
         setValue(newValue)
+        setDeleted(deleted + 1)
     }
 
     return (
@@ -101,15 +112,15 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
             {embeddedForm &&
             <>
                 {!multivalued &&
-                <SingleObjectByForm value={value} onChange={onChangeSingle} config={embeddedForm?.config}/>
+                <SingleObjectByForm value={getValue()} onChange={onChangeSingle} config={embeddedForm?.config}/>
                 }
 
                 {multivalued &&
                 <>
                     {
-                        toArray(value)
+                        toArray(getValue())
                             .map((v: Record<string, any>, i: number) =>
-                                <div style={{paddingBottom: 10}} key={i}>
+                                <div style={{paddingBottom: 10}} key={i.toString() + '-' + deleted.toString()}>
                                     <Collapse
                                         bordered={false}
                                         defaultActiveKey={['1']}
@@ -140,4 +151,4 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     )
 }
 
-export default ObjectByForm
+export default React.memo(ObjectByForm)

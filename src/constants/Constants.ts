@@ -26,6 +26,7 @@ export const DATA_SYSTEM_KEY = '_id'
 export const SYS_DATA = '_sysData'
 export const FT_SEARCH_GRID_ATTR = '_sysData_ftSearch'
 export const SYS_DATA_TITLE_ATTR = 'title'
+export const DICT_VALUE_PROP = 'id'                       // атрибут со значением справочника
 export const EXCEPTION_COLLECTION = '_deduplicate_exceptions'
 export const SECURITY_LOG_TABLE = 'log.security'
 export const ADMINISTRATOR_SYSTEM_ROLE = 'ADMINISTRATOR_SYSTEM'

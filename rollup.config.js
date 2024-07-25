@@ -4,6 +4,7 @@ import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 import scss from "rollup-plugin-scss";
 import PeerDepsExternalPlugin from 'rollup-plugin-peer-deps-external';
+import terser from '@rollup/plugin-terser';
 
 export default [
     {
@@ -24,6 +25,11 @@ export default [
             PeerDepsExternalPlugin(),
             resolve(),
             commonjs(),
+            terser({
+                ecma: 2021,
+                module: true,
+                warnings: true,
+            }),
             typescript({ tsconfig: "./tsconfig.json" }),
             scss({
                 include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],

@@ -1,12 +1,8 @@
-import React, {Key, useEffect, useState} from "react";
+import React, {Key, useState} from "react";
 import {Select} from "antd";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
-import useEntity from "../../hooks/useEntity";
-import {DATA_SYSTEM_KEY, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../../constants/Constants";
-import {entityDataGridType} from "../../constants/GridTypes";
-import useGridData from "../../hooks/useGridData";
-import OptionData from "../../models/types/OptionData";
 import RefDropdownEmbeddedForm from "../../components/RefDropdown/RefDropdownEmbeddedForm/RefDropdownEmbeddedForm";
+import {useSelector} from "react-redux";
 
 type RefDropdownProps = Partial<FormFieldProps<Key | Key[]>> & {
   multivalued?: boolean   // флаг возможности множественного выбора
@@ -26,34 +22,23 @@ type RefDropdownProps = Partial<FormFieldProps<Key | Key[]>> & {
  */
 const RefDropdown: React.FC<RefDropdownProps> = props => {
   const {
-    code, value: initialValue, onChange, label, multivalued, loading: initialLoading, disabled, viewTypeForm
+    code, value: initialValue, onChange, label, multivalued, loading, disabled, viewTypeForm
   } = props;
 
-  const [current, setCurrent] = useState(1)       // номер страницы до которой нужно загрузить данные
-  const [pageSize, setPageSize] = useState(1000)  // количество подгружаемых данных
-  const [loading, setLoading] = useState(initialLoading)
   const [value, setValue] = useState(initialValue)
-  const [dictData, setDictData] = useState([] as OptionData[])
-  const {entity} = useEntity(code)
 
-  // формирование типа грида
-  const gridType = entityDataGridType(code, label, [DATA_SYSTEM_KEY, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'], entity)
-  const gridTypeKeys = {
-    ...gridType,
-    labelKey: 'name',
-    valueKey: DATA_SYSTEM_KEY
-  }
+  // получение сущности из стора
+  const {data: entity} = useSelector((state: Record<string, any>) => {
+    return state.entities?.[code]
+  }) || {}
 
-  // загрузка данных выпадающего списка
-  const {result: dict, loading: dictLoading} = useGridData<OptionData>(gridTypeKeys, {current, pageSize})
-
-  // добавление в массив данных выпадающего списка
-  useEffect(() => {
-    setDictData(dict)
-  }, [dict])
+  // получение данных выпадающего списка из стора
+  const {data: dictData = [], loading: dictLoading} = useSelector((state: Record<string, any>) => {
+    return state.dicts?.[code]
+  }) || {}
 
   /**
-   *
+   * Выбор элемента выпадающего списка
    * @param newVal - новое значение
    */
   const onSelect = (newVal: Key | Key[]) => {
