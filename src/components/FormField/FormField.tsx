@@ -20,7 +20,7 @@ import './FormField.scss'
 /**
  *  Соответствие тип - компонент, каждому типу должен быть сопоставлен компонент
  */
-const fields: any = {
+export const fields: any = {
     [FormItemTypes.text]: Input,
     [FormItemTypes.select]: Select,
     [FormItemTypes.checkbox]: Checkbox,
