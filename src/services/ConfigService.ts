@@ -15,6 +15,18 @@ import {FormConfigComponentTypeEnum} from "../constants/FormConfigComponentTypeE
 import {RefViewTypes} from "../constants/RefViewTypes";
 
 /**
+ * Сортировка элементов по возрастанию ord
+ * @param elem1
+ * @param elem2
+ * @constructor
+ */
+const classicFormElementComparator = (elem1: ClassicFormElementClass, elem2: ClassicFormElementClass) => {
+    const {ord: ord1 = 0} = elem1 || {}
+    const {ord: ord2 = 0} = elem2 || {}
+    return  elem1 && elem2 && ord1 >= ord2 ? 1 : -1
+}
+
+/**
  * Возвращает тип нового формата соответствующий старому формату
  * @param typeId  - тип старого формата
  */
@@ -83,6 +95,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
             let childrenElements = elements
                 .filter((el: ClassicFormElementClass) => el.parentKey === primaryKey)
                 .filter((el: ClassicFormElementClass) => !!el.is_visible)
+                .sort(classicFormElementComparator)
                 .map(el => convertElement(elements, el, dicts))
 
             // формирование формы для отображения, она состоит просто из дочерних элементов
@@ -165,7 +178,8 @@ export const modifyConfig = (config: ClassicFormClass): {result: StatisticsFormC
     const topElements: StatisticsFormElementClass[] = elements
         .filter((el: ClassicFormElementClass) => !el.parentKey)
         .filter((el: ClassicFormElementClass) => !!el.is_visible)
-        .flatMap((el) => elements.filter(childEl => childEl.parentKey === el.primaryKey))
+        .flatMap((el) => elements.filter(childEl => childEl.parentKey === el.primaryKey)) // визуализация начинается с уровня следующего после самого верхнего
+        .sort(classicFormElementComparator)
         .map(el => convertElement(elements, el, dicts))
 
     const result = new StatisticsFormConfig(topElements)
