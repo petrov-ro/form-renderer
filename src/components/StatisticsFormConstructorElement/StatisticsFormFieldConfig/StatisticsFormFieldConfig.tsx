@@ -13,6 +13,7 @@ type StatisticsFormFieldConfigProps = FormFieldProps & {
   multivalued: boolean
   entityAttr?: boolean
   config: StatisticsIndicatorClass['config']
+  setFormData: (values: any) => void                                    // изменение значений формы
 }
 
 /**
@@ -20,7 +21,7 @@ type StatisticsFormFieldConfigProps = FormFieldProps & {
  */
 const StatisticsFormFieldConfig: React.FC<StatisticsFormFieldConfigProps> = (props) => {
   const {
-    label, name, tooltip, disabled, isSection, style, currentElement, config, form
+    label, name, tooltip, disabled, isSection, style, currentElement, config, setFormData
   } = props
 
   const {
@@ -36,8 +37,9 @@ const StatisticsFormFieldConfig: React.FC<StatisticsFormFieldConfigProps> = (pro
                          code={entityCode} components={entityFormConfigComponents}
                          entityLoading={false} indicatorLoading={false}
                          tooltip={tooltip} disabled={disabled} isSection={isSection} style={style}
-                         currentElement={currentElement} form={form}/>
+                         currentElement={currentElement}
+                         setFormData={setFormData}/>
   )
 }
 
-export default StatisticsFormFieldConfig
+export default  React.memo(StatisticsFormFieldConfig)

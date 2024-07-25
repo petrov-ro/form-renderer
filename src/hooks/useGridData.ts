@@ -16,7 +16,7 @@ type ResultProps<T> = {
  * Формирует запись древоводиного справочника категорий и сущностей (либо показателей форм сбора и их категорий)
  * @param d - категория или сущность (показатель или категория показателя)
  */
-const treeNode = <T, P extends Partial<EntityTreeDataClass>>(
+export const treeNode = <T, P extends Partial<EntityTreeDataClass>>(
     d: P,
     valueKey: string | string[] = 'id',
     labelKey: string | string[] = 'title'
@@ -34,7 +34,7 @@ const treeNode = <T, P extends Partial<EntityTreeDataClass>>(
  * @param valueKey
  * @param labelKey
  */
-const flatNode = <T, P>(d: P, valueKey: string | string[] = 'code', labelKey: string | string[] = 'name'): T => ({
+export const flatNode = <T, P>(d: P, valueKey: string | string[] = 'id', labelKey: string | string[] = 'name'): T => ({
   label: _.get(d, labelKey) || _.get(d, 'title'),
   value: _.get(d, valueKey) || _.get(d, 'id'),
   item: d

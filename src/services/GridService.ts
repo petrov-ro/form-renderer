@@ -169,3 +169,32 @@ export const getTableData = <T extends Record<string, any>>(
                         success: false
                     })
                 ))
+
+
+/**
+ * Получение данных ущности
+ *
+ * @param params
+ * @param sort
+ * @param filter
+ * @param type
+ */
+export const getTableDataOnly = <T extends Record<string, any>>(
+    params: GridParamType,
+    sort: Record<string, SortOrder> = {},
+    filter: Record<string, React.ReactText[] | null> = {},
+    entity: EntityClass,
+    type?: GridType,
+    initialData?: T[]
+): Promise<{ data?: any[], success?: boolean }> => {
+    return getData(params, sort, filter, type, initialData, entity)
+        .then((data = []) => ({
+            data: data as T[],
+            success: true
+        }))
+        .catch(() => ({
+                data: [],
+                success: false
+            })
+        )
+}

@@ -8,16 +8,16 @@ import {StatisticsIndicatorClass} from "../../models/classes/StatisticsIndicator
 import {StatisticsFormComponentTypeEnum} from "../../constants/StatisticsFormComponent";
 import StatisticsFormFieldRequest from "./StatisticsFormFieldRequest/StatisticsFormFieldRequest";
 import StatisticsFormFieldConfig from "./StatisticsFormFieldConfig/StatisticsFormFieldConfig";
-import StatisticsFormField from "./StatisticsFormField/StatisticsFormField";
 
 type StatisticsFormConstructorElementProps = FormProps & {
     elements: StatisticsFormElementClass[]                               // элементы размещенные на форме
-    setElements?: (e: StatisticsFormElementClass[]) => void               // изменение элементов на форме
+    setElements?: (e: StatisticsFormElementClass[]) => void              // изменение элементов на форме
     currentElement: StatisticsFormElementClass                           // текущий элемент, который нужно отрисовать
     edit: boolean                                                        // режим редактирования формы внутри режима конструктора
     reportMode?: boolean                                                 // режим ввода данных отчета
     editComponent?: string                                               // идентификатор редактируемого компонента
-    setEditComponent?: Dispatch<SetStateAction<string | undefined>>       // установка редактируемого компонента
+    setEditComponent?: Dispatch<SetStateAction<string | undefined>>      // установка редактируемого компонента
+    setFormData: (values: any) => void                                   // изменение значений формы
 }
 
 /**
@@ -25,7 +25,7 @@ type StatisticsFormConstructorElementProps = FormProps & {
  */
 const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElementProps> = (props) => {
     const {
-        currentElement, form
+        currentElement, setFormData
     } = props
 
     const {
@@ -71,7 +71,7 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
                                  isSection={isSection}
                                  multivalued={multivalued}
                                  currentElement={currentElement}
-                                 style={{...view}} form={form}
+                                 style={{...view}}
                                  rules={[{required, message: `Не задан обязательный атрибут ${fieldTitle}`}]}
             />
             }
@@ -84,7 +84,8 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
                                        isSection={isSection}
                                        multivalued={multivalued}
                                        currentElement={currentElement}
-                                       style={{...view}} form={form}
+                                       setFormData={setFormData}
+                                       style={{...view}}
                                        rules={[{required, message: `Не задан обязательный атрибут ${fieldTitle}`}]}
             />
             }

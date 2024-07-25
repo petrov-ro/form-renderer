@@ -2,4 +2,4 @@
 Configurable form renderer
 
 # Installation
-npm install @petrov-ro/form-renderer
+npm install @petrov.ro/form-renderer

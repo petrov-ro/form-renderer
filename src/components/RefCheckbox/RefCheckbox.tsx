@@ -3,7 +3,7 @@ import {Checkbox, Radio, Spin} from "antd";
 import type {CheckboxOptionType, RadioChangeEvent} from "antd";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import useEntity from "../../hooks/useEntity";
-import {DATA_SYSTEM_KEY, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../../constants/Constants";
+import {DATA_SYSTEM_KEY, DICT_VALUE_PROP, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../../constants/Constants";
 import {entityDataGridType} from "../../constants/GridTypes";
 import useGridData from "../../hooks/useGridData";
 import OptionData from "../../models/types/OptionData";
@@ -36,11 +36,11 @@ const RefCheckbox: React.FC<RefCheckboxProps> = props => {
   const {entity} = useEntity(code)
 
   // формирование типа грида
-  const gridType = entityDataGridType(code, label, [DATA_SYSTEM_KEY, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'], entity)
+  const gridType = entityDataGridType(code, label, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'], entity)
   const gridTypeKeys = {
     ...gridType,
     labelKey: 'name',
-    valueKey: DATA_SYSTEM_KEY
+    valueKey: DICT_VALUE_PROP
   }
 
   // загрузка данных
