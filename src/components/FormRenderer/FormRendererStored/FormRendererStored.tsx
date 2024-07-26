@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {forwardRef, useCallback, useImperativeHandle} from "react";
 import {Button, Form, Layout, Space} from "antd";
 import {Provider} from 'react-redux'
 import FormContentRenderer from "../../../components/FormContentRenderer/FormContentRenderer";
@@ -9,7 +9,7 @@ import {ClassicFormClass} from "../../../models/classes/ClassicFormElementClass"
 import store from "../../../redux/store/index";
 import useDictCache from "../../../hooks/useDictCache";
 import useEntityCache from "../../../hooks/useEntityCache";
-import {ButtonType, CheckResultType, FormRendererProps} from "../FormRenderer";
+import {ButtonType, CheckResultType, FormRendererProps, refType} from "../FormRenderer";
 
 const {Content} = Layout;
 
@@ -19,7 +19,7 @@ const {Content} = Layout;
  * @param props
  * @constructor
  */
-const FormRenderer: React.FC<FormRendererProps> = props => {
+const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
     const {
         config, edit, data, setData, checkHandle, extraButtons = [], checkButton = true,
         apiPath, fetch, legacy = true
@@ -32,6 +32,14 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
     const {elements = []} = modifiedConfig
 
     const [form] = Form.useForm();
+
+    // методы доступные по рефу
+    const getData = async () => form.getFieldsValue(true)
+    useImperativeHandle(ref, () => {
+        return {
+            getData
+        };
+    }, []);
 
     // подгрузка данных о сущностях
     useEntityCache(dicts)
@@ -111,5 +119,6 @@ const FormRenderer: React.FC<FormRendererProps> = props => {
         </Provider>
     )
 }
+)
 
-export default React.memo(FormRenderer)
+export default FormRenderer

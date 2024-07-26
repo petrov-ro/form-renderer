@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, {forwardRef, ReactElement} from "react";
 import {Provider} from 'react-redux'
 import {StatisticsFormConfig} from "../../models/classes/StatisticsFormConfig";
 import {ClassicFormClass} from "../../models/classes/ClassicFormElementClass";
@@ -34,18 +34,23 @@ export interface FormRendererProps {
     legacy?: boolean                                            // старый формат конфига
 }
 
+export interface refType {
+    getData: () => Record<string, any>
+}
+
 /**
  * Компонент рендера формы по метаданным
  *
  * @param props
  * @constructor
  */
-const FormRenderer: React.FC<FormRendererProps> = props => {
+const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
     return (
         <Provider store={store}>
-            <FormRendererStored {...props}/>
+            <FormRendererStored {...props} ref={ref}/>
         </Provider>
     )
 }
+)
 
 export default React.memo(FormRenderer)
