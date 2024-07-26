@@ -26,9 +26,8 @@ export interface FormRendererProps {
     config?: StatisticsFormConfig | ClassicFormClass            // конфиг (метаданные) формы
     edit?: boolean                                              // режим редактирования
     data?: Record<string, any>                                  // данные для отображения на форме
-    checkHandle?: (data: Record<string, any>,
-                   result: CheckResultType) => void             // колбек при проверке данных
-    setData?: (data: string) => void                            // колбек при установке новых значений формы
+    setData?: (fieldData: any,                                  // колбек при установке новых значений формы
+               fullData: Record<string, any>) => void
     extraButtons?: ButtonType[]                                 // дополнительные кнопки
     checkButton?: boolean                                       // флаг отображения кнопки проверки
     legacy?: boolean                                            // старый формат конфига
