@@ -1,6 +1,6 @@
 import React from "react";
 import cn from 'classnames'
-import {Button} from "antd";
+import {Button} from "@gp-frontend-lib/ui-kit-5";
 import {DropTargetMonitor, useDrop} from "react-dnd";
 import {StatisticsFormElementExtendedType} from "../../../models/types/StatisticsFormElementExtendedType";
 import {StatisticsFormElementClass} from "../../../models/classes/StatisticsFormElementClass";

@@ -1,5 +1,6 @@
 import React, {Key, useEffect} from "react";
-import {Form, Spin} from "antd";
+import {Form} from "antd";
+import {Spin} from "@gp-frontend-lib/ui-kit-5";
 import {EntityClass} from "../../../models/classes/EntityClass";
 import {FormConfigComponentType} from "../../../models/types/FormConfigComponentType";
 import useObject from "../../../hooks/useObject";

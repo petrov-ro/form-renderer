@@ -1,5 +1,5 @@
 import React, {Key, useState} from "react";
-import {Select} from "antd";
+import {Select} from "@gp-frontend-lib/ui-kit-5";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import RefDropdownEmbeddedForm from "../../components/RefDropdown/RefDropdownEmbeddedForm/RefDropdownEmbeddedForm";
 import {useSelector} from "react-redux";

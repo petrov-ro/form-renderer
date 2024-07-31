@@ -1,7 +1,6 @@
-import {Button, Collapse, Input} from "antd";
+import {Button, Collapse, Icons, Input} from "@gp-frontend-lib/ui-kit-5";
 import React, {ChangeEvent, useState} from "react";
 import {Identifier} from 'dnd-core';
-import {CaretRightOutlined, EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {StatisticsFormElementExtendedType} from "../../../models/types/StatisticsFormElementExtendedType";
 import {StatisticsFormElementClass} from "../../../models/classes/StatisticsFormElementClass";
 import {StatisticsFormComponentType} from "../../../models/types/StatisticsFormComponentType";
@@ -10,7 +9,9 @@ import {DraggableElements} from "../../../constants/DraggableElements";
 import DropTarget from "../../../components/DropTarget/DropTarget";
 import StatisticsFormConstructorElement from "../../StatisticsFormConstructorElement/StatisticsFormConstructorElement";
 
-const {Panel} = Collapse;
+const EditOutlined = Icons.Edit
+const CaretRightOutlined = Icons.Dropdown
+const SaveOutlined = Icons.Save
 
 type StatisticsPanelValueType = string               // тип значения элемента Раздел
 type StatisticsPanelConfigViewType = any             // тип конфигурации отображения компонента Вкладки
@@ -23,7 +24,10 @@ type StatisticsPanelType = StatisticsFormElementExtendedType<StatisticsPanelValu
  * @constructor
  */
 const StatisticsPanel: React.FC<StatisticsPanelType> = props => {
-    const {elements, setElements, currentElement, edit, changeValue, editComponent, setEditComponent} = props
+    const {
+        elements, setElements, currentElement, edit, changeValue, editComponent, setEditComponent,
+        setFormData = () => {}
+    } = props
     const {id, value = '', content = []} = currentElement
 
     const empty = content.length < 1    // флаг отсутсвия элементов на панели
@@ -80,7 +84,7 @@ const StatisticsPanel: React.FC<StatisticsPanelType> = props => {
                     />
                 </>
                 }
-    </div>
+            </div>
         )
     }
 
@@ -119,25 +123,32 @@ const StatisticsPanel: React.FC<StatisticsPanelType> = props => {
                 <Collapse defaultActiveKey={['1']}
                           bordered={false}
                           expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
-                >
-                    <Panel header={header()} key="1">
-                        {empty &&
-                        <div>Перенесите компоненты и показатели сюда</div>}
+                          items={[
+                              {
+                                  key: '1',
+                                  label: header(),
+                                  children: <>
+                                      {empty &&
+                                      <div>Перенесите компоненты и показатели сюда</div>}
 
-                        {!empty &&
-                        <div className='container'>
-                            {content
-                                .map((element: StatisticsFormElementClass) =>
-                                    <StatisticsFormConstructorElement key={element.id}
-                                                                      elements={content} setElements={changeContent}
-                                                                      currentElement={element} edit={edit}
-                                                                      editComponent={editComponent}
-                                                                      setEditComponent={setEditComponent}/>
-                                )}
-                        </div>
-                        }
-                    </Panel>
-                </Collapse>
+                                      {!empty &&
+                                      <div className='container'>
+                                          {content
+                                              .map((element: StatisticsFormElementClass) =>
+                                                  <StatisticsFormConstructorElement key={element.id}
+                                                                                    elements={content}
+                                                                                    setElements={changeContent}
+                                                                                    currentElement={element} edit={edit}
+                                                                                    editComponent={editComponent}
+                                                                                    setEditComponent={setEditComponent}
+                                                                                    setFormData={setFormData}/>
+                                              )}
+                                      </div>
+                                      }
+                                  </>,
+                              }
+                          ]}
+                />
             </div>
         </DropTarget>
     )

@@ -5,6 +5,7 @@ import dts from "rollup-plugin-dts";
 import scss from "rollup-plugin-scss";
 import PeerDepsExternalPlugin from 'rollup-plugin-peer-deps-external';
 import terser from '@rollup/plugin-terser';
+import json from '@rollup/plugin-json';
 
 export default [
     {
@@ -35,7 +36,8 @@ export default [
                 include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
                 output: "css/style.css",
                 failOnError: true,
-            })
+            }),
+            json()
         ],
     },
     {

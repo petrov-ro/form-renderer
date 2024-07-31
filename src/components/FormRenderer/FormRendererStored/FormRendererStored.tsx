@@ -1,5 +1,6 @@
 import React, {forwardRef, useCallback, useImperativeHandle} from "react";
-import {Button, Form, Layout, Space} from "antd";
+import {Form, Layout, Space} from "antd";
+import {Button} from "@gp-frontend-lib/ui-kit-5";
 import {Provider} from 'react-redux'
 import FormContentRenderer from "../../../components/FormContentRenderer/FormContentRenderer";
 import {API} from "../../../constants/Constants";

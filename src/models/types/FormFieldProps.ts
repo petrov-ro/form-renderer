@@ -23,4 +23,5 @@ export type FormFieldProps<T = any> = Omit<FormItemProps<T>, 'children'> & ColPr
   tooltip?: string
   titleValue?: string
   currentElement?: StatisticsFormElementClass
+  visibleLabelCol?: boolean
 }

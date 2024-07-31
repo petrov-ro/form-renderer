@@ -17,7 +17,7 @@ type StatisticsFormConstructorElementProps = FormProps & {
     reportMode?: boolean                                                 // режим ввода данных отчета
     editComponent?: string                                               // идентификатор редактируемого компонента
     setEditComponent?: Dispatch<SetStateAction<string | undefined>>      // установка редактируемого компонента
-    setFormData: (values: any) => void                                   // изменение значений формы
+    setFormData?: (values: any) => void                                  // изменение значений формы
 }
 
 /**
@@ -25,7 +25,8 @@ type StatisticsFormConstructorElementProps = FormProps & {
  */
 const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElementProps> = (props) => {
     const {
-        currentElement, setFormData
+        currentElement,
+        setFormData = () => void 0
     } = props
 
     const {

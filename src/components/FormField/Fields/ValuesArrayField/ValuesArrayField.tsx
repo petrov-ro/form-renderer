@@ -2,11 +2,14 @@ import React, {Component, Key, useState} from "react";
 import {FormFieldProps} from "../../../../models/types/FormFieldProps";
 import {TableParam} from "../../../../models/classes/TableParam";
 import {isArray} from "../../../../utils/arrayUtils";
-import {Button, Space} from "antd";
+import {Space} from "antd";
+import {Button, Icons} from "@gp-frontend-lib/ui-kit-5";
 import {fields} from "../../FormField";
 import {FormItemTypes} from "../../../../constants/FormItemTypes";
-import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {EntityAttrValTypes} from "../../../../constants/EntityAttrValTypes";
+
+const PlusOutlined = Icons.Add
+const DeleteOutlined = Icons.Delete
 
 export type ValuesArrayFieldType = Partial<FormFieldProps> & {}
 
