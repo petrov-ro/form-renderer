@@ -46,6 +46,8 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
     onChange?.(newVal)
   }
 
+  const mode = multivalued ? "multiple" : undefined
+
   return (
     <>
       {value && !Array.isArray(value) && entity && viewTypeForm && !multivalued &&
@@ -53,10 +55,10 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
       }
 
       <Select
-        showSearch allowClear={false} loading={loading || dictLoading} disabled={disabled}
+        showSearch allowClear={true} loading={loading || dictLoading} disabled={disabled}
         optionLabelProp='label' optionFilterProp='label'
         options={dictData} value={value}
-        mode={multivalued ? "multiple" : undefined}
+        mode={mode}
         onSelect={onSelect}
       />
     </>

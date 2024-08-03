@@ -5,8 +5,6 @@ import {setDict as storeDict} from "../redux/actions/dicts";
 import {entityDataGridType} from "../constants/GridTypes";
 import {DATA_SYSTEM_KEY, DICT_VALUE_PROP, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../constants/Constants";
 import {flatNode, treeNode} from "./useGridData";
-import usePrevious from "./usePrevious";
-import {objectCompare} from "../utils/objectUtils";
 
 /**
  * Получение данных сущности и сохранение их в сторе
@@ -15,20 +13,14 @@ import {objectCompare} from "../utils/objectUtils";
 const useDictCache = (dicts: Record<string, any>) => {
     const [current] = useState(1)       // номер страницы до которой нужно загрузить данные
     const [pageSize] = useState(1000)   // количество подгружаемых данных
-    const prevDicts = usePrevious(dicts)
     const dispatch = useDispatch()
 
     // получение данных сохраненных ранее
     const savedEntity = useSelector((state: Record<string, any>) => {
         return state.entities
     }) || {}
-    const prevSavedEntity = usePrevious(savedEntity)
 
     useEffect(() => {
-        if (objectCompare(dicts, prevDicts) && objectCompare(savedEntity, prevSavedEntity)) {
-            return
-        }
-
         let isMounted = true
 
         Object.keys(dicts).forEach(key => {
@@ -36,7 +28,9 @@ const useDictCache = (dicts: Record<string, any>) => {
 
             // код справочника в сторе
             const dictName = key
-            const setDict = (data: any[], loading: boolean) => dispatch(storeDict(dictName, {config, data, loading}));
+            const setDict = (data: any[], loading: boolean) => {
+                dispatch(storeDict(dictName, {config, data, loading}));
+            }
 
             // из конфига элемента вытаскивается код сущности
             const {entityCode} = config || {}
@@ -76,6 +70,7 @@ const useDictCache = (dicts: Record<string, any>) => {
                         setDict([], false)
                     }
                 })
+                .catch(console.log)
         })
 
         return () => {

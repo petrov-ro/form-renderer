@@ -68,26 +68,31 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
                 /* Отображение объектов */
                 valueTypeId === EntityAttrValTypesEnum.OBJECT &&
                 (typeId === EntityAttrTypes.PLAIN || typeId === EntityAttrTypes.CALC) &&
-                <FormField name={name} key={name} tooltip={tooltip} disabled={disabled}
-                           inputType={FormItemTypes.custom} visibleLabelCol={false}
-                           children={({value, onChange}: FormFieldProps) =>
-                               <Collapse
-                                   bordered={false}
-                                   defaultActiveKey={['1']}
-                                   expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
-                                   items={[
-                                       {
-                                           key: '1',
-                                           label,
-                                           children: <ObjectByForm value={value} onChange={onChange} multivalued={multivalued}
+                <Collapse
+                    bordered={false}
+                    defaultActiveKey={['1']}
+                    expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
+                    items={[
+                        {
+                            key: '1',
+                            label,
+                            children: <FormField name={name} key={name} tooltip={tooltip} disabled={disabled}
+                                                 inputType={FormItemTypes.custom} visibleLabelCol={false}
+                                                 children={({value, onChange}: FormFieldProps) =>
+                                                     <ObjectByForm value={value} onChange={onChange}
+                                                                   multivalued={multivalued}
                                                                    disabled={disabled}
-                                                                   formConfigComponents={components} code={code} name={name}
-                                                                   loading={entityLoading} setFormData={setFormData}/>,
-                                       }
-                                   ]}
-                               />
-                           }
-                           rules={[{required: required, message: `Не задан обязательный атрибут ${name}`}]}
+                                                                   formConfigComponents={components} code={code}
+                                                                   name={name}
+                                                                   loading={entityLoading} setFormData={setFormData}/>
+                                                 }
+                                                 rules={[{
+                                                     required: required,
+                                                     message: `Не задан обязательный атрибут ${name}`
+                                                 }]}
+                            />,
+                        }
+                    ]}
                 />
             }
 

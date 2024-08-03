@@ -144,12 +144,12 @@ const FormField = React.forwardRef(
                 <div className={cn({'input-disabled-container': disabled})}>
                     <Row>
                         {visibleLabelCol &&
-                        <Col xs={12} lg={6} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}}>
+                        <Col xs={12} lg={6} style={{textAlign: 'left'}}>
                             {label}
                         </Col>
                         }
 
-                        <Col xs={12} lg={18} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}}
+                        <Col xs={12} lg={18} style={{textAlign: 'left'}}
                              className='data-col'>
                             <Spin spinning={loading}>
                                 <FormItem {...mainProps} {...addProps} ref={ref} inputType={inputType}/>

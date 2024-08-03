@@ -35,6 +35,7 @@ export interface FormRendererProps {
 
 export interface refType {
     getData: () => Record<string, any>
+    setFieldsValue: (newData: Record<string, any>) => void
 }
 
 /**

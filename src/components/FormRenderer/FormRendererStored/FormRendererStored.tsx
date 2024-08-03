@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback, useImperativeHandle} from "react";
+import React, {forwardRef, useCallback, useEffect, useImperativeHandle} from "react";
 import {Form, Layout, Space} from "antd";
 import {Button} from "@gp-frontend-lib/ui-kit-5";
 import {Provider} from 'react-redux'
@@ -35,9 +35,11 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
 
     // методы доступные по рефу
     const getData = async () => form.getFieldsValue(true)
+    const setFieldsValue = async (newData: Record<string, any>) => form.setFieldsValue(newData)
     useImperativeHandle(ref, () => {
         return {
-            getData
+            getData,
+            setFieldsValue
         };
     }, []);
 
