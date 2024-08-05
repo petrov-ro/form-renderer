@@ -30,7 +30,7 @@ export const getJSON = <T = any>(url: string, params = {}, error: (err: string) 
  * @param params
  * @param silent
  */
-export const postp = <T = any>(url: string, data?: any, params?: any, silent = false, throwout = false): Promise<any> => {
+export const postp = <T = any>(url: string, data?: any, params?: any, silent = false, throwout = true): Promise<any> => {
     // clear() // сброс всех сообщений пока отключил т.к. на формах после неудачного сохранения обновляются встроенные гриды и сбрасывают сообщения
     return API.fetch(`${API.REACT_APP_API_URL}/${url}`, {
         method: 'POST',

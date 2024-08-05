@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://github.com/petrov-ro"
   },
-  "version": "3.3.4",
+  "version": "3.3.5",
   "description": "Configurable form renderer",
   "type": "module",
   "main": "dist/cjs/index.js",

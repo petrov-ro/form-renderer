@@ -171,6 +171,12 @@ export const convertElement = (elements: ClassicFormElementClass[],
  * @param config
  */
 export const modifyConfig = (config: ClassicFormClass): {result: StatisticsFormConfig, dicts: Record<string, any>} => {
+    // перенос элементов из t_600000018 в elements
+    if (config.t_600000018) {
+        config.elements = config.t_600000018
+        delete config.t_600000018
+    }
+
     const {elements = [] as ClassicFormElementClass[]} = config
     const dicts = {}
 

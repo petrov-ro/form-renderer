@@ -68,5 +68,6 @@ export type ClassicFormElementClass = {
 export type ClassicFormClass = {
     key: number
     name: string
-    elements: ClassicFormElementClass[]
+    elements?: ClassicFormElementClass[]        // атрибут содержит элементы конфига
+    t_600000018?: ClassicFormElementClass[]     // атрибут содержит элементы конфига (новая версия), если заполнено будет перенесено в elements
 }

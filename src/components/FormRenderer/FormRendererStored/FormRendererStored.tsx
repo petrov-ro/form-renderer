@@ -47,7 +47,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
     useEntityCache(dicts)
 
     // подгрузка справочников
-    useDictCache(dicts)
+    // useDictCache(dicts)
 
     // установка адреса апи
     API.REACT_APP_API_URL = apiPath
