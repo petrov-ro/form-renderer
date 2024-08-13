@@ -1,7 +1,7 @@
 {
   "name": "@petrov.ro/form-renderer",
   "publishConfig": {
-    "registry": "https://github.com/petrov-ro"
+    "registry": "https://nexus.dear.com.ru/repository/gp-gasps-npm"
   },
   "version": "2.4.1",
   "description": "Configurable form renderer",
