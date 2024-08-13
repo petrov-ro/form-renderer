@@ -1,5 +1,5 @@
 import React from "react";
-import {Table} from "antd";
+import {Table} from "@gp-frontend-lib/ui-kit-5";
 import {StatisticsFormElementExtendedType} from "../../../models/types/StatisticsFormElementExtendedType";
 import {StatisticsFormElementConfigType} from "../../../models/types/StatisticsFormElementConfigType";
 import './StatisticsIndicatorGrid.scss'

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {isArray} from "../../utils/arrayUtils";
-import {Button} from "antd";
+import {Button} from "@gp-frontend-lib/ui-kit-5";
 import {gridMultivalueDelimeter} from "../../constants/Constants";
 import {MoreOutlined, ShrinkOutlined} from "@ant-design/icons";
 import * as React from "react";

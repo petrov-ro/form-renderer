@@ -5,8 +5,6 @@ import {setDict as storeDict} from "../redux/actions/dicts";
 import {entityDataGridType} from "../constants/GridTypes";
 import {DATA_SYSTEM_KEY, DICT_VALUE_PROP, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../constants/Constants";
 import {flatNode, treeNode} from "./useGridData";
-import usePrevious from "./usePrevious";
-import {objectCompare} from "../utils/objectUtils";
 
 /**
  * Получение данных сущности и сохранение их в сторе
@@ -15,28 +13,27 @@ import {objectCompare} from "../utils/objectUtils";
 const useDictCache = (dicts: Record<string, any>) => {
     const [current] = useState(1)       // номер страницы до которой нужно загрузить данные
     const [pageSize] = useState(1000)   // количество подгружаемых данных
-    const prevDicts = usePrevious(dicts)
     const dispatch = useDispatch()
+
+    const setDict = (dictName: string, config: any, data: any[], loading: boolean) => {
+        dispatch(storeDict(dictName, {config, data, loading}));
+    }
 
     // получение данных сохраненных ранее
     const savedEntity = useSelector((state: Record<string, any>) => {
         return state.entities
     }) || {}
-    const prevSavedEntity = usePrevious(savedEntity)
+
+    // получение данных словарей сохраненных ранее
+    const savedDicts = useSelector((state: Record<string, any>) => {
+        return state.dicts
+    }) || {}
 
     useEffect(() => {
-        if (objectCompare(dicts, prevDicts) && objectCompare(savedEntity, prevSavedEntity)) {
-            return
-        }
-
         let isMounted = true
 
         Object.keys(dicts).forEach(key => {
             const config = dicts[key]
-
-            // код справочника в сторе
-            const dictName = key
-            const setDict = (data: any[], loading: boolean) => dispatch(storeDict(dictName, {config, data, loading}));
 
             // из конфига элемента вытаскивается код сущности
             const {entityCode} = config || {}
@@ -46,6 +43,18 @@ const useDictCache = (dicts: Record<string, any>) => {
             if (!entity) {
                 return // если сущность еще не подгружена, то справочник не может быть получен
             }
+
+            // код справочника в сторе
+            const dictName = key
+
+            // если данные справочника есть в сторе либо он загружается, то он не загружается повторно
+            const {data, loading} = savedDicts[dictName] || {}
+            if ((data?.length > 0) || loading) {
+                return
+            }
+
+            // если справочника нет в сторе, то устанавливается флаг его загруки
+            setDict(dictName, config, data, true)
 
             // формирование типа грида
             const gridType = entityDataGridType(entityCode, undefined, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'])
@@ -57,10 +66,6 @@ const useDictCache = (dicts: Record<string, any>) => {
 
             getTableDataOnly({current, pageSize}, undefined, undefined, entity, gridTypeKeys)
                 .then((response: { data?: any[], success?: boolean }) => {
-                    if (!isMounted) {
-                        return
-                    }
-
                     const {success, data} = response
                     if (success && data) {
                         const {valueKey, labelKey, isTree} = gridType
@@ -71,10 +76,14 @@ const useDictCache = (dicts: Record<string, any>) => {
                         /*                      options.sort(({label: a = ''}, {label: b = ''}) =>
                                                   a && b && a.toString().toLowerCase() >= b.toString().toLowerCase() ? 1 : -1
                                               )*/
-                        setDict(options || [], false)
+                        setDict(dictName, config, options || [], false)
                     } else {
-                        setDict([], false)
+                        setDict(dictName, config, [], true) // TODO Loading false! write error
                     }
+                })
+                .catch(err => {
+                    console.log(err)
+                    setDict(dictName, config, [], true) // TODO Loading false! write error
                 })
         })
 

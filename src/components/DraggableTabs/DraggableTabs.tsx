@@ -2,7 +2,7 @@ import * as React from "react";
 import {ReactElement, useRef, useState} from "react";
 import cn from 'classnames'
 import {useDrag, useDrop} from "react-dnd";
-import {Tabs} from 'antd';
+import {Tabs} from "@gp-frontend-lib/ui-kit-5";
 import {TabsProps} from "antd/lib/tabs";
 import './DraggableTabs.scss'
 

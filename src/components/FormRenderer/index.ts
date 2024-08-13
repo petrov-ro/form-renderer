@@ -1,1 +1,1 @@
-export { default } from "./FormRenderer";
+export { default, refType } from "./FormRenderer";

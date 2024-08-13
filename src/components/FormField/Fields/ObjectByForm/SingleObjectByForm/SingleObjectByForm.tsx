@@ -42,7 +42,7 @@ const SingleObjectByForm: React.FC<FormAttributeObjectProps> = props => {
   }, [])
 
   return (
-      <Form form={form} initialValues={value} onValuesChange={onValuesChange} layout={'horizontal'} style={{padding: 20}}>
+      <Form form={form} initialValues={value} onValuesChange={onValuesChange} layout={'horizontal'}>
         <FormContentRenderer
           elements={config?.elements}
           setFormData={setFormData}

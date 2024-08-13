@@ -1,5 +1,5 @@
 import React, {Key, useState} from "react";
-import {Select} from "antd";
+import {Select} from "@gp-frontend-lib/ui-kit-5";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import RefDropdownEmbeddedForm from "../../components/RefDropdown/RefDropdownEmbeddedForm/RefDropdownEmbeddedForm";
 import {useSelector} from "react-redux";
@@ -46,6 +46,8 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
     onChange?.(newVal)
   }
 
+  const mode = multivalued ? "multiple" : undefined
+
   return (
     <>
       {value && !Array.isArray(value) && entity && viewTypeForm && !multivalued &&
@@ -53,10 +55,10 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
       }
 
       <Select
-        showSearch allowClear={false} loading={loading || dictLoading} disabled={disabled}
+        showSearch allowClear={true} loading={loading || dictLoading} disabled={disabled}
         optionLabelProp='label' optionFilterProp='label'
         options={dictData} value={value}
-        mode={multivalued ? "multiple" : undefined}
+        mode={mode}
         onSelect={onSelect}
       />
     </>

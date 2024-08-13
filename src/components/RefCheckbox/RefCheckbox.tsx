@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Checkbox, Radio, Spin} from "antd";
+import {Checkbox, Radio, Spin} from "@gp-frontend-lib/ui-kit-5";
 import type {CheckboxOptionType, RadioChangeEvent} from "antd";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import useEntity from "../../hooks/useEntity";

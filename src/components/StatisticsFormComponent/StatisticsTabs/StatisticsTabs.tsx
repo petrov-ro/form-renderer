@@ -1,10 +1,12 @@
 import React, {ChangeEvent, useState} from "react";
+import {Button, Input, Icons} from "@gp-frontend-lib/ui-kit-5";
 import {StatisticsFormElementExtendedType} from "../../../models/types/StatisticsFormElementExtendedType";
 import DraggableTabs from "../../../components/DraggableTabs/DraggableTabs";
 import {uuid} from "../../../utils/common";
-import {Button, Input} from "antd";
-import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import StatisticsTab, {StatisticsTabsTabType} from "../../../components/StatisticsFormComponent/StatisticsTabs/StatisticsTab/StatisticsTab";
+
+const EditOutlined = Icons.Edit
+const SaveOutlined = Icons.Save
 
 type StatisticsTabsValueType = StatisticsTabsTabType[]    // тип значения элемента Вкладки
 type StatisticsTabsConfigViewType = any                   // тип конфигурации отображения компонента Вкладки

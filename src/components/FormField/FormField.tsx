@@ -1,14 +1,22 @@
-import React, {PropsWithChildren, ReactNode} from "react";
+import React, {PropsWithChildren} from "react";
 import cn from 'classnames'
 import {
-    Checkbox,
-    Col, DatePicker,
-    Form, Input, InputNumber, Radio, Row, Select, Space,
-    Spin, Switch,
-    Tree,
-    TreeSelect,
-    Upload
+    Form,
+    Col,
+    Row,
+    Switch,
+    Tree
 } from "antd";
+import {
+    Input,
+    Checkbox,
+    DatePicker,
+    InputNumber,
+    Radio, Select,
+    Spin,
+    Upload,
+    TreeSelect
+} from "@gp-frontend-lib/ui-kit-5";
 import {FormItemTypes} from "../../constants/FormItemTypes";
 import {DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
@@ -20,7 +28,7 @@ import './FormField.scss'
 /**
  *  Соответствие тип - компонент, каждому типу должен быть сопоставлен компонент
  */
-const fields: any = {
+export const fields: any = {
     [FormItemTypes.text]: Input,
     [FormItemTypes.select]: Select,
     [FormItemTypes.checkbox]: Checkbox,
@@ -32,7 +40,7 @@ const fields: any = {
     [FormItemTypes.date]: DatePicker,
     [FormItemTypes.time]: DatePicker,
     [FormItemTypes.switch]: Switch,
-    [FormItemTypes.area]: Input.TextArea,
+    [FormItemTypes.area]: Input.Textarea,
     [FormItemTypes.uuid]: UUIDField,
     [FormItemTypes.object]: ObjectByForm,
     [FormItemTypes.tree]: Tree,
@@ -49,7 +57,8 @@ const fields: any = {
  */
 const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Element => {
     const {
-        inputType, name, label, styleLabel, fieldProps, children, className, rules, ...childrenProps
+        inputType, name, label, styleLabel, fieldProps, children, className, rules,
+        ...childrenProps
     } = props;
     const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
 
@@ -69,7 +78,7 @@ const FormField = React.forwardRef(
         const {
             name, field, inputType = FormItemTypes.text, disabled, readonly, placeholder = '', loading = false,
             inline, inlineVertical, label: labelText, tooltip,
-            span = 24, xs, sm, md, lg, xl, xxl, flex,
+            span = 24, xs, sm, md, lg, xl, xxl, flex, visibleLabelCol = true,
             ...restProps
         } = props;
 
@@ -134,11 +143,14 @@ const FormField = React.forwardRef(
                 span={span} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl} flex={flex}>
                 <div className={cn({'input-disabled-container': disabled})}>
                     <Row>
-                        <Col xs={12} lg={6} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}}>
+                        {visibleLabelCol &&
+                        <Col xs={12} lg={6} style={{textAlign: 'left'}}>
                             {label}
                         </Col>
+                        }
 
-                        <Col xs={12} lg={18} style={{textAlign: 'left', paddingTop: 10, paddingBottom: 10}} className='data-col'>
+                        <Col xs={12} lg={18} style={{textAlign: 'left'}}
+                             className='data-col'>
                             <Spin spinning={loading}>
                                 <FormItem {...mainProps} {...addProps} ref={ref} inputType={inputType}/>
                             </Spin>

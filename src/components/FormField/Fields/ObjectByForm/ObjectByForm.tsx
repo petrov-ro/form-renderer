@@ -1,17 +1,16 @@
 import React, {useState} from 'react';
-import {Button, Collapse, Form, Spin} from 'antd';
-import {CaretRightOutlined, DeleteOutlined, PlusOutlined} from '@ant-design/icons';
+import {Form} from 'antd';
+import {Button, Collapse, Spin, Icons} from "@gp-frontend-lib/ui-kit-5";
 import {toArray} from "../../../../utils/arrayUtils";
 import {FormConfigComponentType} from "../../../../models/types/FormConfigComponentType";
 import {FormConfigComponentTypeEnum} from "../../../../constants/FormConfigComponentTypeEnum";
-import {EntityClass} from "../../../../models/classes/EntityClass";
+import {FormFieldProps} from "../../../../models/types/FormFieldProps";
 import SingleObjectByForm
     from "../../../../components/FormField/Fields/ObjectByForm/SingleObjectByForm/SingleObjectByForm";
-import {FormFieldProps} from "../../../../models/types/FormFieldProps";
-import {objectCompare} from "../../../../utils/objectUtils";
-import {hashCode} from "../../../../utils/stringHelper";
 
-const {Panel} = Collapse;
+const PlusOutlined = Icons.Add
+const CaretRightOutlined = Icons.Dropdown
+const DeleteOutlined = Icons.Delete
 
 export type RefGridType<T = any> = Partial<FormFieldProps<T>> & {
     multivalued?: boolean   // флаг возможности множественного выбора
@@ -22,7 +21,8 @@ export type RefGridType<T = any> = Partial<FormFieldProps<T>> & {
     dataSource?: any[]
     addBtnText?: string
     versionColumn?: boolean
-    exclude?: string[]  // массив системных идентификторов, которые нельзя выбрать в гриде
+    exclude?: string[]                      // массив системных идентификторов, которые нельзя выбрать в гриде
+    setFormData: (values: any) => void      // изменение значений формы
 }
 
 type FormAttributeObjectProps = Partial<RefGridType<Record<string, any> | Record<string, any>[]>> & {
@@ -60,7 +60,9 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
      * @param index - индекс записи в массиве
      */
     const setValue = (newValue: Record<string, any>) => {
-        setFormData({[name]: newValue})
+        if (name && typeof name === 'string') {
+            setFormData?.({[name]: newValue})
+        }
     }
 
     /**
@@ -125,12 +127,16 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
                                         bordered={false}
                                         defaultActiveKey={['1']}
                                         expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
-                                    >
-                                        <Panel header={`Запись ${i + 1}`} key="1">
-                                            <SingleObjectByForm value={v} onChange={onChangeVal(i)}
-                                                                config={embeddedForm?.config}/>
-                                        </Panel>
-                                    </Collapse>
+                                        items={[
+                                            {
+                                                key: '1',
+                                                label: `Запись ${i + 1}`,
+                                                children: <SingleObjectByForm value={v} onChange={onChangeVal(i)}
+                                                                              config={embeddedForm?.config}/>,
+                                            }
+                                        ]}
+                                    />
+
 
                                     <Button type="primary" danger onClick={removeValue(i)} style={{marginLeft: 10}}>
                                         <DeleteOutlined/>
