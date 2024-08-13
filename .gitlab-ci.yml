@@ -16,6 +16,7 @@ variables:
 
 build_and_publish:
   stage: build_and_publish
+  tags: ["gp-docker"]
   image: node:18
   script:
     # Увеличение версии
