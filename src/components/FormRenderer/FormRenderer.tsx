@@ -31,6 +31,8 @@ export interface FormRendererProps {
     extraButtons?: ButtonType[]                                 // дополнительные кнопки
     checkButton?: boolean                                       // флаг отображения кнопки проверки
     legacy?: boolean                                            // старый формат конфига
+    dictDate?: string                                           // дата на которую отображается состояние справочников (в формате YYYY-MM-DD)
+    dictClosed?: boolean                                        // полказывать закрытые записи справочников
 }
 
 export interface refType {
