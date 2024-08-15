@@ -2,11 +2,17 @@ import React, {useState} from "react";
 import {Checkbox, Radio, Spin} from "@gp-frontend-lib/ui-kit-5";
 import type {CheckboxOptionType, RadioChangeEvent} from "antd";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
-import useEntity from "../../hooks/useEntity";
-import {DATA_SYSTEM_KEY, DICT_VALUE_PROP, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../../constants/Constants";
 import {entityDataGridType} from "../../constants/GridTypes";
+import useEntity from "../../hooks/useEntity";
 import useGridData from "../../hooks/useGridData";
 import OptionData from "../../models/types/OptionData";
+import {
+  DATA_SYSTEM_KEY,
+  DICT_VALUE_LABEL,
+  DICT_VALUE_PROP,
+  SYS_DATA,
+  SYS_DATA_TITLE_ATTR
+} from "../../constants/Constants";
 
 type RefCheckboxProps = Partial<FormFieldProps<any[]>> & {
   multivalued?: boolean   // флаг возможности множественного выбора
@@ -36,10 +42,10 @@ const RefCheckbox: React.FC<RefCheckboxProps> = props => {
   const {entity} = useEntity(code)
 
   // формирование типа грида
-  const gridType = entityDataGridType(code, label, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'], entity)
+  const gridType = entityDataGridType(code, label, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, DICT_VALUE_LABEL], entity)
   const gridTypeKeys = {
     ...gridType,
-    labelKey: 'name',
+    labelKey: DICT_VALUE_LABEL,
     valueKey: DICT_VALUE_PROP
   }
 

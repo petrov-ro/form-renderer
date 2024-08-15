@@ -5,18 +5,28 @@ import {getJSON} from "../services/AbstractService";
 import {getEntityURL} from "./useEntity";
 import {EntityClass} from "../models/classes/EntityClass";
 import {entityDataGridType} from "../constants/GridTypes";
-import {DATA_SYSTEM_KEY, DICT_VALUE_PROP, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../constants/Constants";
+import {
+    DATA_SYSTEM_KEY,
+    DICT_VALUE_LABEL,
+    DICT_VALUE_PROP,
+    SYS_DATA,
+    SYS_DATA_TITLE_ATTR
+} from "../constants/Constants";
 import {getTableDataOnly} from "../services/GridService";
 import {flatNode, treeNode} from "./useGridData";
 import usePrevious from "./usePrevious";
 import {objectCompare} from "../utils/objectUtils";
 import {setDict as storeDict} from "../redux/actions/dicts";
+import {dictData} from "../services/DictService";
 
 /**
  * Получение информации о сущности и сохранение её в сторе
  * @param dicts - конфиги элементов ссылочного типа
  */
-const useEntityCache = (dicts: Record<string, any>) => {
+const useEntityCache = (dicts: Record<string, any>,
+                        dictDate?: string,
+                        dictClosed?: boolean
+) => {
     const [current] = useState(1)       // номер страницы до которой нужно загрузить данные
     const [pageSize] = useState(1000)   // количество подгружаемых данных
     const dispatch = useDispatch()
@@ -66,18 +76,17 @@ const useEntityCache = (dicts: Record<string, any>) => {
                 })
                 .then(entity => {
                     // формирование типа грида
-                    const gridType = entityDataGridType(entityCode, undefined, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'])
+                    const gridType = entityDataGridType(entityCode, undefined, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, DICT_VALUE_LABEL])
                     const gridTypeKeys = {
                         ...gridType,
-                        labelKey: 'name',
+                        labelKey: DICT_VALUE_LABEL,
                         valueKey: DICT_VALUE_PROP
                     }
 
-                    getTableDataOnly({current, pageSize}, undefined, undefined, entity, gridTypeKeys)
-                        .then((response: { data?: any[], success?: boolean }) => {
-                            const {success, data} = response
-                            if (success && data) {
-                                const {valueKey, labelKey, isTree} = gridType
+                    dictData({current, pageSize}, gridTypeKeys, dictDate, dictClosed)
+                        .then((data: any[]) => {
+                            if (data) {
+                                const {valueKey, labelKey, isTree} = gridTypeKeys
 
                                 const options = data
                                     .map(d => isTree ? treeNode(d, valueKey, labelKey) : flatNode(d, valueKey, labelKey))

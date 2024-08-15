@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback, useEffect, useImperativeHandle} from "react";
+import React, {forwardRef, useCallback, useImperativeHandle} from "react";
 import {Form, Layout, Space} from "antd";
 import {Button} from "@gp-frontend-lib/ui-kit-5";
 import {Provider} from 'react-redux'
@@ -7,7 +7,6 @@ import {API} from "../../../constants/Constants";
 import {modifyConfig} from "../../../services/ConfigService";
 import {ClassicFormClass} from "../../../models/classes/ClassicFormElementClass";
 import store from "../../../redux/store/index";
-import useDictCache from "../../../hooks/useDictCache";
 import useEntityCache from "../../../hooks/useEntityCache";
 import {ButtonType, FormRendererProps, refType} from "../FormRenderer";
 
@@ -22,7 +21,8 @@ const {Content} = Layout;
 const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
     const {
         config, edit, data, setData, extraButtons = [], checkButton = true,
-        apiPath, fetch, legacy = true
+        apiPath, fetch, legacy = true,
+        dictDate, dictClosed
     } = props
 
     // приведение типа конфига
@@ -43,11 +43,8 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
         };
     }, []);
 
-    // подгрузка данных о сущностях
-    useEntityCache(dicts)
-
-    // подгрузка справочников
-    // useDictCache(dicts)
+    // подгрузка данных о сущностях и справочников
+    useEntityCache(dicts, dictDate, dictClosed)
 
     // установка адреса апи
     API.REACT_APP_API_URL = apiPath
