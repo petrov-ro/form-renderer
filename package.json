@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://nexus.dear.com.ru/repository/gp-gasps-npm"
   },
-  "version": "3.4.1",
+  "version": "3.4.2",
   "description": "Configurable form renderer",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -50,7 +50,7 @@
     "rollup-plugin-scss": "^4.0.0",
     "tslib": "^2.6.3",
     "typescript": "4.9.5",
-    "@gp-frontend-lib/ui-kit-5": "^2.0.35"
+    "@gp-frontend-lib/ui-kit-5": "^2.0.87"
   },
   "dependencies": {
     "classnames": "^2.5.1",
