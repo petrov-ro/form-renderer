@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Form} from 'antd';
 import FormContentRenderer from "../../../../FormContentRenderer/FormContentRenderer";
 import {StatisticsFormConfig} from "../../../../../models/classes/StatisticsFormConfig";
@@ -23,6 +23,10 @@ const SingleObjectByForm: React.FC<FormAttributeObjectProps> = props => {
 
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    form?.setFieldsValue(value)
+  }, [value])
+
   /**
    * Изменение полей формы
    * @param values
@@ -35,7 +39,7 @@ const SingleObjectByForm: React.FC<FormAttributeObjectProps> = props => {
    * Установка данных формы
    * @param newValues
    */
-  const setFormData = useCallback((newValues) => {
+  const setFormData = useCallback((newValues: Record<string, any>) => {
     const formData = form?.getFieldsValue(true)
     form?.setFieldsValue({...formData, ...newValues})
     onChange({...formData, ...newValues})

@@ -126,4 +126,4 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
     )
 }
 
-export default (StatisticsFormField)
+export default StatisticsFormField

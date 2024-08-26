@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Form} from 'antd';
-import {Button, Collapse, Spin, Icons} from "@gp-frontend-lib/ui-kit-5";
+import {Button, Collapse, Icons, Spin} from "@gp-frontend-lib/ui-kit-5";
 import {toArray} from "../../../../utils/arrayUtils";
 import {FormConfigComponentType} from "../../../../models/types/FormConfigComponentType";
 import {FormConfigComponentTypeEnum} from "../../../../constants/FormConfigComponentTypeEnum";
@@ -157,4 +157,4 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     )
 }
 
-export default React.memo(ObjectByForm)
+export default ObjectByForm

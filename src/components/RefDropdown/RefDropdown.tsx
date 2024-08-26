@@ -41,7 +41,7 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
    * Выбор элемента выпадающего списка
    * @param newVal - новое значение
    */
-  const onSelect = (newVal: Key | Key[]) => {
+  const onChangeValues = (newVal: Key | Key[]) => {
     setValue(newVal)
     onChange?.(newVal)
   }
@@ -59,7 +59,7 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
         optionLabelProp='label' optionFilterProp='label'
         options={dictData} value={value}
         mode={mode}
-        onSelect={onSelect}
+        onChange={onChangeValues}
       />
     </>
   );

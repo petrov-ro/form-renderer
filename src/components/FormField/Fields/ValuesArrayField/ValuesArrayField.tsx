@@ -52,7 +52,16 @@ const ValuesArrayField: React.FC<ValuesArrayFieldType> = props => {
      * Редактирование значения
      */
     const onChangeField = (elem, e) => {
-        const newValue = e
+        let newValue: any
+        switch (inputType) {
+            case FormItemTypes.text:
+                console.log('case', e.target.value)
+                newValue = e.target.value
+                break
+            case FormItemTypes.number:
+            default:
+                newValue = e
+        }
         const values = value.map(v => v.id === elem.id ? {...elem, value: newValue} : v)
         onChange?.(values)
     }
@@ -78,15 +87,18 @@ const ValuesArrayField: React.FC<ValuesArrayFieldType> = props => {
         <div>
             <Space direction="vertical">
                 {value
-                    .map((v, i) =>
-                        <Space direction={'horizontal'} key={v.id}>
-                            <Component value={v.value} onChange={(e) => onChangeField(v, e)}/>
-                            <Button type="primary" ghost key="primary"
-                                    title='Удалить'
-                                    onClick={() => onRemove(i)}>
-                                <DeleteOutlined/>
-                            </Button>
-                        </Space>
+                    .map((v, i) => {
+                            return (
+                                <Space direction={'horizontal'} key={v.id}>
+                                    <Component value={v.value} onChange={(e) => onChangeField(v, e)}/>
+                                    <Button type="primary" ghost key="primary"
+                                            title='Удалить'
+                                            onClick={() => onRemove(i)}>
+                                        <DeleteOutlined/>
+                                    </Button>
+                                </Space>
+                            )
+                        }
                     )}
 
                 <Button type="primary" ghost key="primary"

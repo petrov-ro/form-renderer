@@ -16,7 +16,7 @@ import {
     Spin,
     Upload,
     TreeSelect
-} from "@gp-frontend-lib/ui-kit-5";
+} from "antd";
 import {FormItemTypes} from "../../constants/FormItemTypes";
 import {DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
 import {FormFieldProps} from "../../models/types/FormFieldProps";

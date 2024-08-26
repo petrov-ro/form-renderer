@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback, useImperativeHandle} from "react";
+import React, {forwardRef, useCallback, useEffect, useImperativeHandle} from "react";
 import {Form, Layout, Space} from "antd";
 import {Button} from "@gp-frontend-lib/ui-kit-5";
 import {Provider} from 'react-redux'
@@ -35,16 +35,26 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
 
     // методы доступные по рефу
     const getData = async () => form.getFieldsValue(true)
-    const setFieldsValue = async (newData: Record<string, any>) => form.setFieldsValue(newData)
+    const setFieldsValue = (newData: Record<string, any>) => {
+        form.setFieldsValue(newData)
+    }
+    const resetFields = () => {
+        form.resetFields()
+    }
     useImperativeHandle(ref, () => {
         return {
             getData,
+            resetFields,
             setFieldsValue
         };
     }, []);
 
     // подгрузка данных о сущностях и справочников
     useEntityCache(dicts, dictDate, dictClosed)
+
+    useEffect(() => {
+        form.setFieldsValue(data)
+    }, [])
 
     // установка адреса апи
     API.REACT_APP_API_URL = apiPath
@@ -78,7 +88,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
     return (
         <Provider store={store}>
             <Form form={form} name="render-form" className='statistics-form-constructor'
-                  initialValues={data}
+                  initialValues={undefined}
                   onValuesChange={onValuesChange}
                   layout='vertical'
             >
