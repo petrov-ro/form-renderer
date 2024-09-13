@@ -1,4 +1,5 @@
 import React, {Dispatch, SetStateAction} from "react";
+import {NamePath} from "antd/es/form/interface";
 import {StatisticsFormElementClass} from "../../models/classes/StatisticsFormElementClass";
 import StatisticsFormConstructorElement
   from "../../components/StatisticsFormConstructorElement/StatisticsFormConstructorElement";
@@ -7,11 +8,10 @@ type FormContentRendererProps = {
   elements: StatisticsFormElementClass[]                                // элементы размещенные на форме
   setElements?: Dispatch<SetStateAction<StatisticsFormElementClass[]>>  // изменение элементов на форме
   edit?: boolean                                                        // режим редактирования формы в режиме конструктора
-  reportMode?: boolean                                                  // режим ввода данных
   editComponent?: string                                                // идентификатор редактируемого компонента
   setEditComponent?: Dispatch<SetStateAction<string | undefined>>       // установка редактируемого компонента
   className?: string                                                    // css-классы контейнера
-  setFormData: (values: any) => void                                    // изменение значений формы
+  name?: NamePath                                                       // название атрибута-родителя
 }
 
 /**
@@ -22,19 +22,19 @@ type FormContentRendererProps = {
  */
 const FormContentRenderer: React.FC<FormContentRendererProps> = props => {
   const {
-    elements = [], editComponent, edit = false, reportMode, className, setFormData
+    elements = [], editComponent, edit = false, className, name
   } = props
 
   return (
     <div className={className}>
       {elements.map((elem: StatisticsFormElementClass) =>
-        <StatisticsFormConstructorElement key={elem.id} currentElement={elem}
-                                          edit={edit} reportMode={reportMode}
+        <StatisticsFormConstructorElement key={elem.id} name={name}
+                                          currentElement={elem}
+                                          edit={edit}
                                           elements={elements}
                                           setElements={undefined}
                                           editComponent={editComponent}
-                                          setEditComponent={undefined}
-                                          setFormData={setFormData}/>)
+                                          setEditComponent={undefined}/>)
       }
     </div>
   )

@@ -1,18 +1,17 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Form} from 'antd';
 import {Button, Collapse, Icons, Spin} from "@gp-frontend-lib/ui-kit-5";
-import {toArray} from "../../../../utils/arrayUtils";
 import {FormConfigComponentType} from "../../../../models/types/FormConfigComponentType";
 import {FormConfigComponentTypeEnum} from "../../../../constants/FormConfigComponentTypeEnum";
 import {FormFieldProps} from "../../../../models/types/FormFieldProps";
-import SingleObjectByForm
-    from "../../../../components/FormField/Fields/ObjectByForm/SingleObjectByForm/SingleObjectByForm";
+import FormContentRenderer from "../../../FormContentRenderer/FormContentRenderer";
+import {toArray} from "../../../../utils/arrayUtils";
 
 const PlusOutlined = Icons.Add
 const CaretRightOutlined = Icons.Dropdown
 const DeleteOutlined = Icons.Delete
 
-export type RefGridType<T = any> = Partial<FormFieldProps<T>> & {
+export type RefGridType<T = any> = FormFieldProps<T> & {
     multivalued?: boolean   // флаг возможности множественного выбора
     label: string           // наименование сущности
     code: string            // код сущности для отображения записей
@@ -37,118 +36,64 @@ type FormAttributeObjectProps = Partial<RefGridType<Record<string, any> | Record
  */
 const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
     const {
-        loading, multivalued, formConfigComponents = [],
-        name, setFormData
+        name: initialName, loading, multivalued, formConfigComponents = []
     } = props
-
-    const form = Form.useFormInstance();
-
-    const [deleted, setDeleted] = useState(0)
 
     // получение формы (компонента формы сбора) для сущности на которую ссылается объект (если такая форма есть - она будет отрисована, иначе - грид)
     const embeddedForm = formConfigComponents.find((f: FormConfigComponentType) => f.type === FormConfigComponentTypeEnum.EMBEDDED_FORM)
 
-    /**
-     * Возвращает значение текущего атрибута
-     */
-    const getValue = () => {
-        return form?.getFieldValue(name)
-    }
-
-    /**
-     * Изменение значения в массиве
-     * @param index - индекс записи в массиве
-     */
-    const setValue = (newValue: Record<string, any>) => {
-        if (name && typeof name === 'string') {
-            setFormData?.({[name]: newValue})
-        }
-    }
-
-    /**
-     * Изменение значения в массиве
-     * @param index - индекс записи в массиве
-     */
-    const onChangeVal = (index: number) => (newVal: Record<string, any>) => {
-        const newValue = (getValue() || []).map((val: Record<string, any>, i: number) => i === index ? newVal : val)
-        setValue(newValue)
-    }
-
-    /**
-     * Изменение одиночного значения
-     */
-    const onChangeSingle = (newVal: Record<string, any>) => {
-        setValue(newVal)
-    }
-
-    /**
-     * Добавление нового значения
-     */
-    const addNewValue = () => {
-        let newValue
-        if (multivalued) {
-            newValue = toArray(getValue() || []).concat([{}])
-        } else {
-            newValue = {}
-        }
-        setValue(newValue)
-    }
-
-    /**
-     * Удаление значения
-     */
-    const removeValue = (index: number) => () => {
-        let newValue
-        if (multivalued) {
-            newValue = toArray(getValue() || [])
-            newValue.splice(index, 1);
-        } else {
-            newValue = {}
-        }
-        setValue(newValue)
-        setDeleted(deleted + 1)
-    }
+    const name = initialName ? toArray(initialName) : initialName
 
     return (
         <Spin spinning={false}>
-            {embeddedForm &&
+            {embeddedForm && name &&
             <>
                 {!multivalued &&
-                <SingleObjectByForm value={getValue()} onChange={onChangeSingle} config={embeddedForm?.config}/>
+                <FormContentRenderer name={name}
+                                     elements={embeddedForm?.config?.elements}
+                />
                 }
 
                 {multivalued &&
                 <>
-                    {
-                        toArray(getValue())
-                            .map((v: Record<string, any>, i: number) =>
-                                <div style={{paddingBottom: 10}} key={i.toString() + '-' + deleted.toString()}>
-                                    <Collapse
-                                        bordered={false}
-                                        defaultActiveKey={['1']}
-                                        expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
-                                        items={[
-                                            {
-                                                key: '1',
-                                                label: `Запись ${i + 1}`,
-                                                children: <SingleObjectByForm value={v} onChange={onChangeVal(i)}
-                                                                              config={embeddedForm?.config}/>,
-                                            }
-                                        ]}
-                                    />
+                    <Form.List name={name}>
+                        {(fields, {add, remove}) => (
+                            <>
+                                <div style={{display: 'flex', rowGap: 16, flexDirection: 'column'}}>
+                                    {fields.map((field, i) => (
+                                        <div style={{paddingBottom: 10}} key={field.key}>
+                                            <Collapse
+                                                bordered={false}
+                                                defaultActiveKey={['1']}
+                                                expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
+                                                items={[
+                                                    {
+                                                        key: '1',
+                                                        label: `Запись ${i + 1}`,
+                                                        children: <FormContentRenderer name={field.name}
+                                                                                       elements={embeddedForm?.config?.elements}
+                                                        />,
+                                                    }
+                                                ]}
+                                            />
 
-
-                                    <Button type="primary" danger onClick={removeValue(i)} style={{marginLeft: 10}}>
-                                        <DeleteOutlined/>
-                                        Удалить {`запись ${i + 1}`}
-                                    </Button>
+                                            <Button type="primary" danger onClick={() => remove(field.name)}
+                                                    style={{marginLeft: 10}}>
+                                                <DeleteOutlined/>
+                                                Удалить {`запись ${i + 1}`}
+                                            </Button>
+                                        </div>
+                                    ))}
                                 </div>
-                            )
-                    }
-                    <Button type="primary" style={{marginLeft: 10}} onClick={addNewValue}>
-                        <PlusOutlined/>
-                        Добавить запись
-                    </Button>
+
+
+                                <Button type="primary" style={{marginLeft: 10}} onClick={() => add()}>
+                                    <PlusOutlined/>
+                                    Добавить запись
+                                </Button>
+                            </>
+                        )}
+                    </Form.List>
                 </>
                 }
             </>

@@ -25,8 +25,7 @@ type StatisticsPanelType = StatisticsFormElementExtendedType<StatisticsPanelValu
  */
 const StatisticsPanel: React.FC<StatisticsPanelType> = props => {
     const {
-        elements, setElements, currentElement, edit, changeValue, editComponent, setEditComponent,
-        setFormData = () => {}
+        elements, setElements, currentElement, edit, changeValue, editComponent, setEditComponent
     } = props
     const {id, value = '', content = []} = currentElement
 

@@ -55,7 +55,8 @@ const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
  */
 export const convertElement = (elements: ClassicFormElementClass[],
                                element: ClassicFormElementClass,
-                               dicts: Record<string, any>
+                               dicts: Record<string, any>,
+                               initialValues: Record<string, any>
 ): StatisticsFormElementClass => {
     const {
         key: elementKey,
@@ -91,12 +92,20 @@ export const convertElement = (elements: ClassicFormElementClass[],
             name = elementName
             code = elementKey.toString()
 
+            // конфиг элемента
+            const required = false
+            const multivalued = !!is_extendable
+
+            // формирование начальных данных (массивы должны иметь один начальный элемент)
+            initialValues[code] = multivalued ? [{}] : {}
+            const initialValuesObject = multivalued ? initialValues[code][0] : initialValues[code]
+
             // выборка дочерних элементов для текущего блока
             let childrenElements = elements
                 .filter((el: ClassicFormElementClass) => el.parentKey === primaryKey)
                 .filter((el: ClassicFormElementClass) => !!el.is_visible)
                 .sort(classicFormElementComparator)
-                .map(el => convertElement(elements, el, dicts))
+                .map(el => convertElement(elements, el, dicts, initialValuesObject))
 
             // формирование формы для отображения, она состоит просто из дочерних элементов
             const objectFormConfig = [{
@@ -112,8 +121,8 @@ export const convertElement = (elements: ClassicFormElementClass[],
 
             // формирование конфига, блок в старом формате соответсвует показателю с типом объект в новом формате
             config = {
-                required: false,
-                multivalued: !!is_extendable,
+                required,
+                multivalued,
                 typeId: EntityAttrTypes.PLAIN,
                 valueTypeId: EntityAttrValTypesEnum.OBJECT,
                 entityFormConfigComponents: objectFormConfig
@@ -170,7 +179,11 @@ export const convertElement = (elements: ClassicFormElementClass[],
  * Приведение типов конфига из старого формата в новый
  * @param config
  */
-export const modifyConfig = (config: ClassicFormClass): {result: StatisticsFormConfig, dicts: Record<string, any>} => {
+export const modifyConfig = (config: ClassicFormClass): {
+    result: StatisticsFormConfig,
+    dicts: Record<string, any>,
+    initialValues: Record<string, any>
+} => {
     // перенос элементов из t_600000018 в elements
     if (config.t_600000018) {
         config.elements = config.t_600000018
@@ -179,6 +192,7 @@ export const modifyConfig = (config: ClassicFormClass): {result: StatisticsFormC
 
     const {elements = [] as ClassicFormElementClass[]} = config
     const dicts = {}
+    const initialValues = {}
 
     // выборка родительских элементов (не имеющих родителя)
     const topElements: StatisticsFormElementClass[] = elements
@@ -186,8 +200,8 @@ export const modifyConfig = (config: ClassicFormClass): {result: StatisticsFormC
         .filter((el: ClassicFormElementClass) => !!el.is_visible)
         .flatMap((el) => elements.filter(childEl => childEl.parentKey === el.primaryKey)) // визуализация начинается с уровня следующего после самого верхнего
         .sort(classicFormElementComparator)
-        .map(el => convertElement(elements, el, dicts))
+        .map(el => convertElement(elements, el, dicts, initialValues))
 
     const result = new StatisticsFormConfig(topElements)
-    return {result, dicts}
+    return {result, dicts, initialValues}
 }

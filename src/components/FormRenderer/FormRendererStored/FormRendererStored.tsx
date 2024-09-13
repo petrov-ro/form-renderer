@@ -27,7 +27,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
 
     // приведение типа конфига
     // const modifiedConfig = legacy ? modifyConfig(config as ClassicFormClass) : (config as StatisticsFormConfig)
-    const {result: modifiedConfig, dicts} = modifyConfig(config as ClassicFormClass)
+    const {result: modifiedConfig, dicts, initialValues} = modifyConfig(config as ClassicFormClass)
 
     const {elements = []} = modifiedConfig
 
@@ -35,12 +35,15 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
 
     // методы доступные по рефу
     const getData = async () => form.getFieldsValue(true)
+
     const setFieldsValue = (newData: Record<string, any>) => {
         form.setFieldsValue(newData)
     }
+
     const resetFields = () => {
         form.resetFields()
     }
+
     useImperativeHandle(ref, () => {
         return {
             getData,
@@ -70,17 +73,6 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
      * Установка данных формы
      * @param newValues
      */
-    const setFormData = useCallback((newFieldValue: Record<string, any>) => {
-        const formData = form?.getFieldsValue(true)
-        const newFormData = {...formData, ...newFieldValue}
-        form?.setFieldsValue(newFormData)
-        setData?.(newFieldValue, newFormData)
-    }, [])
-
-    /**
-     * Установка данных формы
-     * @param newValues
-     */
     const onValuesChange = (fieldData: Record<string, any>, fullData: Record<string, any>) => {
         setData?.(fieldData, fullData)
     }
@@ -88,7 +80,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
     return (
         <Provider store={store}>
             <Form form={form} name="render-form" className='statistics-form-constructor'
-                  initialValues={undefined}
+                  initialValues={initialValues}
                   onValuesChange={onValuesChange}
                   layout='vertical'
             >
@@ -109,9 +101,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
                         <Content style={{width: '100%', display: 'block', backgroundColor: 'white'}}>
                             <FormContentRenderer edit={edit}
                                                  elements={elements}
-                                                 reportMode={edit}
                                                  className='statistics-form-layout-content'
-                                                 setFormData={setFormData}
                             />
                         </Content>
                     </Layout>

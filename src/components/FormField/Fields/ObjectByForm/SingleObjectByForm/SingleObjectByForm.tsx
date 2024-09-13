@@ -8,6 +8,7 @@ type FormAttributeObjectProps = {
   value: Record<string, any>                  // объект который нужно показать на форме
   onChange: (v: Record<string, any>) => void  // колбек изменение значений на форме
   config: StatisticsFormConfig                // массив элементов (конфиг формы сбора)
+  name?: string | string[]                    // название атрибута-родителя
 }
 
 /**
@@ -18,40 +19,11 @@ type FormAttributeObjectProps = {
  */
 const SingleObjectByForm: React.FC<FormAttributeObjectProps> = props => {
   const {
-    value = {}, onChange, config
+    name
   } = props
 
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    form?.setFieldsValue(value)
-  }, [value])
-
-  /**
-   * Изменение полей формы
-   * @param values
-   */
-  const onValuesChange = () => {
-    onChange(form?.getFieldsValue(true))
-  }
-
-  /**
-   * Установка данных формы
-   * @param newValues
-   */
-  const setFormData = useCallback((newValues: Record<string, any>) => {
-    const formData = form?.getFieldsValue(true)
-    form?.setFieldsValue({...formData, ...newValues})
-    onChange({...formData, ...newValues})
-  }, [])
-
   return (
-      <Form form={form} initialValues={value} onValuesChange={onValuesChange} layout={'horizontal'}>
-        <FormContentRenderer
-          elements={config?.elements}
-          setFormData={setFormData}
-        />
-      </Form>
+        <></>
   )
 }
 
