@@ -27,7 +27,6 @@ type StatisticsFormFieldRenderProps = FormFieldProps & {
     components: FormConfigComponentType[]
     viewType?: RefViewTypes
     viewTypeForm?: any
-    setFormData: (values: any) => void                                    // изменение значений формы
 }
 
 /**
@@ -37,7 +36,7 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
     const {
         label, name, required, multivalued, viewType, viewTypeForm,
         typeId, valueTypeId, code, components, entityLoading, indicatorLoading, tooltip, disabled, isSection, style,
-        currentElement, setFormData
+        currentElement
     } = props
 
     const exclude: string[] = []  // массив системных идентификторов, которые не нужно отображать в гриде (для атрибутов типа REF)
@@ -76,24 +75,15 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
                         {
                             key: '1',
                             label,
-                            children: <FormField name={name} key={name} tooltip={tooltip} disabled={disabled}
-                                                 inputType={FormItemTypes.custom} visibleLabelCol={false}
-                                                 children={({value, onChange}: FormFieldProps) =>
-                                                     <ObjectByForm value={value} onChange={onChange}
-                                                                   multivalued={multivalued}
-                                                                   disabled={disabled}
-                                                                   formConfigComponents={components} code={code}
-                                                                   name={name}
-                                                                   loading={entityLoading} setFormData={setFormData}/>
-                                                 }
-                                                 rules={[{
-                                                     required: required,
-                                                     message: `Не задан обязательный атрибут ${name}`
-                                                 }]}
-                            />,
+                            children: <ObjectByForm multivalued={multivalued}
+                                                    disabled={disabled}
+                                                    formConfigComponents={components} code={code}
+                                                    name={name}
+                                                    loading={entityLoading}/>,
                         }
                     ]}
                 />
+
             }
 
             {

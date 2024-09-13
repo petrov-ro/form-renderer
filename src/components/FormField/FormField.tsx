@@ -16,7 +16,7 @@ import {
     Spin,
     Upload,
     TreeSelect
-} from "antd";
+} from "@gp-frontend-lib/ui-kit-5";
 import {FormItemTypes} from "../../constants/FormItemTypes";
 import {DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
@@ -62,6 +62,14 @@ const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Ele
     } = props;
     const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
 
+    // удаление свойств для всех, кроме указанных в массиве
+    if (![FormItemTypes.custom].includes(inputType)) {
+        delete childrenProps.currentElement
+    }
+    if (![FormItemTypes.custom, FormItemTypes.values].includes(inputType)) {
+        delete childrenProps.valueTypeBasic
+    }
+
     return (
         <Form.Item name={name} className={className} style={styleLabel} rules={rules} layout={'horizontal'}>
             <CustomElement {...childrenProps} {...fieldProps} label={label}/>
@@ -76,7 +84,7 @@ const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Ele
 const FormField = React.forwardRef(
     (props: PropsWithChildren<FormFieldProps>, ref): JSX.Element => {
         const {
-            name, field, inputType = FormItemTypes.text, disabled, readonly, placeholder = '', loading = false,
+            name, field, inputType = FormItemTypes.text, disabled, readOnly, placeholder = '', loading = false,
             inline, inlineVertical, label: labelText, tooltip,
             span = 24, xs, sm, md, lg, xl, xxl, flex, visibleLabelCol = true,
             ...restProps
@@ -89,7 +97,7 @@ const FormField = React.forwardRef(
 
         // свойства компоненты
         const mainProps = {
-            ...restProps, disabled, readonly, placeholder, label,
+            ...restProps, disabled, readOnly, placeholder, label,
             name: field ? [field.name, name].flat() : name,
         }
 
