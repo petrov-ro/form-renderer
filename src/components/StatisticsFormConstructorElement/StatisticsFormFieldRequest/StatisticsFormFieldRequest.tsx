@@ -23,7 +23,7 @@ const StatisticsFormFieldRequest: React.FC<StatisticsFormFieldProps> = (props) =
         id, label, name, tooltip, disabled, entityAttr, isSection, style, currentElement
     } = props
 
-// получение показателя по идентификатору
+    // получение показателя по идентификатору
     const {indicator, loading: indicatorLoading} = useIndicator(id, entityAttr)
 
     const {
