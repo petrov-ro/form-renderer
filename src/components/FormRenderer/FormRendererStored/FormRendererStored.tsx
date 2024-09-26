@@ -9,6 +9,7 @@ import {ClassicFormClass} from "../../../models/classes/ClassicFormElementClass"
 import store from "../../../redux/store/index";
 import useEntityCache from "../../../hooks/useEntityCache";
 import {ButtonType, FormRendererProps, refType} from "../FormRenderer";
+import {notEmpty, removeEmpty} from "../../../utils/objectUtils";
 
 const {Content} = Layout;
 
@@ -20,7 +21,7 @@ const {Content} = Layout;
  */
 const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
     const {
-        config, edit, data, setData, extraButtons = [], checkButton = true,
+        config, edit, data, setData, noEmpty = false, extraButtons = [], checkButton = true,
         apiPath, fetch, legacy = true,
         dictDate, dictClosed
     } = props
@@ -71,10 +72,21 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
 
     /**
      * Установка данных формы
-     * @param newValues
+     * @param fieldData - данные изменившегося реквизита
+     * @param fullData  - все данные формы
      */
     const onValuesChange = (fieldData: Record<string, any>, fullData: Record<string, any>) => {
-        setData?.(fieldData, fullData)
+        // удаление пустых значений
+        if (noEmpty) {
+            const fieldDataUnempty = removeEmpty(fieldData)
+            const fullDataUnempty = removeEmpty(fullData)
+            if (notEmpty(fieldDataUnempty)) {
+                setData?.(fieldDataUnempty, fullDataUnempty)
+            }
+        } else {
+            setData?.(fieldData, fullData)
+        }
+
     }
 
     return (
