@@ -26,11 +26,11 @@ export default [
             PeerDepsExternalPlugin(),
             resolve(),
             commonjs(),
-            terser({
+/*            terser({
                 ecma: 2021,
                 module: true,
                 warnings: true,
-            }),
+            }),*/
             typescript({ tsconfig: "./tsconfig.json" }),
             scss({
                 include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
