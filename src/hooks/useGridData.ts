@@ -23,8 +23,6 @@ export const treeNode = <T, P extends Partial<EntityTreeDataClass>>(
 ): T => ({
   label: _.get(d, labelKey),
   value: _.get(d, valueKey),
-  children: (d.children || []).map(ch => treeNode(ch, valueKey, labelKey)),
-  leaf: !d.category,
   item: d
 } as T)
 

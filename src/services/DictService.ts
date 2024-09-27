@@ -22,14 +22,14 @@ export const dictData = <T extends Record<string, any>>(
     date?: string,
     dictClosed: boolean = false
 ): Promise<T[]> => {
-    const {current = 1, pageSize = ENTRIES_ON_PAGE} = params
+    const {current = 1, pageSize = ENTRIES_ON_PAGE, ...rest} = params
     const url = type.route
 
     const data = {
         limit: pageSize,
         offset: pageSize * (current - 1),
         fields: type.fields || undefined,
-        ...dictDataRequestParams(date, dictClosed)
+        ...dictDataRequestParams(date, dictClosed, rest)
     }
 
     return (
@@ -43,13 +43,20 @@ export const dictData = <T extends Record<string, any>>(
  * @param date          - дата на которую нужно отобразить справочник
  * @param viewClosed    - флаг отображение последних актуальных версий для закрытых записей
  */
-const dictDataRequestParams = (date: string = convertDateToStr(nowDate(), BACK_DATE_FORMAT)!, dictClosed: boolean = false) => {
+const dictDataRequestParams = (
+    date: string = convertDateToStr(nowDate(), BACK_DATE_FORMAT)!,
+    dictClosed: boolean = false,
+    params: Record<string, any>
+) => {
     return ({
         sort: [{
-                field: 'ord',
-                order: 'asc'
-            }],
-        search: dictDataSearch(date, dictClosed)
+            field: 'ord',
+            order: 'asc'
+        }, {
+            field: 'name',
+            order: 'desc'
+        }],
+        search: dictDataSearch(date, dictClosed, params)
     })
 }
 
@@ -57,8 +64,17 @@ const dictDataRequestParams = (date: string = convertDateToStr(nowDate(), BACK_D
  * Формирование поискового запроса на данные справочника с учетом даты и флага отображения закрытых
  * @param date          - дата на которую нужно отобразить справочник
  * @param viewClosed    - флаг отображение последних актуальных версий для закрытых записей
+ * @param parentAttr    - флаг отображение последних актуальных версий для закрытых записей
+ * @param parentId      - флаг отображение последних актуальных версий для закрытых записей
  */
-const dictDataSearch = (date: string = convertDateToStr(nowDate(), BACK_DATE_FORMAT)!, dictClosed: boolean = false) => {
+const dictDataSearch = (
+    date: string = convertDateToStr(nowDate(), BACK_DATE_FORMAT)!,
+    dictClosed: boolean = false,
+    params: Record<string, any>
+) => {
+    const {isTree = false, parentAttr = 'parentKey', parentId} = params
+    let searches
+
     // группа условий на актуальные записи
     const inDateCond = new GridSearchDataConditon("inDate", GridSearchOperType.lte, date);
     const outDateCond = new GridSearchDataConditon("outDate", GridSearchOperType.gt, date);
@@ -69,8 +85,22 @@ const dictDataSearch = (date: string = convertDateToStr(nowDate(), BACK_DATE_FOR
         const isHasOlderVersionsCond = new GridSearchDataConditon("isHasOlderVersions", GridSearchOperType.eq, false);
         const outDateCond = new GridSearchDataConditon("outDate", GridSearchOperType.lte, date);
         const lastActualCondGroup = new GridSearchDataGroup('and', false, [isHasOlderVersionsCond, outDateCond])
-        return new GridSearchDataGroup('or', false, [actualCondGroup, lastActualCondGroup])
+        searches = new GridSearchDataGroup('or', false, [actualCondGroup, lastActualCondGroup])
+    } else {
+        searches = new GridSearchDataGroup('or', false, [actualCondGroup])
     }
 
-    return new GridSearchDataGroup('or', false, [actualCondGroup])
+    // для дерева добавление условия отсутствия родителей
+    const result = isTree ?
+        new GridSearchDataGroup('and', false, [
+            parentId ? (
+                new GridSearchDataConditon(parentAttr, GridSearchOperType.eq, parentId)
+            ) : (
+                //new GridSearchDataConditon(parentAttr, GridSearchOperType.exists, false)
+                new GridSearchDataConditon(parentAttr, GridSearchOperType.eq, null)
+            ),
+            searches
+        ]) : searches
+
+    return result
 }

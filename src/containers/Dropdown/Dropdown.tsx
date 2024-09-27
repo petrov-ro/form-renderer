@@ -1,9 +1,10 @@
 import React, {Key, useState} from "react";
 import {Select} from "@gp-frontend-lib/ui-kit-5";
+import {SelectProps as SelectProps} from "antd";
 import useDict from "../../hooks/useDict";
 import {API} from "../../constants/Constants";
 
-export interface DropdownProps {
+export interface DropdownProps extends SelectProps {
     fetch: (url: string, params: Record<string, any>) => Promise<Response>   // адрес для вызова процедур
     apiPath: string                         // адрес для вызова процедур
     dictCode: string                        // код справочника (сущности)
@@ -11,8 +12,6 @@ export interface DropdownProps {
     dictClosed?: boolean                    // полказывать закрытые записи справочников
     value?: Key | Key[]                     // начальное значение
     onChange?: (val: Key | Key[]) => void   // колбек изменения атрибута
-    multivalued?: boolean                   // флаг возможности множественного выбора
-    disabled?: boolean                      // отключить редактирование
 }
 
 /**
@@ -23,7 +22,10 @@ export interface DropdownProps {
  */
 const Dropdown: React.FC<DropdownProps> = props => {
     const {
-        dictCode, dictDate, dictClosed = false, value: initialValue, onChange, multivalued, disabled, apiPath, fetch
+        dictCode, dictDate, dictClosed = false,
+        value: initialValue, onChange,
+        apiPath, fetch,
+        ...rest
     } = props;
 
     // установка адреса апи
@@ -43,16 +45,14 @@ const Dropdown: React.FC<DropdownProps> = props => {
         onChange?.(newVal)
     }
 
-    const mode = multivalued ? "multiple" : undefined
-
     return (
         <>
             <Select
-                showSearch allowClear={true} loading={dictLoading} disabled={disabled}
+                showSearch allowClear={true} loading={dictLoading}
                 optionLabelProp='label' optionFilterProp='label'
                 options={dictData} value={value}
-                mode={mode}
                 onChange={onChangeValues}
+                {...rest}
             />
         </>
     );
