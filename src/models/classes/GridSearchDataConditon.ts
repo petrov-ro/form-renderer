@@ -5,11 +5,11 @@ export class GridSearchDataConditon {
   type: GridSearchDataType
   field: string
   operation: GridSearchOperType
-  value: string | string[] | boolean
+  value: string | string[] | boolean | null
 
   constructor(field: string,
               operation: GridSearchOperType,
-              value: string | string[] | boolean
+              value: string | string[] | boolean | null
   ) {
     this.type = 'condition'
     this.field = field
