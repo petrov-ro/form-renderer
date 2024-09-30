@@ -10,9 +10,10 @@ import {
     SYS_DATA,
     SYS_DATA_TITLE_ATTR
 } from "../../constants/Constants";
-import {dictData} from "../../services/DictService";
+import {dictData, nodeBranch} from "../../services/DictService";
 import {treeNode} from "../../hooks/useGridData";
 import {EntityTreeDataClass} from "../../models/classes/EntityDataClass";
+import {toArray} from "../../utils/arrayUtils";
 
 export interface TreeSelectProps extends TreeSelectAntProps {
     fetch: (url: string, params: Record<string, any>) => Promise<Response>   // адрес для вызова процедур
@@ -21,7 +22,8 @@ export interface TreeSelectProps extends TreeSelectAntProps {
     dictDate?: string                       // дата на которую отображается состояние справочников (в формате YYYY-MM-DD)
     dictClosed?: boolean                    // полказывать закрытые записи справочников
     value?: Key | Key[]                     // начальное значение
-    onChange?: (val: Key | Key[]) => void   // колбек изменения атрибута
+    onChange?: (val?: Key | Key[]) => void   // колбек изменения атрибута
+    parentAttr?: string                     // код атрибута по которому определяется родитель
 }
 
 interface DataNode {
@@ -64,7 +66,7 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
     const {
         dictCode, dictDate, dictClosed = false,
         value: initialValue, onChange,
-        apiPath, fetch,
+        apiPath, fetch, parentAttr = 'parentKey',
         ...rest
     } = props;
 
@@ -74,6 +76,7 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
 
     const [value, setValue] = useState(initialValue)
     const [treeData, setTreeData] = useState<DataNode[]>([]);
+    const [loading, setLoading] = useState(false);
 
     // формирование типа грида
     const gridType = entityDataGridType(dictCode, undefined, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, DICT_VALUE_LABEL, DICT_PARENT_KEY])
@@ -83,14 +86,15 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
         valueKey: DICT_VALUE_PROP
     }
 
-    const onLoadData = ({ key, children }: any) =>
+    const onLoadData = ({key, children}: any) =>
         new Promise<void>(resolve => {
             if (children) {
                 resolve();
                 return;
             }
 
-            dictData({pageSize: 1000, parentAttr: 'parentKey', parentId: key, isTree: true}, gridTypeKeys, dictDate, dictClosed)
+            setLoading(true)
+            dictData({pageSize: 20000, parentAttr, parentId: key, isTree: true}, gridTypeKeys, dictDate, dictClosed)
                 .then((data: any[]) => {
                     if (data) {
                         const {valueKey, labelKey} = gridTypeKeys
@@ -104,19 +108,63 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
                     }
                 })
                 .catch(console.log)
-                .finally(() => resolve(undefined))
+                .finally(() => {
+                    setLoading(false)
+                    resolve()
+                })
         });
 
     // первичная загрузка узлов верхнего уровня
     useEffect(() => {
         onLoadData({})
+            .then(() => {
+                if (initialValue) {
+                    //const nodeBranchData = nodeBranch(dictCode, parentAttr, initialValue, dictDate)
+                }
+            })
     }, [])
 
     /**
-     * Выбор элемента выпадающего списка
+     * Выбор элемента дерева
      * @param newVal - новое значение
      */
-    const onChangeValues = (value: Key | Key[]) => {
+    const onSelect = (newValue: Key) => {
+        const {multiple, treeCheckable} = rest
+        if (multiple || treeCheckable) {
+            const newValues = (toArray(value) || [])
+                .concat(toArray(newValue))
+
+            setValue(newValues)
+            onChange?.(newValues)
+        } else {
+            setValue(newValue)
+            onChange?.(newValue)
+        }
+    }
+
+    /**
+     * Удаление из выбранных
+     * @param removeVal - удаляемое значение
+     */
+    const onDeselect = (removeVal: Key) => {
+        const {multiple, treeCheckable} = rest
+        if (multiple || treeCheckable) {
+            const newValues = (toArray(value) || [])
+                .filter((v: Key) => v !== removeVal)
+
+            setValue(newValues)
+            onChange?.(newValues)
+        } else {
+            setValue(undefined)
+            onChange?.(undefined)
+        }
+    }
+
+    /**
+     * Удаление из выбранных
+     * @param removeVal - удаляемое значение
+     */
+    const onChangeTree = (value: Key | Key[] | undefined) => {
         setValue(value)
         onChange?.(value)
     }
@@ -126,14 +174,14 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
             <TreeSelectAnt
                 value={value}
                 treeNodeFilterProp={'label'} filterTreeNode
-                onChange={onChange}
+                onChange={onChangeTree}
                 loadData={onLoadData}
                 treeData={treeData}
-                onSelect={onChangeValues}
-                fieldNames={{ label: 'label', value: 'value', children: 'children' }}
+                loading={loading}
+                fieldNames={{label: 'label', value: 'value', children: 'children'}}
                 showSearch
-                style={{ width: '100%' }}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                style={{width: '100%'}}
+                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                 placeholder="Выберите"
                 {...rest}
             />

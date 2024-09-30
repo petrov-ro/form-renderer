@@ -1,12 +1,13 @@
 import {GridType} from "../models/types/GridType";
 import {BACK_DATE_FORMAT, ENTRIES_ON_PAGE} from "../constants/Constants";
-import {postp} from "./AbstractService";
+import {getJSON, postp} from "./AbstractService";
 import {isArray} from "../utils/arrayUtils";
 import {GridParamType} from "./GridService";
 import {GridSearchDataGroup} from "../models/classes/GridSearchDataGroup";
 import {GridSearchDataConditon} from "../models/classes/GridSearchDataConditon";
 import {GridSearchOperType} from "../models/types/SearchType";
 import {convertDateToStr, nowDate} from "../utils/dateUtils";
+import { Key } from "react";
 
 /**
  * Получение данных справочника
@@ -103,4 +104,25 @@ const dictDataSearch = (
         ]) : searches
 
     return result
+}
+
+/**
+ * Получение данных справочника
+ *
+ * @param entityCode        - код сущности
+ * @param pkValue           - ключ записи
+ * @param parentAttrCode    - код атрибута, по которому выбираются дочерние записи
+ */
+export const nodeBranch = <T extends Record<string, any>>(
+    entityCode: string,
+    parentAttrCode: string,
+    pkValue: Key | Key[],
+    dictDate: string
+): Promise<T[]> => {
+    const url = `tree-branch/by-pk/${entityCode}/${parentAttrCode}/${pkValue}/${dictDate}`
+
+    return (
+        getJSON<T[]>(url)
+            .then(resp => isArray(resp) ? resp : [])
+    )
 }
