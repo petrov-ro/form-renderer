@@ -4,6 +4,7 @@ import {
     DATA_SYSTEM_KEY,
     DICT_VALUE_LABEL,
     DICT_VALUE_PROP,
+    IS_UNSELECTABLE,
     SYS_DATA,
     SYS_DATA_TITLE_ATTR
 } from "../constants/Constants";
@@ -47,7 +48,13 @@ const useDict = <T>(entityCode: string, dictDate?: string, viewClosed?: boolean)
             })
             .then(entity => {
                 // формирование типа грида
-                const gridType = entityDataGridType(entityCode, undefined, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, DICT_VALUE_LABEL])
+                const gridType = entityDataGridType(entityCode, undefined, [
+                    DATA_SYSTEM_KEY,
+                    DICT_VALUE_PROP,
+                    IS_UNSELECTABLE,
+                    `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`,
+                    DICT_VALUE_LABEL
+                ])
                 const gridTypeKeys = {
                     ...gridType,
                     labelKey: DICT_VALUE_LABEL,

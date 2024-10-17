@@ -1,19 +1,19 @@
 import React, {Key, useEffect, useState} from "react";
-import {TreeSelect as TreeSelectAnt} from "antd";
+import {TreeSelect as TreeSelectAnt} from "@gp-frontend-lib/ui-kit-5";
 import {TreeSelectProps as TreeSelectAntProps} from "antd";
 import {entityDataGridType} from "@/constants/GridTypes";
 import {
     API,
-    DATA_SYSTEM_KEY, DICT_PARENT_KEY,
+    DATA_SYSTEM_KEY,
+    DICT_PARENT_KEY,
     DICT_VALUE_LABEL,
-    DICT_VALUE_PROP,
+    DICT_VALUE_PROP, IS_UNSELECTABLE,
     SYS_DATA,
     SYS_DATA_TITLE_ATTR
 } from "../../constants/Constants";
-import {dictData, nodeBranch} from "../../services/DictService";
+import {dictData} from "../../services/DictService";
 import {treeNode} from "../../hooks/useGridData";
 import {EntityTreeDataClass} from "../../models/classes/EntityDataClass";
-import {toArray} from "../../utils/arrayUtils";
 
 export interface TreeSelectProps extends TreeSelectAntProps {
     fetch: (url: string, params: Record<string, any>) => Promise<Response>   // адрес для вызова процедур
@@ -79,7 +79,14 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
     const [loading, setLoading] = useState(false);
 
     // формирование типа грида
-    const gridType = entityDataGridType(dictCode, undefined, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, DICT_VALUE_LABEL, DICT_PARENT_KEY])
+    const gridType = entityDataGridType(dictCode, undefined, [
+        DATA_SYSTEM_KEY,
+        DICT_VALUE_PROP,
+        IS_UNSELECTABLE,
+        `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`,
+        DICT_VALUE_LABEL,
+        DICT_PARENT_KEY
+    ])
     const gridTypeKeys = {
         ...gridType,
         labelKey: DICT_VALUE_LABEL,
@@ -119,46 +126,13 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
         onLoadData({})
             .then(() => {
                 if (initialValue) {
-                    //const nodeBranchData = nodeBranch(dictCode, parentAttr, initialValue, dictDate)
+                    //const nodeBranchData = nodeBranch(gridTypeKeys, dictCode, parentAttr, initialValue, dictDate, dictClosed, 'key')
+                    //setTreeData(key ? (origin) =>
+                    //    updateTreeData(origin, key, options) : options
+                    //);
                 }
             })
     }, [])
-
-    /**
-     * Выбор элемента дерева
-     * @param newVal - новое значение
-     */
-    const onSelect = (newValue: Key) => {
-        const {multiple, treeCheckable} = rest
-        if (multiple || treeCheckable) {
-            const newValues = (toArray(value) || [])
-                .concat(toArray(newValue))
-
-            setValue(newValues)
-            onChange?.(newValues)
-        } else {
-            setValue(newValue)
-            onChange?.(newValue)
-        }
-    }
-
-    /**
-     * Удаление из выбранных
-     * @param removeVal - удаляемое значение
-     */
-    const onDeselect = (removeVal: Key) => {
-        const {multiple, treeCheckable} = rest
-        if (multiple || treeCheckable) {
-            const newValues = (toArray(value) || [])
-                .filter((v: Key) => v !== removeVal)
-
-            setValue(newValues)
-            onChange?.(newValues)
-        } else {
-            setValue(undefined)
-            onChange?.(undefined)
-        }
-    }
 
     /**
      * Удаление из выбранных

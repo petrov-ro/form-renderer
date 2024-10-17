@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {getTableDataOnly} from "../services/GridService";
 import {setDict as storeDict} from "../redux/actions/dicts";
 import {entityDataGridType} from "../constants/GridTypes";
-import {DATA_SYSTEM_KEY, DICT_VALUE_PROP, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../constants/Constants";
+import {DATA_SYSTEM_KEY, DICT_VALUE_PROP, IS_UNSELECTABLE, SYS_DATA, SYS_DATA_TITLE_ATTR} from "../constants/Constants";
 import {flatNode, treeNode} from "./useGridData";
 
 /**
@@ -57,7 +57,15 @@ const useDictCache = (dicts: Record<string, any>) => {
             setDict(dictName, config, data, true)
 
             // формирование типа грида
-            const gridType = entityDataGridType(entityCode, undefined, [DATA_SYSTEM_KEY, DICT_VALUE_PROP, `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`, 'name'])
+            const gridType = entityDataGridType(entityCode, undefined,
+                [
+                    DATA_SYSTEM_KEY,
+                    DICT_VALUE_PROP,
+                    IS_UNSELECTABLE,
+                    `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`,
+                    'name'
+                ]
+            )
             const gridTypeKeys = {
                 ...gridType,
                 labelKey: 'name',

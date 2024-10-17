@@ -38,8 +38,20 @@ const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
         case ReqTypeEnum.INTEGER: {
             return EntityAttrValTypesEnum.INTEGER
         }
+        case ReqTypeEnum.NUMBER: {
+            return EntityAttrValTypesEnum.NUMBER
+        }
         case ReqTypeEnum.DATE: {
             return EntityAttrValTypesEnum.DATE
+        }
+        case ReqTypeEnum.TIME: {
+            return EntityAttrValTypesEnum.TIME
+        }
+        case ReqTypeEnum.DATETIME: {
+            return EntityAttrValTypesEnum.DATETIME
+        }
+        case ReqTypeEnum.BOOLEAN: {
+            return EntityAttrValTypesEnum.BOOLEAN
         }
         default: {
             return EntityAttrValTypesEnum.STRING
@@ -87,6 +99,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
     // формирование конфига показателя для элемента нового формата на основании данных старого формата
     let name, code, config
     switch (elementType) {
+        case ElementTypeEnum.SECTION:
         case ElementTypeEnum.BLOCK:
         case ElementTypeEnum.BLOCK_2: {
             name = elementName

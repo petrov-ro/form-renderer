@@ -10,6 +10,7 @@ export type FormFieldProps<T = any> = Omit<FormItemProps<T>, 'children'> & ColPr
   field?: FormListFieldData
   value?: T
   onChange?: (value: T) => void
+  checked?: boolean
   styleLabel?: CSSProperties
   disabled?: boolean
   readOnly?: boolean
