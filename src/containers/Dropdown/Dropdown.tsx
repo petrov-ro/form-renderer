@@ -1,8 +1,10 @@
 import React, {Key, useState} from "react";
 import {Select} from "@gp-frontend-lib/ui-kit-5";
 import {SelectProps as SelectProps} from "antd";
+import {BaseOptionType} from "antd/es/select";
 import useDict from "../../hooks/useDict";
 import {API} from "../../constants/Constants";
+import {dictOptionRender} from "@/utils/optionDataHelper";
 
 export interface DropdownProps extends SelectProps {
     fetch: (url: string, params: Record<string, any>) => Promise<Response>   // адрес для вызова процедур
@@ -52,10 +54,11 @@ const Dropdown: React.FC<DropdownProps> = props => {
                 optionLabelProp='label' optionFilterProp='label'
                 options={dictData} value={value}
                 onChange={onChangeValues}
+                optionRender={dictOptionRender}
                 {...rest}
             />
         </>
-    );
+    )
 }
 
 export default React.memo(Dropdown)
