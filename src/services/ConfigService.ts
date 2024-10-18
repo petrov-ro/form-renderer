@@ -38,6 +38,7 @@ const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
         case ReqTypeEnum.INTEGER: {
             return EntityAttrValTypesEnum.INTEGER
         }
+        case ReqTypeEnum.FLOAT:
         case ReqTypeEnum.NUMBER: {
             return EntityAttrValTypesEnum.NUMBER
         }
