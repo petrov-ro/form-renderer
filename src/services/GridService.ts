@@ -11,10 +11,9 @@ import {ENTRIES_ON_PAGE} from "../constants/Constants";
 import {getEntityByType} from "../utils/entityHelper";
 import {EntityClass} from "../models/classes/EntityClass";
 
-export type GridParamType = ParamsType & {
+export type GridParamType = Record<string, any> & {
     pageSize?: number;
     current?: number;
-    keyword?: string;
 }
 
 /**

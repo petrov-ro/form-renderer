@@ -38,8 +38,20 @@ const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
         case ReqTypeEnum.INTEGER: {
             return EntityAttrValTypesEnum.INTEGER
         }
+        case ReqTypeEnum.NUMBER: {
+            return EntityAttrValTypesEnum.NUMBER
+        }
         case ReqTypeEnum.DATE: {
             return EntityAttrValTypesEnum.DATE
+        }
+        case ReqTypeEnum.TIME: {
+            return EntityAttrValTypesEnum.TIME
+        }
+        case ReqTypeEnum.DATETIME: {
+            return EntityAttrValTypesEnum.DATETIME
+        }
+        case ReqTypeEnum.BOOLEAN: {
+            return EntityAttrValTypesEnum.BOOLEAN
         }
         default: {
             return EntityAttrValTypesEnum.STRING
@@ -71,7 +83,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
         key: reqKey,
         name: reqName,
         type_id: {
-            key: typeId
+            key: typeId = undefined
         } = {},
         dict_id
     } = req_id || {}
@@ -87,6 +99,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
     // формирование конфига показателя для элемента нового формата на основании данных старого формата
     let name, code, config
     switch (elementType) {
+        case ElementTypeEnum.SECTION:
         case ElementTypeEnum.BLOCK:
         case ElementTypeEnum.BLOCK_2: {
             name = elementName
@@ -105,7 +118,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
                 .filter((el: ClassicFormElementClass) => el.parentKey === primaryKey)
                 .filter((el: ClassicFormElementClass) => !!el.is_visible)
                 .sort(classicFormElementComparator)
-                .map(el => convertElement(elements, el, dicts, initialValuesObject))
+                .map(el  => convertElement(elements, el, dicts, initialValuesObject))
 
             // формирование формы для отображения, она состоит просто из дочерних элементов
             const objectFormConfig = [{
@@ -198,7 +211,10 @@ export const modifyConfig = (config: ClassicFormClass): {
     const topElements: StatisticsFormElementClass[] = elements
         .filter((el: ClassicFormElementClass) => !el.parentKey)
         .filter((el: ClassicFormElementClass) => !!el.is_visible)
-        .flatMap((el) => elements.filter(childEl => childEl.parentKey === el.primaryKey)) // визуализация начинается с уровня следующего после самого верхнего
+        .flatMap((el) => elements      // визуализация начинается с уровня следующего после самого верхнего
+            .filter(childEl => !!childEl.is_visible)
+            .filter(childEl => childEl.parentKey === el.primaryKey)
+        )
         .sort(classicFormElementComparator)
         .map(el => convertElement(elements, el, dicts, initialValues))
 

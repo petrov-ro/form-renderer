@@ -3,6 +3,8 @@ import {Select} from "@gp-frontend-lib/ui-kit-5";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import RefDropdownEmbeddedForm from "../../components/RefDropdown/RefDropdownEmbeddedForm/RefDropdownEmbeddedForm";
 import {useSelector} from "react-redux";
+import {BaseOptionType} from "antd/es/select";
+import {dictOptionRender} from "@/utils/optionDataHelper";
 
 type RefDropdownProps = Partial<FormFieldProps<Key | Key[]>> & {
   multivalued?: boolean   // флаг возможности множественного выбора
@@ -60,6 +62,7 @@ const RefDropdown: React.FC<RefDropdownProps> = props => {
         options={dictData} value={value}
         mode={mode}
         onChange={onChangeValues}
+        optionRender={dictOptionRender}
       />
     </>
   );

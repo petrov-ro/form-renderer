@@ -58,21 +58,21 @@ export const fields: any = {
 const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Element => {
     const {
         inputType, name, label, styleLabel, fieldProps, children, className, rules,
-        ...childrenProps
+        ...formItemProps
     } = props;
     const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
 
     // удаление свойств для всех, кроме указанных в массиве
     if (![FormItemTypes.custom].includes(inputType)) {
-        delete childrenProps.currentElement
+        delete formItemProps.currentElement
     }
     if (![FormItemTypes.custom, FormItemTypes.values].includes(inputType)) {
-        delete childrenProps.valueTypeBasic
+        delete formItemProps.valueTypeBasic
     }
 
     return (
-        <Form.Item name={name} className={className} style={styleLabel} rules={rules} layout={'horizontal'}>
-            <CustomElement {...childrenProps} {...fieldProps} label={label}/>
+        <Form.Item name={name} className={className} style={styleLabel} rules={rules} layout={'horizontal'} {...formItemProps}>
+            <CustomElement {...fieldProps} label={label}/>
         </Form.Item>
     )
 }

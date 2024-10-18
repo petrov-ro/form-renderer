@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://nexus.dear.com.ru/repository/gp-gasps-npm"
   },
-  "version": "3.6.1",
+  "version": "3.9.1",
   "description": "Configurable form renderer",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@ant-design/pro-provider": "^2.14.9",
     "@babel/core": "^7.25.2",
+    "@gp-frontend-lib/ui-kit-5": "^2.0.95",
     "@reduxjs/toolkit": "^2.2.6",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
@@ -38,7 +39,7 @@
     "@types/lodash": "^4.17.6",
     "@types/react": "^18.3.1",
     "@types/redux-actions": "^2.6.5",
-    "antd": "^5.17.0",
+    "antd": "^5.21.1",
     "lodash": "^4.17.21",
     "node-sass": "^9.0.0",
     "react-dom": "^18.3.1",
@@ -49,8 +50,7 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-scss": "^4.0.0",
     "tslib": "^2.6.3",
-    "typescript": "4.9.5",
-    "@gp-frontend-lib/ui-kit-5": "^2.0.95"
+    "typescript": "4.9.5"
   },
   "dependencies": {
     "classnames": "^2.5.1",
@@ -65,11 +65,11 @@
   },
   "peerDependencies": {
     "@ant-design/icons": "^5.3.7",
+    "@gp-frontend-lib/ui-kit-5": "^2.0.35",
     "@types/react": "^18.3.1",
     "antd": "^5.17.0",
     "classnames": "^2.5.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@gp-frontend-lib/ui-kit-5": "^2.0.35"
+    "react-dom": "^18.3.1"
   }
 }

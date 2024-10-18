@@ -21,13 +21,14 @@ export interface CheckResultType {
 }
 
 export interface FormRendererProps {
-    fetch: (url: string, params: Record<string, any>) => Promise<Response>   // адрес для вызова процедур
+    fetch: (url: string, params: Record<string, any>) => Promise<Response>   // метод для вызова запросов
     apiPath: string                                             // адрес для вызова процедур
     config?: StatisticsFormConfig | ClassicFormClass            // конфиг (метаданные) формы
     edit?: boolean                                              // режим редактирования
     data?: Record<string, any>                                  // данные для отображения на форме
     setData?: (fieldData: any,                                  // колбек при установке новых значений формы
                fullData: Record<string, any>) => void
+    noEmpty?: boolean                                           // не включать пустые значения в возвращаемые данные
     extraButtons?: ButtonType[]                                 // дополнительные кнопки
     checkButton?: boolean                                       // флаг отображения кнопки проверки
     legacy?: boolean                                            // старый формат конфига
