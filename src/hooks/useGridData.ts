@@ -6,6 +6,7 @@ import usePrevious from "../hooks/usePrevious";
 import {objectCompare} from "../utils/objectUtils";
 import {EntityTreeDataClass} from "../models/classes/EntityDataClass";
 import _ from "lodash";
+import {isFunction} from "../utils/common";
 
 type ResultProps<T> = {
   loading: boolean;
@@ -31,10 +32,14 @@ export const treeNode = <T, P extends Partial<EntityTreeDataClass>>(
  * Формирует запись плоского справочника
  * @param d         - категория или сущность (показатель или категория показателя) или запись
  * @param valueKey
- * @param labelKey
+ * @param label
  */
-export const flatNode = <T, P extends Partial<EntityTreeDataClass>>(d: P, valueKey: string | string[] = 'id', labelKey: string | string[] = 'name'): T => ({
-  label: _.get(d, labelKey) || _.get(d, 'title'),
+export const flatNode = <T, P extends Partial<EntityTreeDataClass>>(
+    d: P,
+    valueKey: string | string[] = 'id',
+    label: string | string[] | ((v: P) => void) = 'name'
+): T => ({
+  label: isFunction(label) ? (label as Function)(d) : (_.get(d, label as string | string []) || _.get(d, 'title')),
   value: _.get(d, valueKey) || _.get(d, 'id'),
   disabled: !!d.isUnselectable,
   item: d

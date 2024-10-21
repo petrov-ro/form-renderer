@@ -6,18 +6,20 @@ import {getEntityURL} from "./useEntity";
 import {EntityClass} from "../models/classes/EntityClass";
 import {entityDataGridType} from "../constants/GridTypes";
 import {
+    CODE,
     DATA_SYSTEM_KEY,
     DICT_VALUE_LABEL,
-    DICT_VALUE_PROP, IS_UNSELECTABLE,
+    DICT_VALUE_PROP,
+    IS_UNSELECTABLE,
     SYS_DATA,
     SYS_DATA_TITLE_ATTR
 } from "../constants/Constants";
-import {getTableDataOnly} from "../services/GridService";
 import {flatNode, treeNode} from "./useGridData";
 import usePrevious from "./usePrevious";
 import {objectCompare} from "../utils/objectUtils";
 import {setDict as storeDict} from "../redux/actions/dicts";
 import {dictData} from "../services/DictService";
+import {capitalize} from "../utils/stringHelper";
 
 /**
  * Получение информации о сущности и сохранение её в сторе
@@ -80,6 +82,7 @@ const useEntityCache = (dicts: Record<string, any>,
                         DATA_SYSTEM_KEY,
                         DICT_VALUE_PROP,
                         IS_UNSELECTABLE,
+                        CODE,
                         `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`,
                         DICT_VALUE_LABEL
                     ])
@@ -95,7 +98,16 @@ const useEntityCache = (dicts: Record<string, any>,
                                 const {valueKey, labelKey, isTree} = gridTypeKeys
 
                                 const options = data
-                                    .map(d => isTree ? treeNode(d, valueKey, labelKey) : flatNode(d, valueKey, labelKey))
+                                    .map(d => isTree ? (
+                                            treeNode(d, valueKey, labelKey)
+                                        ) : (
+                                            flatNode(
+                                                d,
+                                                valueKey,
+                                                d => `${d[CODE] ? `${d[CODE]}. ` : ''}${capitalize(d[labelKey])}`
+                                            )
+                                        )
+                                    )
 
                                 /*                      options.sort(({label: a = ''}, {label: b = ''}) =>
                                                           a && b && a.toString().toLowerCase() >= b.toString().toLowerCase() ? 1 : -1

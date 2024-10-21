@@ -30,6 +30,7 @@ export const DICT_VALUE_PROP = 'key'                       // атрибут с�
 export const DICT_VALUE_LABEL = 'name'                     // атрибут с названием элемента справочника
 export const DICT_PARENT_KEY = 'parentKey'                 // атрибут с ключом родительского элемента
 export const IS_UNSELECTABLE = 'isUnselectable'            // атрибут с флагом невыбираемости записи
+export const CODE = 'code'                                 // атрибут с кодом элемента справочника
 export const EXCEPTION_COLLECTION = '_deduplicate_exceptions'
 export const SECURITY_LOG_TABLE = 'log.security'
 export const ADMINISTRATOR_SYSTEM_ROLE = 'ADMINISTRATOR_SYSTEM'
