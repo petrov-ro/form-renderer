@@ -13,6 +13,7 @@ import {EntityAttrValTypesEnum} from "../constants/EntityAttrValTypes";
 import {FormConfigComponentType} from "../models/types/FormConfigComponentType";
 import {FormConfigComponentTypeEnum} from "../constants/FormConfigComponentTypeEnum";
 import {RefViewTypes} from "../constants/RefViewTypes";
+import {capitalize} from "../utils/stringHelper";
 
 /**
  * Сортировка элементов по возрастанию ord
@@ -38,6 +39,7 @@ const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
         case ReqTypeEnum.INTEGER: {
             return EntityAttrValTypesEnum.INTEGER
         }
+        case ReqTypeEnum.FLOAT:
         case ReqTypeEnum.NUMBER: {
             return EntityAttrValTypesEnum.NUMBER
         }
@@ -73,6 +75,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
     const {
         key: elementKey,
         name: elementName,
+        code: codeVisual,
         primaryKey,
         is_extendable = false,
         req_id,
@@ -145,7 +148,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
         }
         case ElementTypeEnum.REQ:
         default: {
-            name = reqName
+            name = `${codeVisual ? `${codeVisual}. ` : ''}${capitalize(reqName)}` // префикс кода в имени
             code = (reqKey || elementKey).toString()
 
             // определение типов для реквизита и его значения
