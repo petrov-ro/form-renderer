@@ -95,6 +95,11 @@ const useEntityCache = (dicts: Record<string, any>,
                     dictData({current, pageSize}, gridTypeKeys, dictDate, dictClosed)
                         .then((data: any[]) => {
                             if (data) {
+                                // большие справочники не сохраняются в стор, для них используется отдельная компонента
+                                if (data.length > pageSize - 1) {
+                                    return
+                                }
+
                                 const {valueKey, labelKey, isTree} = gridTypeKeys
 
                                 const options = data
@@ -119,7 +124,7 @@ const useEntityCache = (dicts: Record<string, any>,
                         })
                         .catch(err => {
                             console.log(err)
-                            setDict(entityCode, config, [], false) // TODO Loading false! write error
+                            //setDict(entityCode, config, [], false) // TODO Loading false! write error
                         })
                 })
                 .catch(err => {

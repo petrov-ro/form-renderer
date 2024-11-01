@@ -1,13 +1,20 @@
 import {GridType} from "../models/types/GridType";
 import {BACK_DATE_FORMAT, ENTRIES_ON_PAGE} from "../constants/Constants";
-import {getJSON, postp} from "./AbstractService";
+import {postp} from "./AbstractService";
 import {isArray} from "../utils/arrayUtils";
-import {GridParamType} from "./GridService";
 import {GridSearchDataGroup} from "../models/classes/GridSearchDataGroup";
 import {GridSearchDataConditon} from "../models/classes/GridSearchDataConditon";
 import {GridSearchOperType} from "../models/types/SearchType";
 import {convertDateToStr, nowDate} from "../utils/dateUtils";
-import { Key } from "react";
+import {Key} from "react";
+import {EntityClass} from "../models/classes/EntityClass";
+import {gidRequestParamsData} from "../utils/searchUtils";
+
+export type DictDataParamType = Record<string, any> & {
+    pageSize?: number;
+    current?: number;
+    searchParams?: Record<string, any>   // параметры поиска в базе
+}
 
 /**
  * Получение данных справочника
@@ -18,10 +25,11 @@ import { Key } from "react";
  * @param dictClosed
  */
 export const dictData = <T extends Record<string, any>>(
-    params: GridParamType,
+    params: DictDataParamType,
     type: GridType,
     date?: string,
-    dictClosed: boolean = false
+    dictClosed: boolean = false,
+    entity?: EntityClass
 ): Promise<T[]> => {
     const {current = 1, pageSize = ENTRIES_ON_PAGE, ...rest} = params
     const url = type.route
@@ -30,7 +38,7 @@ export const dictData = <T extends Record<string, any>>(
         limit: pageSize,
         offset: pageSize * (current - 1),
         fields: type.fields || undefined,
-        ...dictDataRequestParams(date, dictClosed, rest)
+        ...dictDataRequestParams(date, dictClosed, rest, type, entity)
     }
 
     return (
@@ -47,7 +55,9 @@ export const dictData = <T extends Record<string, any>>(
 const dictDataRequestParams = (
     date: string = convertDateToStr(nowDate(), BACK_DATE_FORMAT)!,
     dictClosed: boolean = false,
-    params: Record<string, any>
+    params: Record<string, any>,
+    type?: GridType,
+    entity?: EntityClass
 ) => {
     return ({
         sort: [{
@@ -60,7 +70,7 @@ const dictDataRequestParams = (
             field: 'name',
             order: 'desc'
         }],
-        search: dictDataSearch(date, dictClosed, params)
+        search: dictDataSearch(date, dictClosed, params, type, entity)
     })
 }
 
@@ -73,12 +83,22 @@ const dictDataRequestParams = (
 const dictDataSearch = (
     dictDate: string = convertDateToStr(nowDate(), BACK_DATE_FORMAT)!,
     dictClosed: boolean = false,
-    params: Record<string, any>
+    params: Record<string, any>,
+    type?: GridType,
+    entity?: EntityClass
 ) => {
-    const {isTree = false, parentAttr = 'parentKey', parentId, isCommon} = params
+    const {isTree = false, parentAttr = 'parentKey', parentId, isCommon, searchParams} = params
 
     // группа условий на актуальные записи
     let searches = getDictSearches(dictDate, dictClosed)
+
+    // группа условий на параметры поиска
+    if (type && searchParams && Object.values(searchParams).length > 0) {
+        searches = new GridSearchDataGroup('and', false, [
+            searches,
+            gidRequestParamsData(searchParams, type, parentAttr, parentId, entity)
+        ])
+    }
 
     // если требуются только общие условия - выход на этом этапе
     if (isCommon) {

@@ -24,6 +24,7 @@ import UUIDField from "../../components/FormField/Fields/UUIDField/UUIDField";
 import ValuesArrayField from "./Fields/ValuesArrayField/ValuesArrayField";
 import ObjectByForm from "../../components/FormField/Fields/ObjectByForm/ObjectByForm";
 import './FormField.scss'
+import {ColumnValTypesEnum} from "../../constants/EntityAttrValTypes";
 
 /**
  *  Соответствие тип - компонент, каждому типу должен быть сопоставлен компонент
@@ -57,7 +58,7 @@ export const fields: any = {
  */
 const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Element => {
     const {
-        inputType, name, label, styleLabel, fieldProps, children, className, rules,
+        inputType, name, label, styleLabel, fieldProps, children, className, rules, valueTypeBasic,
         ...formItemProps
     } = props;
     const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
@@ -66,13 +67,16 @@ const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Ele
     if (![FormItemTypes.custom].includes(inputType)) {
         delete formItemProps.currentElement
     }
-    if (![FormItemTypes.custom, FormItemTypes.values].includes(inputType)) {
-        delete formItemProps.valueTypeBasic
+
+    // добавление свойств для некоторых компонентов
+    const elementProps: Record<string, any> = {}
+    if ([FormItemTypes.custom, FormItemTypes.values].includes(inputType)) {
+        elementProps.valueTypeBasic = valueTypeBasic
     }
 
     return (
         <Form.Item name={name} className={className} style={styleLabel} rules={rules} layout={'horizontal'} {...formItemProps}>
-            <CustomElement {...fieldProps} label={label}/>
+            <CustomElement {...fieldProps} label={label} {...elementProps}/>
         </Form.Item>
     )
 }

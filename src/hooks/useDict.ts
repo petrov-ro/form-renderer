@@ -14,9 +14,9 @@ import {getJSON} from "@/services/AbstractService";
 import {dictData} from "@/services/DictService";
 import OptionData from "@/models/types/OptionData";
 
-type resultType<T = any> = OptionData<T> & { item?: T }
+export type resultType<T = any> = OptionData<T> & { item?: T }
 
-type useDictProps<T = any> = {
+type useDictResult<T = any> = {
     loading: boolean;
     data: resultType<T>[];
 }
@@ -27,11 +27,14 @@ type useDictProps<T = any> = {
  * @param dictDate     - дата на которую нужно отобразить справочник в формате YYYY-MM-DD
  * @param viewClosed   - флаг отображение последних актуальных версий для закрытых записей
  */
-const useDict = <T>(entityCode: string, dictDate?: string, viewClosed?: boolean): useDictProps<T> => {
-    const [current] = useState(1)       // номер страницы до которой нужно загрузить данные
-    const [pageSize] = useState(1000)   // количество подгружаемых данных
-
-    const [result, setResult] = useState({data: [] as resultType<T>[], loading: true})
+const useDict = <T>(entityCode: string,
+                 dictDate: string | undefined = undefined,
+                 viewClosed: boolean = false,
+                 current: number,
+                 pageSize: number,
+                 result: useDictResult<T>,
+                 setResult: (val: useDictResult<T>) => void,
+                 search?: string) => {
 
     useEffect(() => {
         let isMounted = true
@@ -61,20 +64,34 @@ const useDict = <T>(entityCode: string, dictDate?: string, viewClosed?: boolean)
                     valueKey: DICT_VALUE_PROP
                 }
 
-                dictData({current, pageSize}, gridTypeKeys, dictDate, viewClosed)
+                // поисковые параметры
+                const searchParams = search ? {
+                    [DICT_VALUE_LABEL]: search
+                } : {}
+
+                // формирование параметров запроса с учетом поиска
+                const params = {
+                    current,
+                    pageSize,
+                    searchParams
+                }
+
+                dictData(params, gridTypeKeys, dictDate, viewClosed, entity)
                     .then((data: Record<string, any>[]) => {
-                        if (data) {
-                            const {valueKey, labelKey, isTree} = gridTypeKeys
+                        if (isMounted) {
+                            if (data) {
+                                const {valueKey, labelKey, isTree} = gridTypeKeys
 
-                            const options = data
-                                .map((d: Record<string, any>) => isTree ? treeNode(d, valueKey, labelKey) : flatNode(d, valueKey, labelKey))
+                                const options = data
+                                    .map((d: Record<string, any>) => isTree ? treeNode(d, valueKey, labelKey) : flatNode(d, valueKey, labelKey))
 
-                            /*                      options.sort(({label: a = ''}, {label: b = ''}) =>
-                                                      a && b && a.toString().toLowerCase() >= b.toString().toLowerCase() ? 1 : -1
-                                                  )*/
-                            setResult({data: options as resultType<T>[] || [], loading: false})
-                        } else {
-                            setResult({data: [], loading: false})
+                                /*                      options.sort(({label: a = ''}, {label: b = ''}) =>
+                                                          a && b && a.toString().toLowerCase() >= b.toString().toLowerCase() ? 1 : -1
+                                                      )*/
+                                setResult({data: options as resultType<T>[] || [], loading: false})
+                            } else {
+                                setResult({data: [], loading: false})
+                            }
                         }
                     })
                     .catch(err => {
@@ -90,7 +107,7 @@ const useDict = <T>(entityCode: string, dictDate?: string, viewClosed?: boolean)
         return () => {
             isMounted = false
         }
-    }, [entityCode, dictDate, viewClosed])
+    }, [entityCode, dictDate, viewClosed, search])
 
     return result
 }

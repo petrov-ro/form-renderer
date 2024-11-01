@@ -35,3 +35,14 @@ export const stringToInt = (x: string, base = 10) => {
   }
   return parsed;
 }
+
+/**
+ * Задержка исполнения
+ */
+export const debounce = (func: Function, ms: number) => {
+  let timeout: number;
+  return function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, arguments), ms);
+  };
+}

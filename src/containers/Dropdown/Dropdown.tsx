@@ -1,10 +1,10 @@
 import React, {Key, useState} from "react";
-import {Select} from "@gp-frontend-lib/ui-kit-5";
+import {Select, Spin} from "@gp-frontend-lib/ui-kit-5";
 import {SelectProps as SelectProps} from "antd";
 import {BaseOptionType} from "antd/es/select";
-import useDict from "../../hooks/useDict";
-import {API} from "../../constants/Constants";
 import {dictOptionRender} from "@/utils/optionDataHelper";
+import useDict, {resultType} from "../../hooks/useDict";
+import {API} from "../../constants/Constants";
 
 export interface DropdownProps extends SelectProps {
     fetch: (url: string, params: Record<string, any>) => Promise<Response>   // адрес для вызова процедур
@@ -35,8 +35,13 @@ const Dropdown: React.FC<DropdownProps> = props => {
     API.fetch = fetch as any
 
     const [value, setValue] = useState(initialValue)
+    const [current] = useState(1)         // номер страницы до которой нужно загрузить данные
+    const [pageSize] = useState(1000)     // количество подгружаемых данных
+    const [search, setSearch] = useState<string>()  // искомое значение
+    const [result, setResult] = useState({data: [] as resultType[], loading: true})
 
-    const {data: dictData, loading: dictLoading} = useDict(dictCode, dictDate, dictClosed)
+    const {data: dictData, loading: dictLoading} = useDict(dictCode, dictDate, dictClosed,
+        current, pageSize, result, setResult, search)
 
     /**
      * Выбор элемента выпадающего списка
@@ -44,17 +49,34 @@ const Dropdown: React.FC<DropdownProps> = props => {
      */
     const onChangeValues = (newVal: Key | Key[]) => {
         setValue(newVal)
+        setSearch(undefined)
         onChange?.(newVal)
+    }
+
+    // настройки поиска в зависимости от размера справочника
+    let searchConfig;
+    if (search || dictData.length > (pageSize - 1)) {
+        searchConfig = {
+            onSearch: setSearch,
+            filterOption: false
+        }
+    } else {
+        searchConfig = {
+            onSearch: undefined,
+            optionFilterProp: 'label'
+        }
     }
 
     return (
         <>
             <Select
                 showSearch allowClear={true} loading={dictLoading}
-                optionLabelProp='label' optionFilterProp='label'
+                optionLabelProp='label'
                 options={dictData} value={value}
                 onChange={onChangeValues}
                 optionRender={dictOptionRender}
+                notFoundContent={dictLoading ? <Spin size="small" style={{width: '100%'}}/> : undefined}
+                {...searchConfig}
                 {...rest}
             />
         </>
