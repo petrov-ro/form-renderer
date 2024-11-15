@@ -1,4 +1,5 @@
 import React from "react";
+import {Collapse, Icons} from "@gp-frontend-lib/ui-kit-5";
 import FormField from "../../../components/FormField/FormField";
 import {EntityAttrValTypesEnum, valueTypeBasicByAttr, valueTypeByAttr} from "../../../constants/EntityAttrValTypes";
 import {FormItemTypes} from "../../../constants/FormItemTypes";
@@ -10,7 +11,6 @@ import RefDropdown from "../../RefDropdown/RefDropdown";
 import RefCheckbox from "../../RefCheckbox/RefCheckbox";
 import ObjectByForm from "../../../components/FormField/Fields/ObjectByForm/ObjectByForm";
 import {FormConfigComponentType} from "../../../models/types/FormConfigComponentType";
-import {Collapse, Icons} from "@gp-frontend-lib/ui-kit-5";
 
 const CaretRightOutlined = Icons.Dropdown
 

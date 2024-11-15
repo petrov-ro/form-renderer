@@ -1,9 +1,14 @@
 import {errorHandle} from "../utils/messages";
 import {API} from "../constants/Constants";
 
-export const getJSON = <T = any>(url: string, params = {}, error: (err: string) => void = errorHandle, silent = false): Promise<any> => {
+export const getJSON = <T = any>(relativeUrl: string,
+                                 params = {},
+                                 error: (err: string) => void = errorHandle,
+                                 silent = false,
+                                 apiPath = API.REACT_APP_API_URL
+): Promise<any> => {
     // clear() // сброс всех сообщений пока отключил т.к. на формах после неудачного сохранения обновляются справочники и сбрасывают сообщения
-    return API.fetch(`${API.REACT_APP_API_URL}/${url}`, {
+    return API.fetch(`${apiPath}/${relativeUrl}`, {
         method: 'GET',
         ...params,
     })
@@ -21,6 +26,7 @@ export const getJSON = <T = any>(url: string, params = {}, error: (err: string) 
             error?.(err)
         })
 }
+
 /**
  * Метод post. Обработка ошибок - если флаг silent установлен - проброс ошибки дальше,
  * если не установлен - вывод сообщения и ошибка дальше не пробрасывается
@@ -72,5 +78,37 @@ export const putp = <T = any>(url: string, data?: any, params?: any, silent = fa
                 throw new Error(err)
             }
             errorHandle(err)
+        })
+}
+
+/**
+ *
+ * @param fullUrl
+ * @param params
+ * @param error
+ * @param silent
+ */
+export const getJSONRaw = <T = any>(fullUrl: string,
+                                 params = {},
+                                 error: (err: string) => void = errorHandle,
+                                 silent = false
+): Promise<any> => {
+    // clear() // сброс всех сообщений пока отключил т.к. на формах после неудачного сохранения обновляются справочники и сбрасывают сообщения
+    return fetch(fullUrl, {
+        method: 'GET',
+        ...params,
+    })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+
+            return response
+        })
+        .catch((err: any) => {
+            if (silent) {
+                throw err
+            }
+            error?.(err)
         })
 }

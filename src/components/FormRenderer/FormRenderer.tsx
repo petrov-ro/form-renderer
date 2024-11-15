@@ -23,6 +23,7 @@ export interface CheckResultType {
 export interface FormRendererProps {
     fetch: (url: string, params: Record<string, any>) => Promise<Response>   // метод для вызова запросов
     apiPath: string                                             // адрес для вызова процедур
+    flcPath?: string                                            // адрес для вызова методов ФЛК
     config?: StatisticsFormConfig | ClassicFormClass            // конфиг (метаданные) формы
     edit?: boolean                                              // режим редактирования
     data?: Record<string, any>                                  // данные для отображения на форме

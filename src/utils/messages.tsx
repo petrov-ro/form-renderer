@@ -1,11 +1,13 @@
 import {message} from "antd";
 
+
 export const success = (text: string, timeOut = 2) => { // таймаут в секундах
   console.log(text, timeOut)
 }
 
 export const warning = (content: string, duration = 10) => {
-  console.log(content, duration)
+  //console.log(content, duration)
+  return message.warning(content, duration)
 }
 
 export const error = (content: string, duration = 1000) => {

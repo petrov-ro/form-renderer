@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://nexus.dear.com.ru/repository/gp-gasps-npm"
   },
-  "version": "3.9.4",
+  "version": "3.10.0",
   "description": "Configurable form renderer",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -61,7 +61,8 @@
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
     "redux-actions": "^3.0.3",
-    "redux-thunk": "^3.1.0"
+    "redux-thunk": "^3.1.0",
+    "rtcigs-flc-shared": "0.1.6"
   },
   "peerDependencies": {
     "@ant-design/icons": "^5.3.7",

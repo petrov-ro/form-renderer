@@ -39,9 +39,17 @@ export type ClassicFormElementClass = {
     primaryKey: number              // первичный ключ записи элемента
     parentKey: number | null        // ключ родителя
     uniqueId?: string               // уникальный идентификатор элемента, пример "600000018_1:101903394_3:101898568",
+    gui?: {
+
+    } | null
     req_id: {                       // атрибуты элемента-реквизита (для других элементов значение null)
         key: number
         name: string                // наименование реквизита, пример: "5.6 дополнительная характеристика выявленных однотипных нарушений законодательства"
+        mask_id?: {                 // маска реквизита
+            "key": number,
+            "mask_name": string     // "Дата (ДД.ММ.ГГГГ)"
+            "name": string          // "dd.MM.yyyy"
+        } | null
         dict_id: {                  // данные справочника, если реквизит справочный
             name: string            // название справочника
             key: number             // ключ справочника
@@ -72,11 +80,22 @@ export type ClassicFormElementClass = {
 }
 
 /**
- * Тип элемента из метаданных формы
+ * Тип метаданных формы
  */
 export type ClassicFormClass = {
     key: number
     name: string
+    ord?: number | null
+    inDate?: string | null
+    outDate?: string | null
+    load_from?: string | null
+    load_to?: string | null
+    version?: number | null
+    t_600000270?: {
+        "name": string
+        "short_name": string
+        "key": number
+    } | null,
     elements?: ClassicFormElementClass[]        // атрибут содержит элементы конфига
     t_600000018?: ClassicFormElementClass[]     // атрибут содержит элементы конфига (новая версия), если заполнено будет перенесено в elements
 }
