@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://nexus.dear.com.ru/repository/gp-gasps-npm"
   },
-  "version": "3.10.0",
+  "version": "3.10.1",
   "description": "Configurable form renderer",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -40,7 +40,6 @@
     "@types/react": "^18.3.1",
     "@types/redux-actions": "^2.6.5",
     "antd": "^5.21.1",
-    "lodash": "^4.17.21",
     "node-sass": "^9.0.0",
     "react-dom": "^18.3.1",
     "redux-devtools-extension": "^2.13.9",
@@ -71,6 +70,7 @@
     "antd": "^5.17.0",
     "classnames": "^2.5.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "lodash": "^4.17.21"
   }
 }
