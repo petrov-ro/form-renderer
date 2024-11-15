@@ -1,6 +1,16 @@
-export let API = {
+export let API: {
+    REACT_APP_API_URL: string
+    REACT_APP_API_FLC_URL: string | undefined
+    fetch: (url: string, params: Record<string, any>) => Promise<any>
+    checkFLC: (requisiteKeys: string[], formData: object) => CheckResult<RuleResultFlc>
+} = {
     REACT_APP_API_URL: '/',
-    fetch: (url: string, params: Record<string, any>) => Promise.reject('Не задан метод получения данных')
+    REACT_APP_API_FLC_URL: undefined,
+    fetch: (url: string, params: Record<string, any>) => Promise.reject('Не задан метод получения данных'),
+    checkFLC: (requisiteKeys: string[], formData: object) => ({
+        rulesResult: [],
+        executeExceptions: []
+    })
 }
 export const ENTRIES_ON_PAGE = 100
 

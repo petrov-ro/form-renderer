@@ -3270,6 +3270,11 @@ rollup@^4.19.0:
     "@rollup/rollup-win32-x64-msvc" "4.19.0"
     fsevents "~2.3.2"
 
+rtcigs-flc-shared@0.1.6:
+  version "0.1.6"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rtcigs-flc-shared/-/rtcigs-flc-shared-0.1.6.tgz#904fe2fe672eb6ea80cc8f5faec2bd99a3a51886"
+  integrity sha1-kE/i/mcutuqAzI9frsK9maOlGIY=
+
 safe-buffer@5.2.1, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"

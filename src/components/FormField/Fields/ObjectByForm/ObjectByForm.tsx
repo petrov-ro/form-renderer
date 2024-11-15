@@ -1,6 +1,6 @@
 import React from 'react';
 import {Form} from 'antd';
-import {Button, Collapse, Icons, Spin} from "@gp-frontend-lib/ui-kit-5";
+import {Button, Icons, Spin, Collapse} from "@gp-frontend-lib/ui-kit-5";
 import {FormConfigComponentType} from "../../../../models/types/FormConfigComponentType";
 import {FormConfigComponentTypeEnum} from "../../../../constants/FormConfigComponentTypeEnum";
 import {FormFieldProps} from "../../../../models/types/FormFieldProps";

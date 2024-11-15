@@ -1,30 +1,26 @@
 import React, {PropsWithChildren} from "react";
 import cn from 'classnames'
+import {Col, Form, Row, Switch, Tree} from "antd";
+import {Rule, RuleObject} from "antd/es/form";
 import {
-    Form,
-    Col,
-    Row,
-    Switch,
-    Tree
-} from "antd";
-import {
-    Input,
     Checkbox,
     DatePicker,
+    Input,
     InputNumber,
-    Radio, Select,
+    Radio,
+    Select,
     Spin,
-    Upload,
-    TreeSelect
+    TreeSelect,
+    Upload
 } from "@gp-frontend-lib/ui-kit-5";
 import {FormItemTypes} from "../../constants/FormItemTypes";
-import {DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
+import {API, DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import UUIDField from "../../components/FormField/Fields/UUIDField/UUIDField";
 import ValuesArrayField from "./Fields/ValuesArrayField/ValuesArrayField";
 import ObjectByForm from "../../components/FormField/Fields/ObjectByForm/ObjectByForm";
+import {warning} from "../../utils/messages";
 import './FormField.scss'
-import {ColumnValTypesEnum} from "../../constants/EntityAttrValTypes";
 
 /**
  *  Соответствие тип - компонент, каждому типу должен быть сопоставлен компонент
@@ -58,7 +54,7 @@ export const fields: any = {
  */
 const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Element => {
     const {
-        inputType, name, label, styleLabel, fieldProps, children, className, rules, valueTypeBasic,
+        inputType, name, label, styleLabel, fieldProps, children, className, rules = [], valueTypeBasic,
         ...formItemProps
     } = props;
     const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
@@ -74,8 +70,39 @@ const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Ele
         elementProps.valueTypeBasic = valueTypeBasic
     }
 
+    // модификация правил, добавление проверки ФЛК
+    const rulesModified = [
+        ...rules,
+        (({getFieldsValue}) => {
+            return ({
+                validator() {
+                    try {
+                        // проверка ФЛК
+                        const formData = getFieldsValue(true)
+                        const requisiteKeys = name
+                            .slice(-1)
+                            .map(Number)
+                        const result = API.checkFLC(requisiteKeys, formData)
+                        const {rulesResult = []} = result
+
+                        // возврат ошибок, если они есть
+                        if (rulesResult.length > 0) {
+                            return Promise.reject(rulesResult.map(res => new Error(res.errorMessage)));
+                        }
+                    } catch (err) {
+                        console.log(err)
+                        warning('Ошибка при выполнении проверки ФЛК');
+                    }
+
+                    return Promise.resolve();
+                }
+            })
+        }) as Rule
+    ]
+
     return (
-        <Form.Item name={name} className={className} style={styleLabel} rules={rules} layout={'horizontal'} {...formItemProps}>
+        <Form.Item name={name} className={className} style={styleLabel} rules={rulesModified}
+                   layout={'horizontal'} {...formItemProps}>
             <CustomElement {...fieldProps} label={label} {...elementProps}/>
         </Form.Item>
     )
