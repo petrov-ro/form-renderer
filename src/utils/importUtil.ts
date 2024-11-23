@@ -12,5 +12,5 @@ export function doImport (moduleText: string) {
     }
 
     const url = "data:text/javascript;base64," + btoa(moduleText)
-    return import(url)
+    return import(/* webpackIgnore: true */ url)
 }

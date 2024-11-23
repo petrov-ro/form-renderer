@@ -52,61 +52,65 @@ export const fields: any = {
  * @param props
  * @constructor
  */
-const FormItem = (props: FormFieldProps & { inputType: FormItemTypes }): JSX.Element => {
-    const {
-        inputType, name, label, styleLabel, fieldProps, children, className, rules = [], valueTypeBasic,
-        ...formItemProps
-    } = props;
-    const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
+const FormItem = React.forwardRef(
+    (props: FormFieldProps & { inputType: FormItemTypes }, ref): JSX.Element => {
+        const {
+            inputType, name, label, styleLabel, fieldProps, children, className, rules = [], valueTypeBasic,
+            ...formItemProps
+        } = props;
+        const CustomElement = (inputType === FormItemTypes.custom ? children : fields[inputType]) as React.ElementType
 
-    // удаление свойств для всех, кроме указанных в массиве
-    if (![FormItemTypes.custom].includes(inputType)) {
-        delete formItemProps.currentElement
-    }
+        // удаление свойств для всех, кроме указанных в массиве
+        if (![FormItemTypes.custom].includes(inputType)) {
+            delete formItemProps.currentElement
+        }
 
-    // добавление свойств для некоторых компонентов
-    const elementProps: Record<string, any> = {}
-    if ([FormItemTypes.custom, FormItemTypes.values].includes(inputType)) {
-        elementProps.valueTypeBasic = valueTypeBasic
-    }
+        // добавление свойств для некоторых компонентов
+        const elementProps: Record<string, any> = {}
+        if ([FormItemTypes.custom, FormItemTypes.values].includes(inputType)) {
+            elementProps.valueTypeBasic = valueTypeBasic
+        }
 
-    // модификация правил, добавление проверки ФЛК
-    const rulesModified = [
-        ...rules,
-        (({getFieldsValue}) => {
-            return ({
-                validator() {
-                    try {
-                        // проверка ФЛК
-                        const formData = getFieldsValue(true)
-                        const requisiteKeys = name
-                            .slice(-1)
-                            .map(Number)
-                        const result = API.checkFLC(requisiteKeys, formData)
-                        const {rulesResult = []} = result
+        // модификация правил, добавление проверки ФЛК
+        const rulesModified = [
+            ...rules,
+            (({getFieldsValue}) => {
+                return ({
+                    validator() {
+                        try {
+                            // проверка ФЛК
+                            const formData = getFieldsValue(true)       // полные данные формы
+                            const requisiteKeys = name                  // получение имени конечного реквизита
+                                .slice(-1)
+                                .map(Number)
 
-                        // возврат ошибок, если они есть
-                        if (rulesResult.length > 0) {
-                            return Promise.reject(rulesResult.map(res => new Error(res.errorMessage)));
+                            // выполнение проверки
+                            const result: CheckResult<RuleResultFlc> = API.checkFLC(requisiteKeys, formData)
+                            const {rulesResult = []} = result
+
+                            // возврат ошибок, если они есть
+                            if (rulesResult.length > 0) {
+                                return Promise.reject(rulesResult.map(res => new Error(res.errorMessage)));
+                            }
+                        } catch (err) {
+                            console.log(err)
+                            warning('Ошибка при выполнении проверки ФЛК');
                         }
-                    } catch (err) {
-                        console.log(err)
-                        warning('Ошибка при выполнении проверки ФЛК');
+
+                        return Promise.resolve();
                     }
+                })
+            }) as Rule
+        ]
 
-                    return Promise.resolve();
-                }
-            })
-        }) as Rule
-    ]
-
-    return (
-        <Form.Item name={name} className={className} style={styleLabel} rules={rulesModified}
-                   layout={'horizontal'} {...formItemProps}>
-            <CustomElement {...fieldProps} label={label} {...elementProps}/>
-        </Form.Item>
-    )
-}
+        return (
+            <Form.Item name={name} className={className} style={styleLabel} rules={rulesModified}
+                       layout={'horizontal'} {...formItemProps}>
+                <CustomElement {...fieldProps} label={label} ref={ref} {...elementProps}/>
+            </Form.Item>
+        )
+    }
+)
 
 /**
  * Атрибут формы

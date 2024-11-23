@@ -166,6 +166,9 @@ export const convertElement = (elements: ClassicFormElementClass[],
                 valueTypeId = getType(typeId)
             }
 
+            // формирование начальных данных
+            initialValues[code] = null
+
             // индикатор (реквизит) в старом формате соответсвует показателю с соответствующим типом в новом формате
             config = {
                 required: false,

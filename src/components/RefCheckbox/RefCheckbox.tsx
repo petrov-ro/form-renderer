@@ -13,6 +13,7 @@ import {
     SYS_DATA,
     SYS_DATA_TITLE_ATTR
 } from "../../constants/Constants";
+import RefDropdown from "../RefDropdown/RefDropdown";
 
 type RefCheckboxProps = Partial<FormFieldProps<any[]>> & {
     multivalued?: boolean   // флаг возможности множественного выбора
@@ -32,7 +33,7 @@ type RefCheckboxProps = Partial<FormFieldProps<any[]>> & {
  */
 const RefCheckbox: React.FC<RefCheckboxProps> = props => {
     const {
-        code, value: initialValue, onChange, label, multivalued, loading: initialLoading, disabled
+        code, id, value: initialValue, onChange, label, multivalued, loading: initialLoading, disabled
     } = props;
 
     const [current] = useState(1)       // номер страницы до которой нужно загрузить данные
@@ -75,12 +76,12 @@ const RefCheckbox: React.FC<RefCheckboxProps> = props => {
 
     return (
         <Spin spinning={loading || dictLoading}>
-            {multivalued && <Checkbox.Group value={value} onChange={onChangeCheckbox}
+            {multivalued && <Checkbox.Group value={value} onChange={onChangeCheckbox} id={id}
                                             options={dict as CheckboxOptionType[]}
                                             disabled={disabled}/>
             }
 
-            {!multivalued && <Radio.Group value={value} onChange={onChangeRadio}
+            {!multivalued && <Radio.Group value={value} onChange={onChangeRadio} id={id}
                                           options={dict as CheckboxOptionType[]}
                                           disabled={disabled}/>
             }

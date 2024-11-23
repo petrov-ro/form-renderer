@@ -2,12 +2,15 @@ export let API: {
     REACT_APP_API_URL: string
     REACT_APP_API_FLC_URL: string | undefined
     fetch: (url: string, params: Record<string, any>) => Promise<any>
-    checkFLC: (requisiteKeys: string[], formData: object) => CheckResult<RuleResultFlc>
+    checkFLC: (
+        requisiteKeys: number[],    // массив ключей реквизитов
+        formData: object            // данные формы
+    ) => CheckResult<RuleResultFlc>
 } = {
     REACT_APP_API_URL: '/',
     REACT_APP_API_FLC_URL: undefined,
     fetch: (url: string, params: Record<string, any>) => Promise.reject('Не задан метод получения данных'),
-    checkFLC: (requisiteKeys: string[], formData: object) => ({
+    checkFLC: (requisiteKeys: number[], formData: object) => ({
         rulesResult: [],
         executeExceptions: []
     })

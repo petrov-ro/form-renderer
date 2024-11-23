@@ -1,4 +1,4 @@
-import resolve from "@rollup/plugin-node-resolve";
+import resolve, { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
@@ -23,8 +23,13 @@ export default [
             },
         ],
         plugins: [
+            scss({
+                fileName: 'assets/bundle.css',
+                failOnError: true
+            }),
             PeerDepsExternalPlugin(),
             resolve(),
+            nodeResolve(),
             commonjs(),
 /*            terser({
                 ecma: 2021,
@@ -32,11 +37,6 @@ export default [
                 warnings: true,
             }),*/
             typescript({ tsconfig: "./tsconfig.json" }),
-            scss({
-                include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
-                output: "css/style.css",
-                failOnError: true,
-            }),
             json()
         ],
     },
