@@ -91,10 +91,10 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
                 typeId === EntityAttrTypes.REF && code &&
                 <FormField label={label} name={name} key={name} tooltip={tooltip} disabled={disabled}
                            inputType={FormItemTypes.custom}
-                           children={({value, onChange}: FormFieldProps) =>
+                           children={({value, onChange, id}: FormFieldProps) =>
                                <>
                                    {viewType === RefViewTypes.DROPDOWN &&
-                                   <RefDropdown code={code} disabled={disabled} value={value}
+                                   <RefDropdown code={code} id={id} disabled={disabled} value={value}
                                                 label={name} onChange={onChange} multivalued={multivalued}
                                                 viewTypeForm={viewTypeForm}
                                                 loading={indicatorLoading}
@@ -102,7 +102,7 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
                                    }
 
                                    {viewType === RefViewTypes.CHECKBOX &&
-                                   <RefCheckbox code={code} disabled={disabled} value={value}
+                                   <RefCheckbox code={code} id={id} disabled={disabled} value={value}
                                                 label={name} onChange={onChange} multivalued={multivalued}
                                                 loading={indicatorLoading}
                                                 exclude={exclude}/>

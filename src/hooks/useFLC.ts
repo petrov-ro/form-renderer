@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {getFLCPackage} from '@/services/FLCService';
 import {FLCRuleTypeEnum} from '@/constants/FLCRuleTypeEnum';
 import {ContextInitializer, ReqType, RequisiteMetaData} from 'rtcigs-flc-shared';
@@ -9,14 +9,14 @@ import {API} from "../constants/Constants";
 import {ClassicFormClass} from "..";
 
 /**
- * Получение записи по типу и идентификатору
- * @param type
- * @param id
+ * Получение пакета правил ФЛК, формирование метода проверки
+ * @param flcPath   - адрес сервиса ФЛК
+ * @param config    - конфиг формы (в том числе список реквизитов)
  */
 const useFLC = (
     flcPath: string | undefined,
     config: ClassicFormClass
-): void => {
+) => {
     useEffect(() => {
         // получение ключа формы
         const {key: formKey, version: formVersion, t_600000018: requisites = []} = config as ClassicFormClass

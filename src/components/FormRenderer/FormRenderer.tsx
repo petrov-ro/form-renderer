@@ -4,6 +4,7 @@ import {StatisticsFormConfig} from "../../models/classes/StatisticsFormConfig";
 import {ClassicFormClass} from "../../models/classes/ClassicFormElementClass";
 import store from "../../redux/store/index";
 import FormRendererStored from "./FormRendererStored/FormRendererStored";
+import {flcCheck} from "../../services/FLCService";
 
 export interface ButtonType {
     text: string,
@@ -41,6 +42,7 @@ export interface refType {
     getData: () => Record<string, any>
     resetFields: () => void
     setFieldsValue: (newData: Record<string, any>) => void
+    flcCheck: () => void                                        // проверка правил ФЛК и показ окна
 }
 
 /**

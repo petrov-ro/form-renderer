@@ -25,4 +25,5 @@ export type FormFieldProps<T = any> = Omit<FormItemProps<T>, 'children'> & ColPr
   titleValue?: string
   currentElement?: StatisticsFormElementClass
   visibleLabelCol?: boolean
+  id?: string
 }

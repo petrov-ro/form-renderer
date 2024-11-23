@@ -11,6 +11,7 @@ import useEntityCache from "../../../hooks/useEntityCache";
 import {ButtonType, FormRendererProps, refType} from "../FormRenderer";
 import {notEmpty, removeEmpty} from "../../../utils/objectUtils";
 import useFLC from "../../../hooks/useFLC";
+import {flcCheck} from "../../../services/FLCService";
 
 const {Content} = Layout;
 
@@ -23,7 +24,7 @@ const {Content} = Layout;
 const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
         const {
             config, edit, data, setData, noEmpty = false, extraButtons = [], checkButton = true,
-            apiPath, fetch, flcPath, legacy = true,
+            apiPath, fetch, flcPath,
             dictDate, dictClosed
         } = props
 
@@ -54,7 +55,8 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
             return {
                 getData,
                 resetFields,
-                setFieldsValue
+                setFieldsValue,
+                flcCheck: () => flcCheck(form, config as ClassicFormClass)
             };
         }, []);
 
@@ -123,6 +125,10 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
                         </Layout>
                     </Space>
                 </Form>
+
+{/*                {openFlc &&
+                <FLCResult/>
+                }*/}
             </Provider>
         )
     }
