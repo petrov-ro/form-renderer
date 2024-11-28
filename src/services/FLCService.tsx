@@ -44,6 +44,14 @@ export const getFLCPackage = (formVersionId: number,
 /**
  * Выполнение проверки ФЛК и отображение окна результатов
  */
+export const flcCheckResult = (form: FormInstance): Promise<boolean> =>
+    form.validateFields({validateOnly: true})
+        .then(() => true)
+        .catch(() => false)
+
+/**
+ * Выполнение проверки ФЛК и отображение окна результатов
+ */
 export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy: (() => void)} => {
     const container = document.body
     const containerOverflow = container?.style?.overflow
@@ -87,6 +95,8 @@ export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy
             </Button>
         ]
     })
+
+    API.modal = instance
 
     return instance
 }

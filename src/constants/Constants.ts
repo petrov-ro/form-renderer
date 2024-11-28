@@ -6,6 +6,10 @@ export let API: {
         requisiteKeys: number[],    // массив ключей реквизитов
         formData: object            // данные формы
     ) => CheckResult<RuleResultFlc>
+    modal?: {
+        destroy: () => void,
+        update: (config: any) => void
+    }
 } = {
     REACT_APP_API_URL: '/',
     REACT_APP_API_FLC_URL: undefined,
