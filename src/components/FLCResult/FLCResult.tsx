@@ -6,7 +6,7 @@ import {NamePath} from "antd/es/form/interface";
 import {API, CODE} from "../../constants/Constants";
 import {ClassicFormClass} from "../..";
 import {capitalize} from "../../utils/stringHelper";
-import {errorHandle} from "../../utils/messages";
+import {error} from "../../utils/messages";
 
 type FLCResultProps = {
     form: FormInstance
@@ -67,12 +67,13 @@ const FLCResult: FC<FLCResultProps> = (props) => {
 
     // проверка ФЛК
     const check = () => {
+        console.log('проверка ФЛК')
         form.validateFields()
-            .then((res: {name: NamePath, errors: string[], warnings: string[]}) => {
-                // console.log(res)
+            .then((res) => {
+                console.log(res)
             })
             .catch(err => {
-                errorHandle(err)
+                console.log(err)
             })
 
         // массив ключей всех реквизитов формы
@@ -92,18 +93,16 @@ const FLCResult: FC<FLCResultProps> = (props) => {
     }
 
     useEffect(() => {
+        // выполняется проверка при открытии формы
+        check()
+
         // возвращается скролл контейнеру
         container.style.overflow = 'auto'
 
         return () => {
-            container.style.overflow = containerOverflow
+            // container.style.overflow = containerOverflow
         }
     }, [])
-
-    useEffect(() => {
-        // выполняется проверка при открытии окна
-        check()
-    })
 
     /**
      * Клик по ошибке в окне результатов

@@ -11,7 +11,7 @@ import useEntityCache from "../../../hooks/useEntityCache";
 import {ButtonType, FormRendererProps, refType} from "../FormRenderer";
 import {notEmpty, removeEmpty} from "../../../utils/objectUtils";
 import useFLC from "../../../hooks/useFLC";
-import {flcCheck} from "../../../services/FLCService";
+import {flcCheck, flcCheckResult} from "../../../services/FLCService";
 
 const {Content} = Layout;
 
@@ -56,7 +56,8 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
                 getData,
                 resetFields,
                 setFieldsValue,
-                flcCheck: () => flcCheck(form, config as ClassicFormClass)
+                flcCheck: () => flcCheck(form, config as ClassicFormClass),
+                flcCheckFlag: () => flcCheckResult(form)
             };
         }, []);
 
@@ -66,6 +67,11 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
         // установка начальных значений
         useEffect(() => {
             form.setFieldsValue(data)
+
+            return () => {
+                // закрытие окна с результатом проверки ФЛК
+                API.modal?.destroy()
+            }
         }, [])
 
         // инициализация ФЛК
