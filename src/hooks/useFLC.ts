@@ -23,11 +23,11 @@ const useFLC = (
 
         // формирование метаданных реквизитов формы для проверки ФЛК
         const metaData: RequisiteMetaData[] = requisites.map(req => ({
-                key: req.req_id?.key,
-                type: req.req_id?.type_id?.key || ReqType.String,
-                name: req.name,
-                code: req.code
-            } as RequisiteMetaData))
+            key: req.req_id?.key,
+            type: req.req_id?.type_id?.key || ReqType.String,
+            name: req.name,
+            code: req.code
+        } as RequisiteMetaData))
 
         if (formVersion && formKey && flcPath) {
             getFLCPackage(formVersion, FLCLocationEnum.URP, FLCRuleTypeEnum.FLC)
@@ -61,8 +61,12 @@ const useFLC = (
                         // вызов метода проверки правил
                         const context = contextInitializer.get_context()
                         const checkResult: CheckResult<RuleResultFlc> = flcPackage.execute(context, filter, _)
+                        const checkResultFiltered: CheckResult<RuleResultFlc> = {
+                            ...checkResult,
+                            rulesResult: checkResult.rulesResult.filter(r => requisiteKeys.includes(r.requisiteKey))
+                        }
 
-                        return checkResult
+                        return checkResultFiltered
                     }
                 })
         }

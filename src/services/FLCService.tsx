@@ -32,7 +32,8 @@ export const getFLCPackage = (formVersionId: number,
     const urlParams = new URLSearchParams({
         formVersionId: formVersionId.toString(),
         location: location.toString(),
-        type: type.toString()
+        type: type.toString(),
+        jsMinEnabled: 'true'
     }).toString()
 
     // формирование адреса
