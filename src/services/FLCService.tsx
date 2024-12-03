@@ -10,6 +10,12 @@ import {FLCRuleTypeEnum} from "@/constants/FLCRuleTypeEnum";
 import {FormInstance, Modal} from "antd";
 import FLCResult from "../components/FLCResult/FLCResult";
 import {ClassicFormClass} from "..";
+import {getFormItemId} from "../utils/formUtils";
+import { getNamePath } from '@/utils/flcUtils';
+import {deepFind} from "../utils/treeUtils";
+import {isString} from "../utils/common";
+import {isArray} from "../utils/arrayUtils";
+import {objectCompare} from "../utils/objectUtils";
 
 /**
  * Запрос пакета правил
@@ -100,4 +106,94 @@ export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy
     API.modal = instance
 
     return instance
+}
+
+/**
+ *
+ * @param requisiteIdKeys
+ * @param fullData
+ * @param hiding
+ * @param form
+ */
+export const hide = (hiding, hidePaths) => {
+    // открыть тех, кто есть в ранее скрытых, но нет в новых скрытых
+    hiding
+        .filter((h: string) => !hidePaths.includes(h))
+        .forEach((id: string) => {
+            // открыть
+            const item = document.getElementById(id)
+            if (item) {
+                item.style.visibility = 'visible'
+                item.style.position = 'static'
+            } else {
+                console.log('Поле формы не найдено')
+            }
+        })
+
+    // скрыть тех кого нет в уже скрытых
+    hidePaths
+        .filter((h: string) => !hiding.includes(h))
+        .forEach((id: string) => {
+            // скрыть
+            const item = document.getElementById(id)
+            if (item) {
+                item.style.visibility = 'hidden'
+                item.style.position = 'fixed'
+            } else {
+                console.log('Поле формы не найдено')
+            }
+        })
+
+    // запись нового значения
+    return [...hidePaths]
+    //setHiding(hidePaths)
+
+    // проверка AUTOCOMPLETE
+/*    const resultAUTOCOMPLETE: CheckResult<RuleResultFlc> = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
+    const {rulesResult: rulesResultAUTOCOMPLETE = []} = resultAUTOCOMPLETE
+    console.log(resultAUTOCOMPLETE)
+
+    // выполнение проверки LIMITATION
+    const resultLIMITATION: CheckResult<RuleResultFlc> = API.checkLIMITATION(requisiteIdKeys, fullData)
+    const {rulesResult: rulesResultLIMITATION = []} = resultLIMITATION
+    console.log(resultLIMITATION)*/
+}
+
+/**
+ *
+ * @param requisiteIdKeys
+ * @param fullData
+ * @param hiding
+ * @param initialValues
+ * @param form
+ */
+export const checkHiding = (requisiteIdKeys, fullData, hiding, initialValues, form) => {
+    const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, fullData)
+    const hidePaths = rulesResultHIDING
+        .filter(({hideState}) => hideState)
+        .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
+        .map(getFormItemId)
+
+    // скрытие элементов на форме
+    setTimeout(() => {
+        hiding = hide(hiding, hidePaths)
+    }, 0)
+
+    // удаление значений скрытых реквизитов
+    const namePaths = rulesResultHIDING
+        .filter(({hideState}) => hideState)
+        .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
+        .filter(namePath => {
+            // получение значения по умолчанию для реквизита
+            const find = deepFind(initialValues, namePath.filter(p => !isString(p) && p > 1000))
+            const defaultValues = (isArray(find) && find.length > 0) ? find[0] : find
+
+            // если реквизит содержит не дефолтное значение, его нужно очистить, он попадает в выборку
+            const currentValue = form.getFieldsValue(namePath)
+            return !objectCompare(defaultValues, currentValue)
+        })
+
+    if (namePaths.length > 0) {
+        form.resetFields(namePaths)
+    }
 }

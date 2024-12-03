@@ -13,13 +13,13 @@ import {
     TreeSelect,
     Upload
 } from "@gp-frontend-lib/ui-kit-5";
+import {warning} from "@/utils/messages";
 import {FormItemTypes} from "../../constants/FormItemTypes";
 import {API, DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
 import {FormFieldProps} from "../../models/types/FormFieldProps";
 import UUIDField from "../../components/FormField/Fields/UUIDField/UUIDField";
 import ValuesArrayField from "./Fields/ValuesArrayField/ValuesArrayField";
 import ObjectByForm from "../../components/FormField/Fields/ObjectByForm/ObjectByForm";
-import {warning} from "../../utils/messages";
 import './FormField.scss'
 
 /**
@@ -78,13 +78,13 @@ const FormItem = React.forwardRef(
                 return ({
                     validator() {
                         try {
-                            // проверка ФЛК
+                            // подготовка данных для вызова проверок
                             const formData = getFieldsValue(true)       // полные данные формы
                             const requisiteKeys = name                  // получение имени конечного реквизита
                                 .slice(-1)
                                 .map(Number)
 
-                            // выполнение проверки
+                            // выполнение проверки FLC
                             const result: CheckResult<RuleResultFlc> = API.checkFLC(requisiteKeys, formData)
                             const {rulesResult = []} = result
 
@@ -98,7 +98,8 @@ const FormItem = React.forwardRef(
                         }
 
                         return Promise.resolve();
-                    }
+                    },
+                    validateDebounce: 500
                 })
             }) as Rule
         ]
@@ -106,7 +107,7 @@ const FormItem = React.forwardRef(
         return (
             <Form.Item name={name} className={className} style={styleLabel} rules={rulesModified}
                        layout={'horizontal'} {...formItemProps}>
-                <CustomElement {...fieldProps} label={label} ref={ref} {...elementProps}/>
+                <CustomElement ref={ref} {...fieldProps} label={label} {...elementProps}/>
             </Form.Item>
         )
     }
@@ -125,15 +126,16 @@ const FormField = React.forwardRef(
             ...restProps
         } = props;
 
-        // console.log(props)
-
         // название поля
         const label = labelText
+
+        // имя поля
+        const namePath = field ? [field.name, name].flat() : name
 
         // свойства компоненты
         const mainProps = {
             ...restProps, disabled, readOnly, placeholder, label,
-            name: field ? [field.name, name].flat() : name,
+            name: namePath,
         }
 
         // доп свойства общее
@@ -183,8 +185,9 @@ const FormField = React.forwardRef(
         return (
             <Col
                 className={cn('gutter-row', 'form-item', {'inline-field': inline}, {'inline-vertical-field': inlineVertical})}
-                span={span} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl} flex={flex}>
-                <div className={cn({'input-disabled-container': disabled})}>
+                span={span} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl} flex={flex}
+            >
+                <div className={cn('form-item-container', {'input-disabled-container': disabled})}>
                     <Row>
                         {visibleLabelCol &&
                         <Col xs={12} lg={6} style={{textAlign: 'left'}}>

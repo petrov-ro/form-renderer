@@ -15,6 +15,7 @@
   "scripts": {
     "build": "rollup -c"
   },
+  "lib": "es2020",
   "repository": {
     "type": "git",
     "url": "form-renderer"

@@ -40,7 +40,7 @@ export interface FormRendererProps {
 
 export interface refType {
     getData: () => Record<string, any>
-    resetFields: () => void
+    resetFields: (namePaths: any[]) => void
     setFieldsValue: (newData: Record<string, any>) => void
     flcCheck: () => void                                        // проверка правил ФЛК и показ окна
     flcCheckFlag: () => Promise<boolean>                        // проверка правил ФЛК и возврат промиса да/нет

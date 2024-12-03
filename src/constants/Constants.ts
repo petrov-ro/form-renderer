@@ -6,6 +6,18 @@ export let API: {
         requisiteKeys: number[],    // массив ключей реквизитов
         formData: object            // данные формы
     ) => CheckResult<RuleResultFlc>
+    checkAUTOCOMPLETE: (
+        requisiteKeys: number[],    // массив ключей реквизитов
+        formData: object            // данные формы
+    ) => CheckResult<RuleResultFlc>
+    checkHIDING: (
+        requisiteKeys: number[],    // массив ключей реквизитов
+        formData: object            // данные формы
+    ) => CheckResult<RuleResultHiding>
+    checkLIMITATION: (
+        requisiteKeys: number[],    // массив ключей реквизитов
+        formData: object            // данные формы
+    ) => CheckResult<RuleResultFlc>
     modal?: {
         destroy: () => void,
         update: (config: any) => void
@@ -15,6 +27,18 @@ export let API: {
     REACT_APP_API_FLC_URL: undefined,
     fetch: (url: string, params: Record<string, any>) => Promise.reject('Не задан метод получения данных'),
     checkFLC: (requisiteKeys: number[], formData: object) => ({
+        rulesResult: [],
+        executeExceptions: []
+    }),
+    checkAUTOCOMPLETE: (requisiteKeys: number[], formData: object) => ({
+        rulesResult: [],
+        executeExceptions: []
+    }),
+    checkHIDING: (requisiteKeys: number[], formData: object) => ({
+        rulesResult: [],
+        executeExceptions: []
+    }),
+    checkLIMITATION: (requisiteKeys: number[], formData: object) => ({
         rulesResult: [],
         executeExceptions: []
     })

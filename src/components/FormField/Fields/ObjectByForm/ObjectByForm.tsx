@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {Form} from 'antd';
 import {Button, Icons, Spin, Collapse} from "@gp-frontend-lib/ui-kit-5";
 import {FormConfigComponentType} from "../../../../models/types/FormConfigComponentType";
 import {FormConfigComponentTypeEnum} from "../../../../constants/FormConfigComponentTypeEnum";
 import {FormFieldProps} from "../../../../models/types/FormFieldProps";
 import FormContentRenderer from "../../../FormContentRenderer/FormContentRenderer";
-import {toArray} from "../../../../utils/arrayUtils";
+import {isArray, toArray} from "../../../../utils/arrayUtils";
+import {ConfigContext} from "../../../FormRenderer/FormRendererStored/FormRendererStored";
+import {deepFind} from "../../../../utils/treeUtils";
+import {isString} from "../../../../utils/common";
 
 const PlusOutlined = Icons.Add
 const CaretRightOutlined = Icons.Dropdown
@@ -44,57 +47,63 @@ const ObjectByForm: React.FC<FormAttributeObjectProps> = props => {
 
     const name = initialName ? toArray(initialName) : initialName
 
+    const initialValues = useContext(ConfigContext);
+    const find = deepFind(initialValues, name.filter(isString))
+    const defaultValues = (isArray(find) && find.length > 0) ? find[0] : find
+
     return (
         <Spin spinning={false}>
             {embeddedForm && name &&
             <>
                 {!multivalued &&
-                <FormContentRenderer name={name}
+                <FormContentRenderer name={name} path={name}
                                      elements={embeddedForm?.config?.elements}
                 />
                 }
 
                 {multivalued &&
-                <>
-                    <Form.List name={name}>
-                        {(fields, {add, remove}) => (
-                            <>
-                                <div style={{display: 'flex', rowGap: 16, flexDirection: 'column'}}>
-                                    {fields.map((field, i) => (
-                                        <div style={{paddingBottom: 10}} key={field.key}>
-                                            <Collapse
-                                                bordered={false}
-                                                defaultActiveKey={['1']}
-                                                expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
-                                                items={[
-                                                    {
-                                                        key: '1',
-                                                        label: `Запись ${i + 1}`,
-                                                        children: <FormContentRenderer name={field.name}
-                                                                                       elements={embeddedForm?.config?.elements}
-                                                        />,
-                                                    }
-                                                ]}
-                                            />
+                <Form.List name={name}>
+                    {(fields, {add, remove}) => (
+                        <>
+                            <div style={{display: 'flex', rowGap: 16, flexDirection: 'column'}}>
+                                {fields.map((field, i) => {
+                                    const namePath = name === undefined ? [field.name] : (
+                                        isArray(name) ? name.concat([field.name]) : toArray(name).concat([field.name])
+                                    )
 
-                                            <Button type="primary" danger onClick={() => remove(field.name)}
-                                                    style={{marginLeft: 10}}>
-                                                <DeleteOutlined/>
-                                                Удалить {`запись ${i + 1}`}
-                                            </Button>
-                                        </div>
-                                    ))}
-                                </div>
+                                    return (
+                                    <div style={{paddingBottom: 10}} key={field.key}>
+                                        <Collapse
+                                            bordered={false}
+                                            defaultActiveKey={['1']}
+                                            expandIcon={({isActive}) => <CaretRightOutlined rotate={isActive ? 90 : 0}/>}
+                                            items={[
+                                                {
+                                                    key: '1',
+                                                    label: `Запись ${i + 1}`,
+                                                    children: <FormContentRenderer name={field.name} path={namePath}
+                                                                                   elements={embeddedForm?.config?.elements}
+                                                    />,
+                                                }
+                                            ]}
+                                        />
 
+                                        <Button type="primary" danger onClick={() => remove(field.name)}
+                                                style={{marginLeft: 10}}>
+                                            <DeleteOutlined/>
+                                            Удалить {`запись ${i + 1}`}
+                                        </Button>
+                                    </div>
+                                )})}
+                            </div>
 
-                                <Button type="primary" style={{marginLeft: 10}} onClick={() => add()}>
-                                    <PlusOutlined/>
-                                    Добавить запись
-                                </Button>
-                            </>
-                        )}
-                    </Form.List>
-                </>
+                            <Button type="primary" style={{marginLeft: 10}} onClick={() => add(defaultValues)}>
+                                <PlusOutlined/>
+                                Добавить запись
+                            </Button>
+                        </>
+                    )}
+                </Form.List>
                 }
             </>
             }

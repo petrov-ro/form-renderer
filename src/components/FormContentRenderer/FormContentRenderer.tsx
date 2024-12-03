@@ -12,6 +12,7 @@ type FormContentRendererProps = {
   setEditComponent?: Dispatch<SetStateAction<string | undefined>>       // установка редактируемого компонента
   className?: string                                                    // css-классы контейнера
   name?: NamePath                                                       // название атрибута-родителя
+  path?: NamePath                                                       // путь к атрибуту
 }
 
 /**
@@ -22,13 +23,13 @@ type FormContentRendererProps = {
  */
 const FormContentRenderer: React.FC<FormContentRendererProps> = props => {
   const {
-    elements = [], editComponent, edit = false, className, name
+    elements = [], editComponent, edit = false, className, name, path
   } = props
 
   return (
     <div className={className}>
       {elements.map((elem: StatisticsFormElementClass) =>
-        <StatisticsFormConstructorElement key={elem.id} name={name}
+        <StatisticsFormConstructorElement key={elem.id} name={name} path={path}
                                           currentElement={elem}
                                           edit={edit}
                                           elements={elements}
