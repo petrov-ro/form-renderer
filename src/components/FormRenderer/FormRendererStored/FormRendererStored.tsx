@@ -164,15 +164,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
             // если есть реквизиты которые нужно очистить
             if (namePaths.length > 0) {
                 form.resetFields(namePaths)
-                const newFormData = form.getFieldsValue(true)
-                //form.resetFields()
-                form.setFieldsValue(newFormData)
-
-                // удаление содержания
-/*                const elem = document.getElementById('render-form_101904970_101904974_0_101873472')
-                const titleElem = elem.parentElement.parentElement.getElementsByClassName('ant-select-selection-item')[0]
-                titleElem.setAttribute('title', null)
-                titleElem.textContent = null*/
+                form.setFieldsValue(form.getFieldsValue(true))
             }
 
             // удаление пустых значений и вызов колбека
