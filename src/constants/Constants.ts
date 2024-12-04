@@ -9,7 +9,7 @@ export let API: {
     checkAUTOCOMPLETE: (
         requisiteKeys: number[],    // массив ключей реквизитов
         formData: object            // данные формы
-    ) => CheckResult<RuleResultFlc>
+    ) => CheckResult<RuleResultAUTOCOMPLETE>
     checkHIDING: (
         requisiteKeys: number[],    // массив ключей реквизитов
         formData: object            // данные формы
@@ -17,7 +17,7 @@ export let API: {
     checkLIMITATION: (
         requisiteKeys: number[],    // массив ключей реквизитов
         formData: object            // данные формы
-    ) => CheckResult<RuleResultFlc>
+    ) => CheckResult<RuleResultLIMITATION>
     modal?: {
         destroy: () => void,
         update: (config: any) => void

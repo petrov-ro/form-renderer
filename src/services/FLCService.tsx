@@ -109,11 +109,10 @@ export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy
 }
 
 /**
+ * Скрытие элементов формы
  *
- * @param requisiteIdKeys
- * @param fullData
- * @param hiding
- * @param form
+ * @param hiding    - список путей ранее скрытых
+ * @param hidePaths - список путей которые нужно скрыть
  */
 export const hide = (hiding, hidePaths) => {
     // открыть тех, кто есть в ранее скрытых, но нет в новых скрытых
@@ -146,54 +145,5 @@ export const hide = (hiding, hidePaths) => {
 
     // запись нового значения
     return [...hidePaths]
-    //setHiding(hidePaths)
-
-    // проверка AUTOCOMPLETE
-/*    const resultAUTOCOMPLETE: CheckResult<RuleResultFlc> = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
-    const {rulesResult: rulesResultAUTOCOMPLETE = []} = resultAUTOCOMPLETE
-    console.log(resultAUTOCOMPLETE)
-
-    // выполнение проверки LIMITATION
-    const resultLIMITATION: CheckResult<RuleResultFlc> = API.checkLIMITATION(requisiteIdKeys, fullData)
-    const {rulesResult: rulesResultLIMITATION = []} = resultLIMITATION
-    console.log(resultLIMITATION)*/
 }
 
-/**
- *
- * @param requisiteIdKeys
- * @param fullData
- * @param hiding
- * @param initialValues
- * @param form
- */
-export const checkHiding = (requisiteIdKeys, fullData, hiding, initialValues, form) => {
-    const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, fullData)
-    const hidePaths = rulesResultHIDING
-        .filter(({hideState}) => hideState)
-        .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
-        .map(getFormItemId)
-
-    // скрытие элементов на форме
-    setTimeout(() => {
-        hiding = hide(hiding, hidePaths)
-    }, 0)
-
-    // удаление значений скрытых реквизитов
-    const namePaths = rulesResultHIDING
-        .filter(({hideState}) => hideState)
-        .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
-        .filter(namePath => {
-            // получение значения по умолчанию для реквизита
-            const find = deepFind(initialValues, namePath.filter(p => !isString(p) && p > 1000))
-            const defaultValues = (isArray(find) && find.length > 0) ? find[0] : find
-
-            // если реквизит содержит не дефолтное значение, его нужно очистить, он попадает в выборку
-            const currentValue = form.getFieldsValue(namePath)
-            return !objectCompare(defaultValues, currentValue)
-        })
-
-    if (namePaths.length > 0) {
-        form.resetFields(namePaths)
-    }
-}

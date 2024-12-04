@@ -14,5 +14,6 @@ export const getNamePath = (requisiteKey: number, groupNumber: number, parentsCh
 
     result.push(requisiteKey)
 
-    return result
+
+    return result.map(String)
 }

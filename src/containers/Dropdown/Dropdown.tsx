@@ -70,7 +70,6 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
         return (
             <>
                 <Select
-                    ref={ref}
                     showSearch allowClear={true} loading={dictLoading}
                     optionLabelProp='label'
                     options={dictData} value={value}

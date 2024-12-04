@@ -1,7 +1,7 @@
 import React, {createContext, forwardRef, useEffect, useImperativeHandle, useMemo, useState} from "react";
 import {Form, Layout, Space} from "antd";
 import {Button} from "@gp-frontend-lib/ui-kit-5";
-import {Provider} from 'react-redux'
+import {Provider, useDispatch} from 'react-redux'
 import FormContentRenderer from "../../../components/FormContentRenderer/FormContentRenderer";
 import {API, CODE} from "../../../constants/Constants";
 import {modifyConfig} from "../../../services/ConfigService";
@@ -18,6 +18,7 @@ import {getFormItemId} from "../../../utils/formUtils";
 import {deepFind} from "../../../utils/treeUtils";
 import {isString} from "../../../utils/common";
 import {isArray} from "../../../utils/arrayUtils";
+import {limitsAdd} from "../../../redux/actions/flc";
 
 const {Content} = Layout;
 
@@ -35,6 +36,8 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
             apiPath, fetch, flcPath,
             dictDate, dictClosed
         } = props
+
+        const dispatch = useDispatch()
 
         // установка адреса апи
         API.REACT_APP_API_URL = apiPath
@@ -108,20 +111,36 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
 
         // инициализация ФЛК
         useFLC(flcPath, config as ClassicFormClass)?.then(() => {
-                const formData = form.getFieldsValue(true)
+            let formData;
 
-                // проверка HIDING
-                const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, formData)
-                const hidePaths = rulesResultHIDING
-                    .filter(({hideState}) => hideState)
-                    .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
-                    .map(getFormItemId)
+            // выполнение проверки LIMITATION
+            formData = form.getFieldsValue(true)
+            const resultLIMITATION: CheckResult<RuleResultLIMITATION> = API.checkLIMITATION(requisiteIdKeys, formData)
+            const {rulesResult: rulesResultLIMITATION = []} = resultLIMITATION
+            if (rulesResultLIMITATION.length > 0) {
+                const limits = rulesResultLIMITATION
+                    .reduce((acc, r) => {
+                        const {requisiteKey, groupNumber, parentsChain, requisiteLimits} = r
+                        const name = getNamePath(requisiteKey, groupNumber, parentsChain)
+                        acc[name.join()] = requisiteLimits
+                        return acc
+                    }, {} as Record<string, any>)
+                dispatch(limitsAdd(limits));
+            }
 
-                // скрытие элементов на форме
-                setTimeout(() => {
-                    hiding = hide(hiding, hidePaths)
-                }, 0)
-            })
+            // проверка HIDING
+            formData = form.getFieldsValue(true)
+            const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, formData)
+            const hidePaths = rulesResultHIDING
+                .filter(({hideState}) => hideState)
+                .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
+                .map(getFormItemId)
+
+            // скрытие элементов на форме
+            setTimeout(() => {
+                hiding = hide(hiding, hidePaths)
+            }, 0)
+        })
 
         const showButtons = (checkButton || extraButtons.length > 0)
 
@@ -135,8 +154,17 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
          * @param fullData  - все данные формы
          */
         const onValuesChange = (fieldData: Record<string, any>, fullData: Record<string, any>) => {
+            // проверка AUTOCOMPLETE
+            const {rulesResult: rulesResultAUTOCOMPLETE = []} = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
+            rulesResultAUTOCOMPLETE
+                .map(({requisiteValues, requisiteKey, groupNumber, parentsChain}) => {
+                    const path = getNamePath(requisiteKey, groupNumber, parentsChain)
+                    form.setFieldValue(path, requisiteValues)
+                })
+
             // проверка HIDING
-            const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, fullData)
+            let formData = form.getFieldsValue(true)
+            const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, formData)
             const hidePaths = rulesResultHIDING
                 .filter(({hideState}) => hideState)
                 .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
@@ -168,7 +196,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
             }
 
             // удаление пустых значений и вызов колбека
-            const formData = form.getFieldsValue(true)  // полные данные формы получаются заново, т.к. могли быть удалены при скрытии
+            formData = form.getFieldsValue(true)  // полные данные формы получаются заново, т.к. могли быть удалены при скрытии
             if (noEmpty) {
                 const fieldDataUnempty = removeEmpty(fieldData)
                 const fullDataUnempty = removeEmpty(formData)
@@ -212,10 +240,6 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
                             </Layout>
                         </Space>
                     </Form>
-
-                    {/*                {openFlc &&
-                <FLCResult/>
-                }*/}
                 </Provider>
             </ConfigContext.Provider>
         )

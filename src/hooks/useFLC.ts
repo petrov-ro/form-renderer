@@ -89,7 +89,6 @@ const useFLC = (
                         // фильтрование контекста для проверки конкретного реквизита
                         const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
-                        console.log(requiredContextDto)
 
                         // формируется контекст и заполняется данными
                         const contextInitializer = new ContextInitializer()
@@ -105,13 +104,17 @@ const useFLC = (
 
                         // вызов метода проверки правил
                         const context = contextInitializer.get_context()
-                        const checkResult: CheckResult<RuleResultFlc> = flcPackage.execute(context, filter, _)
-                        const checkResultFiltered: CheckResult<RuleResultFlc> = {
-                            ...checkResult,
-                            rulesResult: checkResult.rulesResult.filter(r => requisiteKeys.includes(r.requisiteKey))
+                        try {
+                            const checkResult: CheckResult<RuleResultAUTOCOMPLETE> = flcPackage.execute(context, filter, _)
+                            return checkResult
+                        } catch (e) {
+                            console.log(e)
                         }
 
-                        return checkResultFiltered
+                        return {
+                            rulesResult: [],
+                            executeExceptions: []
+                        }
                     }
                 }),
 
@@ -145,13 +148,17 @@ const useFLC = (
 
                         // вызов метода проверки правил
                         const context = contextInitializer.get_context()
-                        const checkResult: CheckResult<RuleResultHiding> = flcPackage.execute(context, filter, _)
-                        const checkResultFiltered: CheckResult<RuleResultHiding> = {
-                            ...checkResult,
-                            rulesResult: checkResult.rulesResult.filter(r => requisiteKeys.includes(r.requisiteKey))
+                        try {
+                            const checkResult: CheckResult<RuleResultHiding> = flcPackage.execute(context, filter, _)
+                            return checkResult
+                        } catch (e) {
+                            console.log(e)
                         }
 
-                        return checkResultFiltered
+                        return {
+                            rulesResult: [],
+                            executeExceptions: []
+                        }
                     }
                 }),
 
@@ -170,7 +177,6 @@ const useFLC = (
                         // фильтрование контекста для проверки конкретного реквизита
                         const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
-                        console.log(requiredContextDto)
 
                         // формируется контекст и заполняется данными
                         const contextInitializer = new ContextInitializer()
@@ -186,13 +192,17 @@ const useFLC = (
 
                         // вызов метода проверки правил
                         const context = contextInitializer.get_context()
-                        const checkResult: CheckResult<RuleResultFlc> = flcPackage.execute(context, filter, _)
-                        const checkResultFiltered: CheckResult<RuleResultFlc> = {
-                            ...checkResult,
-                            rulesResult: checkResult.rulesResult.filter(r => requisiteKeys.includes(r.requisiteKey))
+                        try {
+                            const checkResult: CheckResult<RuleResultLIMITATION> = flcPackage.execute(context, filter, _)
+                            return checkResult
+                        } catch (e) {
+                            console.log(e)
                         }
 
-                        return checkResultFiltered
+                        return {
+                            rulesResult: [],
+                            executeExceptions: []
+                        }
                     }
                 })
             ]

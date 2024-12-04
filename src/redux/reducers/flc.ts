@@ -1,25 +1,23 @@
 import {AnyAction, createReducer, Reducer} from '@reduxjs/toolkit';
-import {hidingAdd, hidingRemove} from "../actions/flc";
+import {limitsAdd} from "../actions/flc";
+import {objectCompare} from "../../utils/objectUtils";
 
 export type FLCState = {
-  hiding: string[];
+  limits: {
+      [req: string]: any
+  };
 }
 
 const initialState: FLCState = {
-    hiding: []
+    limits: {}
 }
 
 const flc: Reducer<FLCState> = createReducer<FLCState>(initialState,
     (builder) => {
       builder
-          .addCase(hidingAdd, (state: FLCState, action: AnyAction) => {
-             if (!state.hiding.includes(action.payload.id)) {
-                 state.hiding.push(action.payload.id)
-             }
-          })
-          .addCase(hidingRemove, (state: FLCState, action: AnyAction) => {
-             if (state.hiding.includes(action.payload.id)) {
-                 state.hiding = state.hiding.filter(id => id === action.payload.id)
+          .addCase(limitsAdd, (state: FLCState, action: AnyAction) => {
+             if (!objectCompare(state.limits, action.payload.limits)) {
+                 state.limits = action.payload.limits
              }
           })
     }

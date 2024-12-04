@@ -91,23 +91,18 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
                 typeId === EntityAttrTypes.REF && code &&
                 <FormField label={label} name={name} key={name} tooltip={tooltip} disabled={disabled}
                            inputType={FormItemTypes.custom}
-                           children={({value, onChange, id}: FormFieldProps) =>
-                               <>
-                                   {viewType === RefViewTypes.DROPDOWN &&
-                                   <RefDropdown code={code} id={id} disabled={disabled} value={value}
-                                                label={name} onChange={onChange} multivalued={multivalued}
+                           children={props =>
+                               viewType === RefViewTypes.DROPDOWN ?
+                                   <RefDropdown {...props} code={code} disabled={disabled}
+                                                name={name} multivalued={multivalued}
                                                 viewTypeForm={viewTypeForm}
                                                 loading={indicatorLoading}
                                                 exclude={exclude}/>
-                                   }
-
-                                   {viewType === RefViewTypes.CHECKBOX &&
-                                   <RefCheckbox code={code} id={id} disabled={disabled} value={value}
-                                                label={name} onChange={onChange} multivalued={multivalued}
+                                   :
+                                   <RefCheckbox {...props} code={code} disabled={disabled}
+                                                label={name} multivalued={multivalued}
                                                 loading={indicatorLoading}
                                                 exclude={exclude}/>
-                                   }
-                               </>
                            }
                            rules={[{required: required, message: `Не задан обязательный атрибут ${name}`}]}
                 />

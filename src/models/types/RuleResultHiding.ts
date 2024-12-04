@@ -1,11 +1,7 @@
 /**
  * Результат проверки правил типа HIDING
  */
-type RuleResultHiding = {
-    requisiteKey: number
-    groupNumber: number
+type RuleResultHiding = RuleResult & {
     hideState: boolean
     hintMessage: string
-    parentsChain: RuleParentChain,
-    ruleData: RuleData
 }
