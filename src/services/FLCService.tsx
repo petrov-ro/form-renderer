@@ -10,6 +10,12 @@ import {FLCRuleTypeEnum} from "@/constants/FLCRuleTypeEnum";
 import {FormInstance, Modal} from "antd";
 import FLCResult from "../components/FLCResult/FLCResult";
 import {ClassicFormClass} from "..";
+import {getFormItemId} from "../utils/formUtils";
+import { getNamePath } from '@/utils/flcUtils';
+import {deepFind} from "../utils/treeUtils";
+import {isString} from "../utils/common";
+import {isArray} from "../utils/arrayUtils";
+import {objectCompare} from "../utils/objectUtils";
 
 /**
  * Запрос пакета правил
@@ -32,7 +38,8 @@ export const getFLCPackage = (formVersionId: number,
     const urlParams = new URLSearchParams({
         formVersionId: formVersionId.toString(),
         location: location.toString(),
-        type: type.toString()
+        type: type.toString(),
+        jsMinEnabled: 'true'
     }).toString()
 
     // формирование адреса
@@ -100,3 +107,43 @@ export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy
 
     return instance
 }
+
+/**
+ * Скрытие элементов формы
+ *
+ * @param hiding    - список путей ранее скрытых
+ * @param hidePaths - список путей которые нужно скрыть
+ */
+export const hide = (hiding, hidePaths) => {
+    // открыть тех, кто есть в ранее скрытых, но нет в новых скрытых
+    hiding
+        .filter((h: string) => !hidePaths.includes(h))
+        .forEach((id: string) => {
+            // открыть
+            const item = document.getElementById(id)
+            if (item) {
+                item.style.visibility = 'visible'
+                item.style.position = 'static'
+            } else {
+                console.log('Поле формы не найдено')
+            }
+        })
+
+    // скрыть тех кого нет в уже скрытых
+    hidePaths
+        .filter((h: string) => !hiding.includes(h))
+        .forEach((id: string) => {
+            // скрыть
+            const item = document.getElementById(id)
+            if (item) {
+                item.style.visibility = 'hidden'
+                item.style.position = 'fixed'
+            } else {
+                console.log('Поле формы не найдено')
+            }
+        })
+
+    // запись нового значения
+    return [...hidePaths]
+}
+

@@ -2,11 +2,10 @@ import {FC, useEffect, useMemo, useState} from "react";
 import {Button, FormInstance} from "antd";
 import styled from 'styled-components';
 import {CloseOutlined, ReloadOutlined} from '@ant-design/icons';
-import {NamePath} from "antd/es/form/interface";
 import {API, CODE} from "../../constants/Constants";
 import {ClassicFormClass} from "../..";
 import {capitalize} from "../../utils/stringHelper";
-import {error} from "../../utils/messages";
+import {getNamePath} from "@/utils/flcUtils";
 
 type FLCResultProps = {
     form: FormInstance
@@ -70,7 +69,7 @@ const FLCResult: FC<FLCResultProps> = (props) => {
         console.log('проверка ФЛК')
         form.validateFields()
             .then((res) => {
-                console.log(res)
+                // console.log(res)
             })
             .catch(err => {
                 console.log(err)
@@ -114,15 +113,7 @@ const FLCResult: FC<FLCResultProps> = (props) => {
 
         // формирование цепочки имени реквизита
         const {requisiteKey, groupNumber, parentsChain} = error
-        const namePath: any[] = parentsChain
-            .flatMap(({groupNumber, requisiteKey}) => (
-                groupNumber !== null && groupNumber !== undefined ? [requisiteKey, groupNumber] : requisiteKey
-            ))
-            .reverse()
-        if (groupNumber !== null && groupNumber !== undefined) {
-            namePath.push(groupNumber)
-        }
-        namePath.push(requisiteKey)
+        const namePath = getNamePath(requisiteKey, groupNumber, parentsChain)
 
         // переход к реквизиту
         form.focusField(namePath)

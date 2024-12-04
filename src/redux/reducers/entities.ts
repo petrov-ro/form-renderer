@@ -1,8 +1,12 @@
 import {AnyAction, createReducer, Reducer} from '@reduxjs/toolkit';
 import { setEntity } from "../actions/entities";
+import {EntityClass} from "../../models/classes/EntityClass";
 
 export type DictsState = {
-  [dict: string]: any[];
+  [dict: string]: {
+      entity: EntityClass | undefined
+      loading: boolean
+  }
 }
 
 const initialState: DictsState = {

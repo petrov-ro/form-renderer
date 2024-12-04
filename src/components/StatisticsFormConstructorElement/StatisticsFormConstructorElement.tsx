@@ -9,6 +9,7 @@ import {StatisticsFormComponentTypeEnum} from "../../constants/StatisticsFormCom
 import StatisticsFormFieldRequest from "./StatisticsFormFieldRequest/StatisticsFormFieldRequest";
 import StatisticsFormFieldConfig from "./StatisticsFormFieldConfig/StatisticsFormFieldConfig";
 import {NamePath} from "antd/lib/form/interface";
+import { getFormItemId } from "@/utils/formUtils";
 
 type StatisticsFormConstructorElementProps = FormProps & {
     elements: StatisticsFormElementClass[]                               // элементы размещенные на форме
@@ -18,6 +19,7 @@ type StatisticsFormConstructorElementProps = FormProps & {
     editComponent?: string                                               // идентификатор редактируемого компонента
     setEditComponent?: Dispatch<SetStateAction<string | undefined>>      // установка редактируемого компонента
     name?: NamePath                                                      // название атрибута-родителя
+    path?: NamePath                                                      // путь к атрибуту
 }
 
 /**
@@ -25,7 +27,7 @@ type StatisticsFormConstructorElementProps = FormProps & {
  */
 const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElementProps> = (props) => {
     const {
-        currentElement, name,
+        currentElement, name, path = []
     } = props
 
     const {
@@ -69,6 +71,7 @@ const StatisticsFormConstructorElement: React.FC<StatisticsFormConstructorElemen
     return (
         <div className={cn('component-container')}
              style={{margin: containerMargin}}
+             id={getFormItemId(path.concat([fieldName]))}
         >
             {isIndicator &&
             <Component label={fieldTitle} name={namePath} id={indicatorId} code={indicatorCode}
