@@ -75,6 +75,17 @@
     classnames "^2.2.6"
     rc-util "^5.31.1"
 
+"@ant-design/icons@^5.5.2":
+  version "5.5.2"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/@ant-design/icons/-/icons-5.5.2.tgz#c4567943cc2b7c6dbe9cae68c06ffa35f755dc0d"
+  integrity sha512-xc53rjVBl9v2BqFxUjZGti/RfdDeA8/6KYglmInM2PNqSXc/WfuGDTifJI/ZsokJK0aeKvOIbXc9y2g8ILAhEA==
+  dependencies:
+    "@ant-design/colors" "^7.0.0"
+    "@ant-design/icons-svg" "^4.4.0"
+    "@babel/runtime" "^7.24.8"
+    classnames "^2.2.6"
+    rc-util "^5.31.1"
+
 "@ant-design/pro-provider@^2.14.9":
   version "2.14.9"
   resolved "https://registry.yarnpkg.com/@ant-design/pro-provider/-/pro-provider-2.14.9.tgz#ca9c764a4eeda5ceacdd9cca817ce2764644db3a"
@@ -314,6 +325,25 @@
     dayjs "^1.11.11"
     immutability-helper "^3.1.1"
     rc-picker "^4.6.8"
+    react-resizable "^3.0.5"
+    styled-components "^6.1.11"
+
+"@gp-frontend-ui/ui-kit-5v2@^2.0.5":
+  version "2.0.5"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/@gp-frontend-ui/ui-kit-5v2/-/ui-kit-5v2-2.0.5.tgz#ac8af4a633734dedf7bd2f5682c2925f17fcc877"
+  integrity sha512-p0VEyuz2g3i6D07AFWYBTebAb03axkf0bfuCF2CQf56JgzVhOwacHD3VIvdNYR2Famo+Ve8Qi+XRfjmJefh08g==
+  dependencies:
+    "@rollup/plugin-json" "^6.1.0"
+    "@rollup/plugin-url" "^8.0.2"
+    antd "^5.22.2"
+    axios "^1.7.2"
+    crypto-pro "^2.3.0"
+    date-fns "^3.6.0"
+    date-fns-tz "^3.1.3"
+    dayjs "^1.11.11"
+    immutability-helper "^3.1.1"
+    rc-picker "^4.6.8"
+    rc-select "^14.16.2"
     react-resizable "^3.0.5"
     styled-components "^6.1.11"
 
@@ -901,6 +931,61 @@ antd@^5.21.1:
     rc-tooltip "~6.2.1"
     rc-tree "~5.10.1"
     rc-tree-select "~5.24.4"
+    rc-upload "~4.8.1"
+    rc-util "^5.43.0"
+    scroll-into-view-if-needed "^3.1.0"
+    throttle-debounce "^5.0.2"
+
+antd@^5.22.2:
+  version "5.22.3"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/antd/-/antd-5.22.3.tgz#51bd7094562a6ff321a6c152ac3ff8cff770b249"
+  integrity sha512-YyJ9PhsWkTqJzEo1cZ6wBFk8Ofrfs5O3uGsW8vWcpqBLq/w/yPM/nqZkEDoPFeZ1H+nAhuPF/oWmE/sfj3uYeg==
+  dependencies:
+    "@ant-design/colors" "^7.1.0"
+    "@ant-design/cssinjs" "^1.21.1"
+    "@ant-design/cssinjs-utils" "^1.1.1"
+    "@ant-design/icons" "^5.5.2"
+    "@ant-design/react-slick" "~1.1.2"
+    "@babel/runtime" "^7.25.7"
+    "@ctrl/tinycolor" "^3.6.1"
+    "@rc-component/color-picker" "~2.0.1"
+    "@rc-component/mutate-observer" "^1.1.0"
+    "@rc-component/qrcode" "~1.0.0"
+    "@rc-component/tour" "~1.15.1"
+    "@rc-component/trigger" "^2.2.5"
+    classnames "^2.5.1"
+    copy-to-clipboard "^3.3.3"
+    dayjs "^1.11.11"
+    rc-cascader "~3.30.0"
+    rc-checkbox "~3.3.0"
+    rc-collapse "~3.9.0"
+    rc-dialog "~9.6.0"
+    rc-drawer "~7.2.0"
+    rc-dropdown "~4.2.0"
+    rc-field-form "~2.6.0"
+    rc-image "~7.11.0"
+    rc-input "~1.6.4"
+    rc-input-number "~9.3.0"
+    rc-mentions "~2.17.0"
+    rc-menu "~9.16.0"
+    rc-motion "^2.9.3"
+    rc-notification "~5.6.2"
+    rc-pagination "~4.3.0"
+    rc-picker "~4.8.2"
+    rc-progress "~4.0.0"
+    rc-rate "~2.13.0"
+    rc-resize-observer "^1.4.0"
+    rc-segmented "~2.5.0"
+    rc-select "~14.16.3"
+    rc-slider "~11.1.7"
+    rc-steps "~6.0.1"
+    rc-switch "~4.1.0"
+    rc-table "~7.49.0"
+    rc-tabs "~15.4.0"
+    rc-textarea "~1.8.2"
+    rc-tooltip "~6.2.1"
+    rc-tree "~5.10.1"
+    rc-tree-select "~5.24.5"
     rc-upload "~4.8.1"
     rc-util "^5.43.0"
     scroll-into-view-if-needed "^3.1.0"
@@ -2780,6 +2865,15 @@ rc-field-form@~2.5.0:
     "@rc-component/async-validator" "^5.0.3"
     rc-util "^5.32.2"
 
+rc-field-form@~2.6.0:
+  version "2.6.0"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-field-form/-/rc-field-form-2.6.0.tgz#b19025202b9839f18dd6d4257eacb006ab86e06e"
+  integrity sha512-qU7ei+G/nZ5nkx7TFLRoPtcMR0s0R0yG/2O+iWqA/CX65tJmgODpJvTYYzGMPW/Psj+gy5QHbcZUrNVcPXKjLQ==
+  dependencies:
+    "@babel/runtime" "^7.18.0"
+    "@rc-component/async-validator" "^5.0.3"
+    rc-util "^5.32.2"
+
 rc-image@~7.11.0:
   version "7.11.0"
   resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-image/-/rc-image-7.11.0.tgz#18c77ea557a6fdbe26856c688a9aace1505c0e77"
@@ -2818,6 +2912,15 @@ rc-input@~1.6.0, rc-input@~1.6.3:
   version "1.6.3"
   resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-input/-/rc-input-1.6.3.tgz#f1708fc3d5e68f95cb20faeb3eed1df8543cd444"
   integrity sha512-wI4NzuqBS8vvKr8cljsvnTUqItMfG1QbJoxovCgL+DX4eVUcHIjVwharwevIxyy7H/jbLryh+K7ysnJr23aWIA==
+  dependencies:
+    "@babel/runtime" "^7.11.1"
+    classnames "^2.2.1"
+    rc-util "^5.18.1"
+
+rc-input@~1.6.4:
+  version "1.6.4"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-input/-/rc-input-1.6.4.tgz#08d91460f6b75b3fa5294154e89775784c233129"
+  integrity sha512-lBZhfRD4NSAUW0zOKLUeI6GJuXkxeZYi0hr8VcJgJpyTNOvHw1ysrKWAHcEOAAHj7guxgmWYSi6xWrEdfrSAsA==
   dependencies:
     "@babel/runtime" "^7.11.1"
     classnames "^2.2.1"
@@ -2947,6 +3050,18 @@ rc-picker@~4.8.0:
     rc-resize-observer "^1.4.0"
     rc-util "^5.43.0"
 
+rc-picker@~4.8.2:
+  version "4.8.3"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-picker/-/rc-picker-4.8.3.tgz#06cffd5a2201fc8d274e12f7ee32ea8ba6f3f60f"
+  integrity sha512-hJ45qoEs4mfxXPAJdp1n3sKwADul874Cd0/HwnsEOE60H+tgiJUGgbOD62As3EG/rFVNS5AWRfBCDJJfmRqOVQ==
+  dependencies:
+    "@babel/runtime" "^7.24.7"
+    "@rc-component/trigger" "^2.0.0"
+    classnames "^2.2.1"
+    rc-overflow "^1.3.2"
+    rc-resize-observer "^1.4.0"
+    rc-util "^5.43.0"
+
 rc-progress@~4.0.0:
   version "4.0.0"
   resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-progress/-/rc-progress-4.0.0.tgz#5382147d9add33d3a5fbd264001373df6440e126"
@@ -2984,6 +3099,19 @@ rc-segmented@~2.5.0:
     classnames "^2.2.1"
     rc-motion "^2.4.4"
     rc-util "^5.17.0"
+
+rc-select@^14.16.2:
+  version "14.16.4"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-select/-/rc-select-14.16.4.tgz#a98840c4cfb96e263c750e59334ea0a2862e04fc"
+  integrity sha512-jP6qf7+vjnxGvPpfPWbGYfFlSl3h8L2XcD4O7g2GYXmEeBC0mw+nPD7i++OOE8v3YGqP8xtYjRKAWCMLfjgxlw==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    "@rc-component/trigger" "^2.1.1"
+    classnames "2.x"
+    rc-motion "^2.0.1"
+    rc-overflow "^1.3.1"
+    rc-util "^5.16.1"
+    rc-virtual-list "^3.5.2"
 
 rc-select@~14.15.0, rc-select@~14.15.2:
   version "14.15.2"
@@ -3062,6 +3190,18 @@ rc-table@~7.48.1:
     rc-util "^5.41.0"
     rc-virtual-list "^3.14.2"
 
+rc-table@~7.49.0:
+  version "7.49.0"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-table/-/rc-table-7.49.0.tgz#f5a4880d9527d2c9e42f5f721b5423e7a1ca475b"
+  integrity sha512-/FoPLX94muAQOxVpi1jhnpKjOIqUbT81eELQPAzSXOke4ky4oCWYUXOcVpL31ZCO90xScwVSXRd7coqtgtB1Ng==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    "@rc-component/context" "^1.4.0"
+    classnames "^2.2.5"
+    rc-resize-observer "^1.1.0"
+    rc-util "^5.41.0"
+    rc-virtual-list "^3.14.2"
+
 rc-tabs@~15.2.0:
   version "15.2.0"
   resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-tabs/-/rc-tabs-15.2.0.tgz#29a89f9f4d66e1d998e46e3ba871c0a09b49800b"
@@ -3123,6 +3263,17 @@ rc-tree-select@~5.24.4:
   version "5.24.4"
   resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-tree-select/-/rc-tree-select-5.24.4.tgz#6789b8761daf53a8b91b75e9e6c4f720a7e8cc92"
   integrity sha512-MzljkSkk7weKOcE853UtYlXB6uyUEzcEQhhpaCwE6jQPbmBUgGiRURuKWpYUnM/dXrwTTlCK969M6Pgjj35MLA==
+  dependencies:
+    "@babel/runtime" "^7.25.7"
+    classnames "2.x"
+    rc-select "~14.16.2"
+    rc-tree "~5.10.1"
+    rc-util "^5.43.0"
+
+rc-tree-select@~5.24.5:
+  version "5.24.5"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rc-tree-select/-/rc-tree-select-5.24.5.tgz#a1bf85c7d5e4979880cfb0748bb6bab937ed3483"
+  integrity sha512-PnyR8LZJWaiEFw0SHRqo4MNQWyyZsyMs8eNmo68uXZWjxc7QqeWcjPPoONN0rc90c3HZqGF9z+Roz+GLzY5GXA==
   dependencies:
     "@babel/runtime" "^7.25.7"
     classnames "2.x"

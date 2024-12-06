@@ -1,5 +1,6 @@
 import React, {Key, useState} from "react";
-import {Select, Spin} from "@gp-frontend-lib/ui-kit-5";
+import {Spin} from "@gp-frontend-lib/ui-kit-5";
+import {Select} from "@gp-frontend-ui/ui-kit-5v2";
 import {SelectProps as SelectProps} from "antd";
 import {BaseOptionType} from "antd/es/select";
 import {dictOptionRender} from "@/utils/optionDataHelper";
