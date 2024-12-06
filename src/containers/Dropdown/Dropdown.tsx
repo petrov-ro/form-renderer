@@ -1,7 +1,7 @@
 import React, {Key, useState} from "react";
 import {Spin} from "@gp-frontend-lib/ui-kit-5";
-import {Select} from "@gp-frontend-ui/ui-kit-5v2";
-import {SelectProps as SelectProps} from "antd";
+import {Select, theme} from "@gp-frontend-ui/ui-kit-5v2";
+import {ConfigProvider, SelectProps as SelectProps} from "antd";
 import {BaseOptionType} from "antd/es/select";
 import {dictOptionRender} from "@/utils/optionDataHelper";
 import useDict, {resultType} from "../../hooks/useDict";
@@ -70,6 +70,9 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
 
         return (
             <>
+                <ConfigProvider theme={theme}>
+
+                </ConfigProvider>
                 <Select
                     showSearch allowClear={true} loading={dictLoading}
                     optionLabelProp='label'
