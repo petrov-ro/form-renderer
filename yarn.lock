@@ -328,10 +328,10 @@
     react-resizable "^3.0.5"
     styled-components "^6.1.11"
 
-"@gp-frontend-ui/ui-kit-5v2@^2.0.5":
-  version "2.0.5"
-  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/@gp-frontend-ui/ui-kit-5v2/-/ui-kit-5v2-2.0.5.tgz#ac8af4a633734dedf7bd2f5682c2925f17fcc877"
-  integrity sha512-p0VEyuz2g3i6D07AFWYBTebAb03axkf0bfuCF2CQf56JgzVhOwacHD3VIvdNYR2Famo+Ve8Qi+XRfjmJefh08g==
+"@gp-frontend-ui/ui-kit-5v2@^2.0.8":
+  version "2.0.8"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/@gp-frontend-ui/ui-kit-5v2/-/ui-kit-5v2-2.0.8.tgz#440ad76dacee946edd6036334488e9acb5c251d8"
+  integrity sha512-UkLwCHSR/7tTRAxjuLFqG0cbUDdFwAs0HG+RiZvyKQfjtYQ5FwQ42zmg8s99Ci5ghKAXoJ25gT/caESzJSldqA==
   dependencies:
     "@rollup/plugin-json" "^6.1.0"
     "@rollup/plugin-url" "^8.0.2"
