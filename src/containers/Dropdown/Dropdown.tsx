@@ -71,18 +71,17 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
         return (
             <>
                 <ConfigProvider theme={theme}>
-
+                    <Select
+                        showSearch allowClear={true} loading={dictLoading}
+                        optionLabelProp='label'
+                        options={dictData} value={value}
+                        onChange={onChangeValues}
+                        optionRender={dictOptionRender}
+                        notFoundContent={dictLoading ? <Spin size="small" style={{width: '100%'}}/> : undefined}
+                        {...searchConfig}
+                        {...rest}
+                    />
                 </ConfigProvider>
-                <Select
-                    showSearch allowClear={true} loading={dictLoading}
-                    optionLabelProp='label'
-                    options={dictData} value={value}
-                    onChange={onChangeValues}
-                    optionRender={dictOptionRender}
-                    notFoundContent={dictLoading ? <Spin size="small" style={{width: '100%'}}/> : undefined}
-                    {...searchConfig}
-                    {...rest}
-                />
             </>
         )
     }
