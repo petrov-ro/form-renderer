@@ -4,7 +4,6 @@ import {Col, Form, Row, Switch, Tree} from "antd";
 import {Rule, RuleObject} from "antd/es/form";
 import {
     Checkbox,
-    DatePicker,
     Input,
     InputNumber,
     Radio,
@@ -13,6 +12,7 @@ import {
     TreeSelect,
     Upload
 } from "@gp-frontend-lib/ui-kit-5";
+import {DatePicker} from "@gp-frontend-ui/ui-kit-5v2";
 import {warning} from "@/utils/messages";
 import {FormItemTypes} from "../../constants/FormItemTypes";
 import {API, DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
