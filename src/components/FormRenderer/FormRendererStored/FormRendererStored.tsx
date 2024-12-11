@@ -140,6 +140,9 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
             setTimeout(() => {
                 hiding = hide(hiding, hidePaths)
             }, 0)
+
+            // начальная проверка при открытии формы
+            flcCheckResult(form, false)
         })
 
         const showButtons = (checkButton || extraButtons.length > 0)
