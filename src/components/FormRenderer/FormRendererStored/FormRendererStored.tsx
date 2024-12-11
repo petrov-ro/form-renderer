@@ -89,7 +89,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
                 resetFields,
                 setFieldsValue,
                 flcCheck: () => flcCheck(form, config as ClassicFormClass),
-                flcCheckFlag: () => flcCheckResult(form)
+                flcCheckFlag: (validateOnly) => flcCheckResult(form, validateOnly)
             };
         }, []);
 

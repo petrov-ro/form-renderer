@@ -51,8 +51,8 @@ export const getFLCPackage = (formVersionId: number,
 /**
  * Выполнение проверки ФЛК и отображение окна результатов
  */
-export const flcCheckResult = (form: FormInstance): Promise<boolean> =>
-    form.validateFields({validateOnly: true})
+export const flcCheckResult = (form: FormInstance, validateOnly = true): Promise<boolean> =>
+    form.validateFields({validateOnly})
         .then(() => true)
         .catch(() => false)
 
