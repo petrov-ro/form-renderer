@@ -162,7 +162,8 @@ const FormField = React.forwardRef(
             case FormItemTypes.integer.toString():
                 addProps.fieldProps = {
                     ...addProps.fieldProps,
-                    precision: 0
+                    precision: 0,
+                    min: 0
                 }
                 break;
             case FormItemTypes.uuid.toString():
