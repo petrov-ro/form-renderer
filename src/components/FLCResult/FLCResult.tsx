@@ -41,7 +41,7 @@ const ErrorContainer = styled.div`
  * @constructor
  */
 const FLCResult: FC<FLCResultProps> = (props) => {
-    const {form, config, onClose, container, containerOverflow} = props
+    const {form, config, onClose, container} = props
 
     const [errors, setErrors] = useState<RuleResultFlc[]>([])
 
@@ -66,7 +66,6 @@ const FLCResult: FC<FLCResultProps> = (props) => {
 
     // проверка ФЛК
     const check = () => {
-        console.log('проверка ФЛК')
         form.validateFields()
             .then((res) => {
                 // console.log(res)
@@ -85,10 +84,8 @@ const FLCResult: FC<FLCResultProps> = (props) => {
         const result: CheckResult<RuleResultFlc> = API.checkFLC(requisiteIdKeys, formData)
         const {rulesResult = []} = result
 
-        // возврат ошибок, если они есть
-        if (rulesResult.length > 0) {
-            setErrors(rulesResult)
-        }
+        // возврат ошибок
+        setErrors(rulesResult)
     }
 
     useEffect(() => {
@@ -131,7 +128,9 @@ const FLCResult: FC<FLCResultProps> = (props) => {
                                 onClick={e => onClick(e, error)}
                             >
                                 <p>
-                                    <span style={{fontWeight: 500}}>{index + 1}. {requisiteMap[requisiteKey]}</span>
+                                    <span style={{fontWeight: 500}}>
+                                        {index + 1}. {requisiteMap[requisiteKey]}
+                                    </span>
                                     <br/>
                                     {errorMessage}
                                 </p>
@@ -141,8 +140,8 @@ const FLCResult: FC<FLCResultProps> = (props) => {
                 )}
 
                 {errors.length === 0 &&
-                <p>
-                    <span style={{fontWeight: 500}}>Ошибок нет</span>
+                <p style={{textAlign: 'center'}}>
+                    <span style={{fontWeight: 600, fontSize: 20}}>Ошибок нет</span>
                 </p>
                 }
             </div>
