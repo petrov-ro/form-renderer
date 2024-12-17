@@ -7,6 +7,7 @@ import {FLCLocationEnum} from "../constants/FLCLocationEnum";
 import {doImport} from "../utils/importUtil";
 import {API} from "../constants/Constants";
 import {ClassicFormClass} from "..";
+import { formDataFLC } from '@/utils/formUtils';
 
 /**
  * Получение пакета правил ФЛК, формирование метода проверки
@@ -44,7 +45,9 @@ const useFLC = (
                 .then(module => {
                     const {flcPackage} = module
 
-                    API.checkFLC = (requisiteKeys, formData) => {
+                    API.checkFLC = (requisiteKeys, formDataInitial) => {
+                        const formData = formDataFLC(formDataInitial)
+
                         // фильтрование контекста для проверки конкретного реквизита
                         const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
@@ -54,7 +57,7 @@ const useFLC = (
                         const contextInitializer = new ContextInitializer()
 
                         // установка данных в контекст
-                        contextInitializer.set_req_data(1, {...formData}, metaData, formKey, true)
+                        contextInitializer.set_req_data(1, formData, metaData, formKey, true)
 
                         // заполнение значений переменных
                         // contextInitializer.set_variable(name, targetType, value)                // установка переменных если они требуются (указано в requiredContextDto)
@@ -85,7 +88,9 @@ const useFLC = (
                 .then(module => {
                     const {flcPackage} = module
 
-                    API.checkAUTOCOMPLETE = (requisiteKeys, formData) => {
+                    API.checkAUTOCOMPLETE = (requisiteKeys, formDataInitial) => {
+                        const formData = formDataFLC(formDataInitial)
+
                         // фильтрование контекста для проверки конкретного реквизита
                         const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
@@ -94,7 +99,7 @@ const useFLC = (
                         const contextInitializer = new ContextInitializer()
 
                         // установка данных в контекст
-                        contextInitializer.set_req_data(1, {...formData}, metaData, formKey, true)
+                        contextInitializer.set_req_data(1, formData, metaData, formKey, true)
 
                         // заполнение значений переменных
                         // contextInitializer.set_variable(name, targetType, value)                // установка переменных если они требуются (указано в requiredContextDto)
@@ -129,7 +134,9 @@ const useFLC = (
                 .then(module => {
                     const {flcPackage} = module
 
-                    API.checkHIDING = (requisiteKeys, formData) => {
+                    API.checkHIDING = (requisiteKeys, formDataInitial) => {
+                        const formData = formDataFLC(formDataInitial)
+
                         // фильтрование контекста для проверки конкретного реквизита
                         const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
@@ -138,7 +145,7 @@ const useFLC = (
                         const contextInitializer = new ContextInitializer()
 
                         // установка данных в контекст
-                        contextInitializer.set_req_data(1, {...formData}, metaData, formKey, true)
+                        contextInitializer.set_req_data(1, formData, metaData, formKey, true)
 
                         // заполнение значений переменных
                         // contextInitializer.set_variable(name, targetType, value)                // установка переменных если они требуются (указано в requiredContextDto)
@@ -173,7 +180,9 @@ const useFLC = (
                 .then(module => {
                     const {flcPackage} = module
 
-                    API.checkLIMITATION = (requisiteKeys, formData) => {
+                    API.checkLIMITATION = (requisiteKeys, formDataInitial) => {
+                        const formData = formDataFLC(formDataInitial)
+
                         // фильтрование контекста для проверки конкретного реквизита
                         const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов

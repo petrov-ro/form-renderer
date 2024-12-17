@@ -39,7 +39,7 @@ export const getFLCPackage = (formVersionId: number,
         formVersionId: formVersionId.toString(),
         location: location.toString(),
         type: type.toString(),
-        jsMinEnabled: 'true'
+        jsMinEnabled: 'false'
     }).toString()
 
     // формирование адреса
