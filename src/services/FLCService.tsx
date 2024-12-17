@@ -63,6 +63,9 @@ export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy
     const container = document.body
     const containerOverflow = container?.style?.overflow
 
+    // предварительно закрывается открытое ранее окно (если оно есть)
+    API.modal?.destroy()
+
     const instance = Modal.warning({
         title: 'Ошибки',
         content: (
