@@ -153,12 +153,24 @@ const FormField = React.forwardRef(
                 break;
             case FormItemTypes.date.toString():
                 addProps.fieldProps!.format = DATE_FORMAT
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    minDate: API.minDate
+                }
                 break;
             case FormItemTypes.time.toString():
                 addProps.fieldProps!.format = TIME_FORMAT
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    minDate: API.minDate
+                }
                 break;
             case FormItemTypes.datetime.toString():
                 addProps.fieldProps!.format = DATE_TIME_FORMAT
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    minDate: API.minDate
+                }
                 break;
             case FormItemTypes.checkbox.toString():
                 addProps.valuePropName = 'checked'

@@ -36,6 +36,7 @@ export interface FormRendererProps {
     legacy?: boolean                                            // старый формат конфига
     dictDate?: string                                           // дата на которую отображается состояние справочников (в формате YYYY-MM-DD)
     dictClosed?: boolean                                        // полказывать закрытые записи справочников
+    minDate?: any                                               // минимальная дата для установки при выборе дат в формате dayjs
 }
 
 export interface refType {
