@@ -4,6 +4,7 @@ import {TreeSelectProps as TreeSelectAntProps} from "antd";
 import {entityDataGridType} from "@/constants/GridTypes";
 import {
     API,
+    CODE,
     DATA_SYSTEM_KEY,
     DICT_PARENT_KEY,
     DICT_VALUE_LABEL,
@@ -83,6 +84,7 @@ const TreeSelect: React.FC<TreeSelectProps> = props => {
         DATA_SYSTEM_KEY,
         DICT_VALUE_PROP,
         IS_UNSELECTABLE,
+        CODE,
         `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`,
         DICT_VALUE_LABEL,
         DICT_PARENT_KEY

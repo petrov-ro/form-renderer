@@ -7,6 +7,7 @@ import useEntity from "../../hooks/useEntity";
 import useGridData from "../../hooks/useGridData";
 import OptionData from "../../models/types/OptionData";
 import {
+    CODE,
     DATA_SYSTEM_KEY,
     DICT_VALUE_LABEL,
     DICT_VALUE_PROP, IS_UNSELECTABLE,
@@ -47,6 +48,7 @@ const RefCheckbox: React.FC<RefCheckboxProps> = props => {
         DATA_SYSTEM_KEY,
         DICT_VALUE_PROP,
         IS_UNSELECTABLE,
+        CODE,
         `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`,
         DICT_VALUE_LABEL
     ], entity)

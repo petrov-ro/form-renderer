@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {entityDataGridType} from "../constants/GridTypes";
 import {
+    CODE,
     DATA_SYSTEM_KEY,
     DICT_VALUE_LABEL,
     DICT_VALUE_PROP,
@@ -55,6 +56,7 @@ const useDict = <T>(entityCode: string,
                     DATA_SYSTEM_KEY,
                     DICT_VALUE_PROP,
                     IS_UNSELECTABLE,
+                    CODE,
                     `${SYS_DATA}.${SYS_DATA_TITLE_ATTR}`,
                     DICT_VALUE_LABEL
                 ])
