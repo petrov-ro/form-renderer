@@ -99,9 +99,15 @@ const FormItem = React.forwardRef(
             }) as Rule
         ]
 
+        /**
+         * Значение undefined преобразуется к null для сервиса ФЛК
+         * @param value
+         */
+        const normalize = (value: any) => value === undefined ? null : value
+
         return (
             <Form.Item name={name} className={className} style={styleLabel} rules={rulesModified}
-                       layout={'horizontal'} {...formItemProps}>
+                       layout={'horizontal'} normalize={normalize} {...formItemProps}>
                 <CustomElement ref={ref} {...fieldProps} label={label} {...elementProps}/>
             </Form.Item>
         )
