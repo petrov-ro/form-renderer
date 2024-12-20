@@ -34,7 +34,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
         const {
             config, edit, data, setData, noEmpty = false, extraButtons = [], checkButton = true,
             apiPath, fetch, flcPath,
-            dictDate, dictClosed, minDate
+            dictDate, dictClosed, minDate, attributes, variables
         } = props
 
         const dispatch = useDispatch()

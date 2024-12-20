@@ -4,21 +4,11 @@ import {StatisticsFormConfig} from "../../models/classes/StatisticsFormConfig";
 import {ClassicFormClass} from "../../models/classes/ClassicFormElementClass";
 import store from "../../redux/store/index";
 import FormRendererStored from "./FormRendererStored/FormRendererStored";
-import {flcCheck} from "../../services/FLCService";
 
 export interface ButtonType {
     text: string,
     icon: ReactElement,
     action: (values: Record<string, any>) => void
-}
-
-export interface CheckResultType {
-    errors: {
-        type: number
-    }[],
-    warnings: {
-        type: number
-    }[],
 }
 
 export interface FormRendererProps {
@@ -37,6 +27,8 @@ export interface FormRendererProps {
     dictDate?: string                                           // дата на которую отображается состояние справочников (в формате YYYY-MM-DD)
     dictClosed?: boolean                                        // полказывать закрытые записи справочников
     minDate?: any                                               // минимальная дата для установки при выборе дат в формате dayjs
+    attributes?: Record<string, any>                            // данные атрибутов для ФЛК (fio, position, department и пр.)
+    variables?: Record<string, any>                             // данные переменных для ФЛК (current_date и пр.)
 }
 
 export interface refType {

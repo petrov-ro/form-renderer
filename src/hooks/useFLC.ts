@@ -8,6 +8,7 @@ import {doImport} from "../utils/importUtil";
 import {API} from "../constants/Constants";
 import {ClassicFormClass} from "..";
 import { formDataFLC } from '@/utils/formUtils';
+import { FLCRulePlaceEnum } from '@/constants/FLCRulePlaceEnum';
 
 /**
  * Получение пакета правил ФЛК, формирование метода проверки
@@ -49,7 +50,7 @@ const useFLC = (
                         const formData = formDataFLC(formDataInitial)
 
                         // фильтрование контекста для проверки конкретного реквизита
-                        const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
+                        const filter = {requisiteKeys, multiForm: false, debugOutput: true, places: [FLCRulePlaceEnum.CLIENT]} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
                         //console.log(requiredContextDto)
 
@@ -92,8 +93,9 @@ const useFLC = (
                         const formData = formDataFLC(formDataInitial)
 
                         // фильтрование контекста для проверки конкретного реквизита
-                        const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
+                        const filter = {requisiteKeys, multiForm: false, debugOutput: true, places: [FLCRulePlaceEnum.CLIENT]} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
+                        //console.log(requiredContextDto)
 
                         // формируется контекст и заполняется данными
                         const contextInitializer = new ContextInitializer()
@@ -138,8 +140,9 @@ const useFLC = (
                         const formData = formDataFLC(formDataInitial)
 
                         // фильтрование контекста для проверки конкретного реквизита
-                        const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
+                        const filter = {requisiteKeys, multiForm: false, debugOutput: true, places: [FLCRulePlaceEnum.CLIENT]} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
+                        //console.log(requiredContextDto)
 
                         // формируется контекст и заполняется данными
                         const contextInitializer = new ContextInitializer()
@@ -184,8 +187,9 @@ const useFLC = (
                         const formData = formDataFLC(formDataInitial)
 
                         // фильтрование контекста для проверки конкретного реквизита
-                        const filter = {requisiteKeys, multiForm: false, debugOutput: true} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
+                        const filter = {requisiteKeys, multiForm: false, debugOutput: true, places: [FLCRulePlaceEnum.CLIENT]} // формирование фильтра для проверки конкретного реквизита(ов) RuleFilterDto.executionFilter
                         const requiredContextDto = flcPackage.getRequiredContext(filter)    // возвращается RequiredContextDto - список используемых атрибутов контекста, системных переменных и реквизитов
+                        //console.log(requiredContextDto)
 
                         // формируется контекст и заполняется данными
                         const contextInitializer = new ContextInitializer()
