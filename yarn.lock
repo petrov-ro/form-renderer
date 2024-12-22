@@ -3580,10 +3580,10 @@ rollup@^4.19.0:
     "@rollup/rollup-win32-x64-msvc" "4.19.0"
     fsevents "~2.3.2"
 
-rtcigs-flc-shared@0.1.8:
-  version "0.1.8"
-  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rtcigs-flc-shared/-/rtcigs-flc-shared-0.1.8.tgz#0b9543d92739e586cc3e9e55d948a7ffa786dc26"
-  integrity sha1-C5VD2Sc55YbMPp5V2Uin/6eG3CY=
+rtcigs-flc-shared@0.1.12:
+  version "0.1.12"
+  resolved "https://nexus.dear.com.ru/repository/gp-gasps-npm-group/rtcigs-flc-shared/-/rtcigs-flc-shared-0.1.12.tgz#b5e5d95a361bdc43210906fcc48c0ad26ec1adba"
+  integrity sha1-teXZWjYb3EMhCQb8xIwK0m7Brbo=
 
 safe-buffer@5.2.1, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
   version "5.2.1"

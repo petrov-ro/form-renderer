@@ -1,6 +1,4 @@
-import {Key} from "react";
 import {isArray} from "./arrayUtils";
-import {ClassicFormClass, ElementTypeEnum, ReqTypeEnum} from "..";
 
 /**
  * Возвращает идентификтатор элемента формы
@@ -20,6 +18,7 @@ export const getFormItemId = (name: any): string => {
 export const formDataFLC = (formData: Record<string, any> = {}): Record<string, any> => {
     const jsonString = JSON.stringify(formData)
     const result = JSON.parse(jsonString);
+    //console.log(result)
     return result
 
 /*    // перенос элементов из t_600000018 в elements

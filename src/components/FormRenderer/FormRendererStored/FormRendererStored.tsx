@@ -19,6 +19,21 @@ import {deepFind} from "../../../utils/treeUtils";
 import {isString} from "../../../utils/common";
 import {isArray} from "../../../utils/arrayUtils";
 import {limitsAdd} from "../../../redux/actions/flc";
+import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat.js'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import localeData from 'dayjs/plugin/localeData.js'
+import weekday from 'dayjs/plugin/weekday.js'
+import weekOfYear from 'dayjs/plugin/weekOfYear.js'
+import weekYear from 'dayjs/plugin/weekYear.js'
+import {modifyValue} from "../../../utils/flcUtils";
+
+dayjs.extend(customParseFormat)
+dayjs.extend(advancedFormat)
+dayjs.extend(weekday)
+dayjs.extend(localeData)
+dayjs.extend(weekOfYear)
+dayjs.extend(weekYear)
 
 const {Content} = Layout;
 
@@ -43,6 +58,8 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
         API.REACT_APP_API_URL = apiPath
         API.REACT_APP_API_FLC_URL = flcPath
         API.fetch = fetch as any
+        API.attributes = attributes
+        API.variables = variables
         API.minDate = minDate
 
         // приведение типа конфига
@@ -112,39 +129,50 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
 
         // инициализация ФЛК
         useFLC(flcPath, config as ClassicFormClass)?.then(() => {
-            let formData;
+            const formData = form.getFieldsValue(true)
 
-            // выполнение проверки LIMITATION
-            formData = form.getFieldsValue(true)
-            const resultLIMITATION: CheckResult<RuleResultLIMITATION> = API.checkLIMITATION(requisiteIdKeys, formData)
-            const {rulesResult: rulesResultLIMITATION = []} = resultLIMITATION
-            if (rulesResultLIMITATION.length > 0) {
-                const limits = rulesResultLIMITATION
-                    .reduce((acc, r) => {
-                        const {requisiteKey, groupNumber, parentsChain, requisiteLimits} = r
-                        const name = getNamePath(requisiteKey, groupNumber, parentsChain)
-                        acc[name.join()] = requisiteLimits
-                        return acc
-                    }, {} as Record<string, any>)
-                dispatch(limitsAdd(limits));
-            }
-
-            // проверка HIDING
-            formData = form.getFieldsValue(true)
-            const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, formData)
-            const hidePaths = rulesResultHIDING
-                .filter(({hideState}) => hideState)
-                .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
-                .map(getFormItemId)
-
-            // скрытие элементов на форме
-            setTimeout(() => {
-                hiding = hide(hiding, hidePaths)
-            }, 0)
-
-            // начальная проверка при открытии формы
-            flcCheckResult(form, false)
+            // проверка AUTOCOMPLETE
+            const {rulesResult: rulesResultAUTOCOMPLETE = []} = API.checkAUTOCOMPLETE(requisiteIdKeys, formData)
+            rulesResultAUTOCOMPLETE
+                .map(({requisiteValues, requisiteKey, groupNumber, parentsChain}) => {
+                    const path = getNamePath(requisiteKey, groupNumber, parentsChain)
+                    form.setFieldValue(path, modifyValue(requisiteValues))
+                })
         })
+            .then(() => {
+                let formData;
+
+                // выполнение проверки LIMITATION
+                formData = form.getFieldsValue(true)
+                const resultLIMITATION: CheckResult<RuleResultLIMITATION> = API.checkLIMITATION(requisiteIdKeys, formData)
+                const {rulesResult: rulesResultLIMITATION = []} = resultLIMITATION
+                if (rulesResultLIMITATION.length > 0) {
+                    const limits = rulesResultLIMITATION
+                        .reduce((acc, r) => {
+                            const {requisiteKey, groupNumber, parentsChain, requisiteLimits} = r
+                            const name = getNamePath(requisiteKey, groupNumber, parentsChain)
+                            acc[name.join()] = requisiteLimits
+                            return acc
+                        }, {} as Record<string, any>)
+                    dispatch(limitsAdd(limits));
+                }
+
+                // проверка HIDING
+                formData = form.getFieldsValue(true)
+                const {rulesResult: rulesResultHIDING = []}: CheckResult<RuleResultHiding> = API.checkHIDING(requisiteIdKeys, formData)
+                const hidePaths = rulesResultHIDING
+                    .filter(({hideState}) => hideState)
+                    .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
+                    .map(getFormItemId)
+
+                // скрытие элементов на форме
+                setTimeout(() => {
+                    hiding = hide(hiding, hidePaths)
+                }, 0)
+
+                // начальная проверка при открытии формы
+                flcCheckResult(form, false)
+            })
 
         const showButtons = (checkButton || extraButtons.length > 0)
 
@@ -158,13 +186,14 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
          * @param fullData  - все данные формы
          */
         const onValuesChange = (fieldData: Record<string, any>, fullData: Record<string, any>) => {
-            // проверка AUTOCOMPLETE
-            const {rulesResult: rulesResultAUTOCOMPLETE = []} = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
+            // проверка AUTOCOMPLETE отключил т.к. при изменениях в атрибуте, он же сам перезаписывается значением из правила
+/*            const {rulesResult: rulesResultAUTOCOMPLETE = []} = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
             rulesResultAUTOCOMPLETE
+                //.filter(rule => rule.requisiteKey !== fieldData)
                 .map(({requisiteValues, requisiteKey, groupNumber, parentsChain}) => {
                     const path = getNamePath(requisiteKey, groupNumber, parentsChain)
-                    form.setFieldValue(path, requisiteValues)
-                })
+                    form.setFieldValue(path, modifyValue(requisiteValues))
+                })*/
 
             // проверка HIDING
             let formData = form.getFieldsValue(true)
