@@ -189,7 +189,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
             // проверка AUTOCOMPLETE отключил т.к. при изменениях в атрибуте, он же сам перезаписывается значением из правила
             const {rulesResult: rulesResultAUTOCOMPLETE = []} = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
             rulesResultAUTOCOMPLETE
-                .filter(rule => rule.applyWhenEditing)
+                //.filter(rule => rule.applyWhenEditing)
                 .map(({requisiteValues, requisiteKey, groupNumber, parentsChain}) => {
                     const path = getNamePath(requisiteKey, groupNumber, parentsChain)
                     form.setFieldValue(path, modifyValue(requisiteValues))
