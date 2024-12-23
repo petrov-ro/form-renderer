@@ -44,6 +44,9 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
     // для логического типа добавляется children (надпись рядом с чекбоксом)
     const children = valueTypeId === EntityAttrValTypesEnum.BOOLEAN ? 'Да' : undefined
 
+    // получение конфига для показателя
+    const {multi_line} = currentElement?.indicator?.config || {}
+
     return (
         <>
             {
@@ -54,7 +57,7 @@ const StatisticsFormField: React.FC<StatisticsFormFieldRenderProps> = (props) =>
                            inputType={isSection ? FormItemTypes.statisticsGrid : valueTypeByAttr({
                                valueTypeId,
                                multivalued
-                           } as EntityAttrClass)}
+                           } as EntityAttrClass, multi_line)}
                            valueTypeBasic={valueTypeBasicByAttr({valueTypeId})}
                            currentElement={currentElement}
                            style={style}

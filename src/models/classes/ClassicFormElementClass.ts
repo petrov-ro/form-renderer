@@ -45,6 +45,11 @@ export type ClassicFormElementClass = {
     req_id: {                       // атрибуты элемента-реквизита (для других элементов значение null)
         key: number
         name: string                // наименование реквизита, пример: "5.6 дополнительная характеристика выявленных однотипных нарушений законодательства"
+        max_value?: number | null
+        min_value?: number | null
+        max_length?: number | null
+        precision?: number | null
+        multi_line?: boolean
         mask_id?: {                 // маска реквизита
             "key": number,
             "mask_name": string     // "Дата (ДД.ММ.ГГГГ)"

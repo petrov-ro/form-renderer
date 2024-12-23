@@ -123,7 +123,7 @@ const FormField = React.forwardRef(
         const {
             name, field, inputType = FormItemTypes.text, disabled, readOnly, placeholder = '', loading = false,
             inline, inlineVertical, label: labelText, tooltip,
-            span = 24, xs, sm, md, lg, xl, xxl, flex, visibleLabelCol = true,
+            span = 24, xs, sm, md, lg, xl, xxl, flex, visibleLabelCol = true, fieldProps,
             ...restProps
         } = props;
 
@@ -140,16 +140,37 @@ const FormField = React.forwardRef(
         }
 
         // доп свойства общее
+        const {max_value, min_value, max_length, precision} = restProps.currentElement?.indicator?.config || {}
         const addProps: any = {
             fieldProps: {
-                ...props.fieldProps
+                ...fieldProps
             }
         }
 
         // доп свойства в зависимости от типа поля
         switch (inputType.toString()) {
+            case FormItemTypes.values.toString():
+                // для этого компонента передаются все свойства
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    maxLength: max_length,
+                    precision: precision ?? undefined,
+                    max: max_value ?? undefined,
+                    min: min_value ?? undefined,
+                }
+                break;
+            case FormItemTypes.text.toString():
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    maxLength: max_length,
+                }
+                break;
             case FormItemTypes.select.toString():
-                addProps.fieldProps!.showSearch = true
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    showSearch: true,
+                    minDate: API.minDate
+                }
                 break;
             case FormItemTypes.date.toString():
                 addProps.fieldProps!.format = DATE_FORMAT
@@ -172,6 +193,12 @@ const FormField = React.forwardRef(
                     minDate: API.minDate
                 }
                 break;
+            case FormItemTypes.area.toString():
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    minDate: API.minDate
+                }
+                break;
             case FormItemTypes.checkbox.toString():
                 addProps.valuePropName = 'checked'
                 break;
@@ -180,8 +207,16 @@ const FormField = React.forwardRef(
             case FormItemTypes.integer.toString():
                 addProps.fieldProps = {
                     ...addProps.fieldProps,
-                    precision: 0,
-                    min: 0
+                    max: max_value ?? undefined,
+                    min: min_value ?? undefined,
+                }
+                break;
+            case FormItemTypes.number.toString():
+                addProps.fieldProps = {
+                    ...addProps.fieldProps,
+                    precision: precision ?? undefined,
+                    max: max_value ?? undefined,
+                    min: min_value ?? undefined,
                 }
                 break;
             case FormItemTypes.uuid.toString():

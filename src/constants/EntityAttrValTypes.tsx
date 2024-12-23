@@ -154,10 +154,15 @@ export const EntityAttrValTypes: {
  * Получение типа поля для атрибута
  * @param attr - атрибут сущности
  */
-export const valueTypeByAttr = ({multivalued, valueTypeId = EntityAttrValTypesEnum.STRING}: EntityAttrClass): FormItemTypes => {
+export const valueTypeByAttr = ({multivalued, valueTypeId = EntityAttrValTypesEnum.STRING}: EntityAttrClass, multi_line: boolean): FormItemTypes => {
   if (multivalued) {
     return FormItemTypes.values
   }
+
+  if (multi_line && valueTypeId === EntityAttrValTypesEnum.STRING) {
+    return FormItemTypes.area
+  }
+
   return EntityAttrValTypes[valueTypeId]?.inputType || FormItemTypes.text
 }
 

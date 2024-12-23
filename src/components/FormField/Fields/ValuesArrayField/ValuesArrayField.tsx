@@ -28,7 +28,7 @@ const convertParamsToArray = <T extends Key>(value: T | T[] = [] as T[]): TableP
  * @constructor
  */
 const ValuesArrayField: React.FC<ValuesArrayFieldType> = props => {
-    const {value: initialValue = [], onChange: onChangeInitial, valueTypeBasic} = props;
+    const {value: initialValue = [], onChange: onChangeInitial, valueTypeBasic, ...fieldProps} = props;
 
     // модификация значений для удобства работы с ними
     const [value, setValue] = useState(convertParamsToArray(initialValue))
@@ -90,7 +90,10 @@ const ValuesArrayField: React.FC<ValuesArrayFieldType> = props => {
                     .map((v, i) => {
                             return (
                                 <Space direction={'horizontal'} key={v.id}>
-                                    <Component value={v.value} onChange={(e) => onChangeField(v, e)}/>
+                                    <Component value={v.value} onChange={(e) => onChangeField(v, e)}
+                                               {...fieldProps}
+                                    />
+
                                     <Button type="primary" ghost key="primary"
                                             title='Удалить'
                                             onClick={() => onRemove(i)}>

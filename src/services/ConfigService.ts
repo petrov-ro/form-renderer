@@ -85,6 +85,11 @@ export const convertElement = (elements: ClassicFormElementClass[],
     const {
         key: reqKey,
         name: reqName,
+        max_value,
+        min_value,
+        max_length,
+        precision,
+        multi_line,
         type_id: {
             key: typeId = undefined
         } = {},
@@ -182,6 +187,16 @@ export const convertElement = (elements: ClassicFormElementClass[],
             // добавление в карту справочников
             if (typeId === ReqTypeEnum.DICT && entityCode) {
                 dicts[entityCode] = config
+            }
+
+            // свойства реквизита
+            config = {
+                ...config,
+                max_value,
+                min_value,
+                max_length,
+                precision,
+                multi_line
             }
         }
     }
