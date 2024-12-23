@@ -187,13 +187,13 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
          */
         const onValuesChange = (fieldData: Record<string, any>, fullData: Record<string, any>) => {
             // проверка AUTOCOMPLETE отключил т.к. при изменениях в атрибуте, он же сам перезаписывается значением из правила
-/*            const {rulesResult: rulesResultAUTOCOMPLETE = []} = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
+            const {rulesResult: rulesResultAUTOCOMPLETE = []} = API.checkAUTOCOMPLETE(requisiteIdKeys, fullData)
             rulesResultAUTOCOMPLETE
-                //.filter(rule => rule.requisiteKey !== fieldData)
+                .filter(rule => rule.applyWhenEditing)
                 .map(({requisiteValues, requisiteKey, groupNumber, parentsChain}) => {
                     const path = getNamePath(requisiteKey, groupNumber, parentsChain)
                     form.setFieldValue(path, modifyValue(requisiteValues))
-                })*/
+                })
 
             // проверка HIDING
             let formData = form.getFieldsValue(true)

@@ -49,7 +49,7 @@ export type ClassicFormElementClass = {
         min_value?: number | null
         max_length?: number | null
         precision?: number | null
-        multi_line?: boolean
+        multi_line?: boolean | null
         mask_id?: {                 // маска реквизита
             "key": number,
             "mask_name": string     // "Дата (ДД.ММ.ГГГГ)"
