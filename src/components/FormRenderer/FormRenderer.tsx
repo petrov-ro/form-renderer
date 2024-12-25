@@ -27,6 +27,7 @@ export interface FormRendererProps {
     dictDate?: string                                           // дата на которую отображается состояние справочников (в формате YYYY-MM-DD)
     dictClosed?: boolean                                        // полказывать закрытые записи справочников
     minDate?: any                                               // минимальная дата для установки при выборе дат в формате dayjs
+    maxDate?: any                                               // максимальная дата для установки при выборе дат в формате dayjs
     attributes?: Record<string, any>                            // данные атрибутов для ФЛК (fio, position, department и пр.)
     variables?: Record<string, any>                             // данные переменных для ФЛК (current_date и пр.)
 }

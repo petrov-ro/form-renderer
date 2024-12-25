@@ -49,7 +49,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
         const {
             config, edit, data, setData, noEmpty = false, extraButtons = [], checkButton = true,
             apiPath, fetch, flcPath,
-            dictDate, dictClosed, minDate, attributes, variables
+            dictDate, dictClosed, minDate, maxDate, attributes, variables
         } = props
 
         const dispatch = useDispatch()
@@ -61,6 +61,7 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
         API.attributes = attributes
         API.variables = variables
         API.minDate = minDate
+        API.maxDate = maxDate
 
         // приведение типа конфига
         const {result: modifiedConfig, dicts, initialValues} = modifyConfig({...config} as ClassicFormClass)

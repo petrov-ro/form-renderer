@@ -31,7 +31,7 @@ const classicFormElementComparator = (elem1: ClassicFormElementClass, elem2: Cla
  * Возвращает тип нового формата соответствующий старому формату
  * @param typeId  - тип старого формата
  */
-const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
+const getType = (typeId: ReqTypeEnum | null = null, maskName?: string): EntityAttrValTypesEnum => {
     switch (typeId) {
         case ReqTypeEnum.STRING: {
             return EntityAttrValTypesEnum.STRING
@@ -44,6 +44,18 @@ const getType = (typeId?: ReqTypeEnum): EntityAttrValTypesEnum => {
             return EntityAttrValTypesEnum.NUMBER
         }
         case ReqTypeEnum.DATE: {
+            if (maskName) {
+                // датавремя
+                if (["dd.MM.yyyy HH:mm", "dd.MM.yyyy HH:mm:ss"].includes(maskName)) {
+                    return EntityAttrValTypesEnum.DATETIME
+                }
+
+                // только время
+                if (["HH:mm", "HH:mm:ss"].includes(maskName)) {
+                    return EntityAttrValTypesEnum.TIME
+                }
+            }
+
             return EntityAttrValTypesEnum.DATE
         }
         case ReqTypeEnum.TIME: {
@@ -90,6 +102,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
         max_length,
         precision,
         multi_line,
+        mask_id,
         type_id: {
             key: typeId = undefined
         } = {},
@@ -103,6 +116,10 @@ export const convertElement = (elements: ClassicFormElementClass[],
     const {
         key: dictKey
     } = dict_id || {}
+
+    const {
+        name: maskName = undefined
+    } = mask_id ? mask_id : {}
 
     // формирование конфига показателя для элемента нового формата на основании данных старого формата
     let name, code, config
@@ -168,7 +185,7 @@ export const convertElement = (elements: ClassicFormElementClass[],
                 viewType = RefViewTypes.DROPDOWN
             } else {
                 reqTypeId = EntityAttrTypes.PLAIN
-                valueTypeId = getType(typeId)
+                valueTypeId = getType(typeId, maskName)
             }
 
             // формирование начальных данных
@@ -179,9 +196,10 @@ export const convertElement = (elements: ClassicFormElementClass[],
                 required: false,
                 multivalued: !!is_extendable,
                 typeId: reqTypeId,
-                valueTypeId: valueTypeId,
+                valueTypeId,
                 entityCode,
-                viewType
+                viewType,
+                mask: maskName
             }
 
             // добавление в карту справочников

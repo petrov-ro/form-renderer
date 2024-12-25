@@ -3,6 +3,7 @@ export let API: {
     REACT_APP_API_FLC_URL: string | undefined
     fetch: (url: string, params: Record<string, any>) => Promise<any>
     minDate: any                        // минимальная дата для установки при выборе дат в формате dayjs
+    maxDate: any                        // максимальная дата для установки при выборе дат в формате dayjs
     attributes?: Record<string, any>    // данные атрибутов для ФЛК (fio, position, department и пр.)
     variables?: Record<string, any>     // данные переменных для ФЛК (current_date и пр.)
     checkFLC: (
@@ -29,6 +30,7 @@ export let API: {
     REACT_APP_API_URL: '/',
     REACT_APP_API_FLC_URL: undefined,
     minDate: undefined,
+    maxDate: undefined,
     attributes: {},
     variables: {},
     fetch: (url: string, params: Record<string, any>) => Promise.reject('Не задан метод получения данных'),

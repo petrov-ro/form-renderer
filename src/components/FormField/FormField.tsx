@@ -8,6 +8,7 @@ import {
     Upload
 } from "@gp-frontend-lib/ui-kit-5";
 import {DatePicker, Checkbox, Input, InputNumber, Radio, Select} from "@gp-frontend-ui/ui-kit-5v2";
+import {TimePicker} from 'antd';
 import {warning} from "@/utils/messages";
 import {FormItemTypes} from "../../constants/FormItemTypes";
 import {API, DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT} from "../../constants/Constants";
@@ -30,7 +31,7 @@ export const fields: any = {
     [FormItemTypes.integer]: InputNumber,
     [FormItemTypes.datetime]: DatePicker,
     [FormItemTypes.date]: DatePicker,
-    [FormItemTypes.time]: DatePicker,
+    [FormItemTypes.time]: TimePicker,
     [FormItemTypes.switch]: Switch,
     [FormItemTypes.area]: Input.Textarea,
     [FormItemTypes.uuid]: UUIDField,
@@ -140,7 +141,7 @@ const FormField = React.forwardRef(
         }
 
         // доп свойства общее
-        const {max_value, min_value, max_length, precision} = restProps.currentElement?.indicator?.config || {}
+        const {max_value, min_value, max_length, precision, mask} = restProps.currentElement?.indicator?.config || {}
         const addProps: any = {
             fieldProps: {
                 ...fieldProps
@@ -169,34 +170,49 @@ const FormField = React.forwardRef(
                 addProps.fieldProps = {
                     ...addProps.fieldProps,
                     showSearch: true,
-                    minDate: API.minDate
+                    minDate: API.minDate,
+                    maxDate: API.maxDate
                 }
                 break;
             case FormItemTypes.date.toString():
                 addProps.fieldProps!.format = DATE_FORMAT
                 addProps.fieldProps = {
                     ...addProps.fieldProps,
-                    minDate: API.minDate
+                    showTime: false,
+                    minDate: API.minDate,
+                    maxDate: API.maxDate
                 }
                 break;
             case FormItemTypes.time.toString():
-                addProps.fieldProps!.format = TIME_FORMAT
+                let formatTime = TIME_FORMAT
+                if (mask === "HH:mm") {
+                    formatTime = mask
+                }
+                addProps.fieldProps!.format = formatTime
                 addProps.fieldProps = {
                     ...addProps.fieldProps,
-                    minDate: API.minDate
+                    minDate: API.minDate,
+                    maxDate: API.maxDate
                 }
                 break;
             case FormItemTypes.datetime.toString():
-                addProps.fieldProps!.format = DATE_TIME_FORMAT
+                let format = DATE_TIME_FORMAT
+                if (mask === "dd.MM.yyyy HH:mm") {
+                    format = "DD.MM.YYYY HH:mm"
+                }
+                addProps.fieldProps!.format = format
                 addProps.fieldProps = {
                     ...addProps.fieldProps,
-                    minDate: API.minDate
+                    showTime: true,
+                    minDate: API.minDate,
+                    maxDate: API.maxDate
                 }
                 break;
             case FormItemTypes.area.toString():
                 addProps.fieldProps = {
                     ...addProps.fieldProps,
-                    minDate: API.minDate
+                    minDate: API.minDate,
+                    maxDate: API.maxDate
                 }
                 break;
             case FormItemTypes.checkbox.toString():
