@@ -204,6 +204,20 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
                 .map(({requisiteKey, groupNumber, parentsChain}) => getNamePath(requisiteKey, groupNumber, parentsChain))
                 .map(getFormItemId)
 
+            // выполнение проверки LIMITATION
+            const resultLIMITATION: CheckResult<RuleResultLIMITATION> = API.checkLIMITATION(requisiteIdKeys, formData)
+            const {rulesResult: rulesResultLIMITATION = []} = resultLIMITATION
+            if (rulesResultLIMITATION.length > 0) {
+                const limits = rulesResultLIMITATION
+                    .reduce((acc, r) => {
+                        const {requisiteKey, groupNumber, parentsChain, requisiteLimits} = r
+                        const name = getNamePath(requisiteKey, groupNumber, parentsChain)
+                        acc[name.join()] = requisiteLimits
+                        return acc
+                    }, {} as Record<string, any>)
+                dispatch(limitsAdd(limits));
+            }
+
             // скрытие элементов на форме
             setTimeout(() => {
                 hiding = hide(hiding, hidePaths)
