@@ -36,8 +36,8 @@ export interface refType {
     getData: () => Record<string, any>
     resetFields: () => void
     setFieldsValue: (newData: Record<string, any>) => void
-    flcCheck: () => void                                        // проверка правил ФЛК и показ окна
-    flcCheckFlag: (validateOnly?: boolean) => Promise<boolean>  // проверка правил ФЛК и возврат промиса да/нет
+    flcCheck: (ruleResult: any) => void                                         // проверка правил ФЛК и показ окна
+    flcCheckFlag: (validateOnly: boolean, ruleResult: any) => Promise<boolean>  // проверка правил ФЛК и возврат промиса да/нет
 }
 
 /**

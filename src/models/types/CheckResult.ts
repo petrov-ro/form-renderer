@@ -3,5 +3,5 @@
  */
 type CheckResult<T = RuleResultFlc> = {
     rulesResult: T[]
-    executeExceptions: any[]
+    executeExceptions?: any[]
 }
