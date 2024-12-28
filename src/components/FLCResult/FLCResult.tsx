@@ -2,10 +2,10 @@ import {FC, useEffect, useMemo, useState} from "react";
 import {Button, FormInstance} from "antd";
 import styled from 'styled-components';
 import {CloseOutlined, ReloadOutlined} from '@ant-design/icons';
+import {getNamePath} from "@/utils/flcUtils";
 import {API, CODE} from "../../constants/Constants";
 import {ClassicFormClass} from "../..";
 import {capitalize} from "../../utils/stringHelper";
-import {getNamePath} from "@/utils/flcUtils";
 
 type FLCResultProps = {
     form: FormInstance
@@ -13,6 +13,7 @@ type FLCResultProps = {
     onClose: () => void
     container: HTMLElement
     containerOverflow: string
+    checkResult: CheckResult
 }
 
 /**
@@ -41,7 +42,7 @@ const ErrorContainer = styled.div`
  * @constructor
  */
 const FLCResult: FC<FLCResultProps> = (props) => {
-    const {form, config, onClose, container} = props
+    const {form, config, onClose, container, checkResult} = props
 
     const [errors, setErrors] = useState<RuleResultFlc[]>([])
 
@@ -83,9 +84,16 @@ const FLCResult: FC<FLCResultProps> = (props) => {
         // выполнение проверки
         const result: CheckResult<RuleResultFlc> = API.checkFLC(requisiteIdKeys, formData)
         const {rulesResult = []} = result
+        const {rulesResult: rulesResultBack = []} = checkResult ?? {};
+
+        // формирование общего массива ошибок (проверка на фронте и бэке)
+        const backOnlyResult = rulesResultBack.filter(resBack => rulesResult.findIndex(resFront => resFront.ruleData?.ruleKey === resBack.ruleData?.ruleKey) === -1)
+        const rulesResultCommon = rulesResult
+            .concat(backOnlyResult)
+            .sort((a, b) => a.requisiteKey - b.requisiteKey)
 
         // возврат ошибок
-        setErrors(rulesResult)
+        setErrors(rulesResultCommon)
     }
 
     useEffect(() => {

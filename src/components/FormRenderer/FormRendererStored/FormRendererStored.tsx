@@ -9,7 +9,7 @@ import {ClassicFormClass} from "../../../models/classes/ClassicFormElementClass"
 import store from "../../../redux/store/index";
 import useEntityCache from "../../../hooks/useEntityCache";
 import {ButtonType, FormRendererProps, refType} from "../FormRenderer";
-import {notEmpty, objectCompare, removeEmpty} from "../../../utils/objectUtils";
+import {camelize, notEmpty, objectCompare, removeEmpty} from "../../../utils/objectUtils";
 import useFLC from "../../../hooks/useFLC";
 import {hide, flcCheck, flcCheckResult} from "../../../services/FLCService";
 import {capitalize} from "../../../utils/stringHelper";
@@ -107,7 +107,11 @@ const FormRenderer = forwardRef<refType, FormRendererProps>((props, ref) => {
                 getData,
                 resetFields,
                 setFieldsValue,
-                flcCheck: () => flcCheck(form, config as ClassicFormClass),
+                flcCheck: (checkResult: Record<string, any>) => flcCheck(
+                    form,
+                    config as ClassicFormClass,
+                    camelize(checkResult) as CheckResult
+                ),
                 flcCheckFlag: (validateOnly) => flcCheckResult(form, validateOnly)
             };
         }, []);

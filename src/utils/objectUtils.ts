@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {isArray, removeEmptyFromArray} from "./arrayUtils";
 
 export const objectCompare = (obj1: any, obj2: any): boolean => {
@@ -102,3 +103,13 @@ export const notEmpty = (value: any): boolean => {
 
     return true
 }
+
+/**
+ * Преобразование ключей объекта к camelCase, возврат объекта
+ * @param obj
+ */
+export const camelize = (obj: Record<string, any>) => _.transform(obj, (acc: Record<string, any>, value, key, target) => {
+    const camelKey = _.isArray(target) ? key : _.camelCase(key);
+
+    acc[camelKey] = _.isObject(value) ? camelize(value) : value;
+});

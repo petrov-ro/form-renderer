@@ -10,12 +10,6 @@ import {FLCRuleTypeEnum} from "@/constants/FLCRuleTypeEnum";
 import {FormInstance, Modal} from "antd";
 import FLCResult from "../components/FLCResult/FLCResult";
 import {ClassicFormClass} from "..";
-import {getFormItemId} from "../utils/formUtils";
-import { getNamePath } from '@/utils/flcUtils';
-import {deepFind} from "../utils/treeUtils";
-import {isString} from "../utils/common";
-import {isArray} from "../utils/arrayUtils";
-import {objectCompare} from "../utils/objectUtils";
 
 /**
  * Запрос пакета правил
@@ -59,7 +53,7 @@ export const flcCheckResult = (form: FormInstance, validateOnly = true): Promise
 /**
  * Выполнение проверки ФЛК и отображение окна результатов
  */
-export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy: (() => void)} => {
+export const flcCheck = (form: FormInstance, config: ClassicFormClass, checkResult: CheckResult): {destroy: (() => void)} => {
     const container = document.body
     const containerOverflow = container?.style?.overflow
 
@@ -70,7 +64,7 @@ export const flcCheck = (form: FormInstance, config: ClassicFormClass): {destroy
         title: 'Ошибки',
         content: (
             <FLCResult form={form} config={config} onClose={() => instance.destroy()}
-                       container={container} containerOverflow={containerOverflow}/>
+                       container={container} containerOverflow={containerOverflow} checkResult={checkResult}/>
         ),
         mask: false,
         closable: false,
